@@ -9,7 +9,7 @@
 		<version>2.5.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.livestockFarm</groupId>
 	<artifactId>LivestockFarmData</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>

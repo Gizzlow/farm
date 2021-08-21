@@ -37,7 +37,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.example</groupId>
+			<groupId>com.livestockFarm</groupId>
 			<artifactId>LivestockFarmData</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
