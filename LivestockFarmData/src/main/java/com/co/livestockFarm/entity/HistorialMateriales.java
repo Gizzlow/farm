@@ -12,6 +12,7 @@ import lombok.Data;
 public class HistorialMateriales {
 	@Id
 	private int id;
+	
 //	private Materiales materialesId;
 	private String observacion;
 	private Date fecha;

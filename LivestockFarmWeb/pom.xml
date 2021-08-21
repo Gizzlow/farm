@@ -9,7 +9,7 @@
 		<version>2.5.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.livestockFarm</groupId>
+	<groupId>com.co.livestockFarm</groupId>
 	<artifactId>LivestockFarmWeb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>LivestockFarmWeb</name>
