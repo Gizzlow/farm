@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 @Entity
 @Builder(toBuilder = true)
-public class Alimentos {
+public class Food {
 	@Id
 	private int id;
-	private String nombre;
+	private String name;
 }
