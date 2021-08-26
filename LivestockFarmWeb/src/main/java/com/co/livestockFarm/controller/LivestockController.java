@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.co.livestockFarm.dto.LivestockDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
-import com.co.livestockFarm.service.GanadoService;
+import com.co.livestockFarm.service.LivestockService;
 
 @Controller
 @RequestMapping(value = "/ganado")
-public class GanadoController {
+public class LivestockController {
 
 	@Autowired
-	GanadoService ganadoService;
+	LivestockService ganadoService;
 
 	@PostMapping(path = "/agregar")
 	public ResponseDTO agregarGanado(@RequestBody LivestockDTO ganado) {

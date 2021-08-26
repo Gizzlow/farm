@@ -3,6 +3,6 @@ package com.co.livestockFarm.controller;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MaterialesController {
+public class MaterialsController {
 
 }
