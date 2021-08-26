@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.co.livestockFarm.dto.FoodDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.co.livestockFarm.service.AlimentosService;
+import com.co.livestockFarm.service.FoodService;
 
 @Controller
 @RequestMapping(value = "/alimentos")
-public class AlimentosController {
+public class FoodController {
 
 	@Autowired
-	private AlimentosService alimentosService;
+	private FoodService alimentosService;
 
 	@PostMapping("/registrarAlimentos")
 	public String registrarAlimentos(@RequestBody FoodDTO alimentos) {
