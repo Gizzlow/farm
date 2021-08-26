@@ -7,8 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Materiales {
+public class HistoryFood {
 	@Id
 	private int id;
-	private String nombre;
 }

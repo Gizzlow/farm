@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.co.livestockFarm.dto.GanadoDTO;
+import com.co.livestockFarm.dto.LivestockDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.GanadoService;
 
@@ -19,7 +19,7 @@ public class GanadoController {
 	GanadoService ganadoService;
 
 	@PostMapping(path = "/agregar")
-	public ResponseDTO agregarGanado(@RequestBody GanadoDTO ganado) {
+	public ResponseDTO agregarGanado(@RequestBody LivestockDTO ganado) {
 
 		try {
 			ganadoService.ganado();
@@ -43,7 +43,7 @@ public class GanadoController {
 	}
 
 	@PostMapping(path = "/editar")
-	public ResponseDTO editarGanado(@RequestBody GanadoDTO ganado) {
+	public ResponseDTO editarGanado(@RequestBody LivestockDTO ganado) {
 
 		try {
 			ganadoService.ganado();

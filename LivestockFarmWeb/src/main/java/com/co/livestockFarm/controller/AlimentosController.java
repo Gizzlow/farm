@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.co.livestockFarm.dto.AlimentosDTO;
+import com.co.livestockFarm.dto.FoodDTO;
 import com.co.livestockFarm.service.AlimentosService;
 
 @Controller
@@ -17,7 +17,7 @@ public class AlimentosController {
 	private AlimentosService alimentosService;
 
 	@PostMapping("/registrarAlimentos")
-	public String registrarAlimentos(@RequestBody AlimentosDTO alimentos) {
+	public String registrarAlimentos(@RequestBody FoodDTO alimentos) {
 
 		try {
 			alimentosService.registrarAlimentos();
@@ -29,7 +29,7 @@ public class AlimentosController {
 	}
 
 	@PostMapping("/agregarAlimentos")
-	public String agregarAlimentos(@RequestBody AlimentosDTO alimentos) {
+	public String agregarAlimentos(@RequestBody FoodDTO alimentos) {
 
 		try {
 			alimentosService.agregarAlimentos();

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class HistorialAlimentos {
+public class InventoryMedicine {
 	@Id
-	private int id;
+	private int inventoryMedicineId;
 }

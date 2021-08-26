@@ -7,9 +7,8 @@ import lombok.Data;
 
 @Data
 @Entity
-public class InventarioMateriales {
+public class Materials {
 	@Id
-	private int id;
-//	private Materiales materialesId;
-	private int cantidad;
+	private int materialsId;
+	private String name;
 }
