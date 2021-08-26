@@ -3,13 +3,13 @@ package com.co.livestockFarm.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AlimentosService {
+public class GanadoService {
 	
-	public void registrarAlimentos() {
+	
+	public void ganado() {
 		
-	}
-	
-	public void agregarAlimentos() {
+		
+		
 		
 	}
 

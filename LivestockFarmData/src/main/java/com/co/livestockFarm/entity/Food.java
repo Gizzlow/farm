@@ -11,6 +11,6 @@ import lombok.Data;
 @Builder(toBuilder = true)
 public class Food {
 	@Id
-	private int id;
+	private int foodId;
 	private String name;
 }
