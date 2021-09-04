@@ -12,7 +12,7 @@
 	<groupId>com.livestockFarm</groupId>
 	<artifactId>LivestockFarmData</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>LivestockFarmData</name>
 	<description>LivestockFarm</description>
 	<properties>
@@ -53,12 +53,4 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>
