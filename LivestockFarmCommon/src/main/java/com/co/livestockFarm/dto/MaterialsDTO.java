@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class MaterialsDTO {
-	private int materialsId;
+	private Long materialsId;
 	private String name;
 }
