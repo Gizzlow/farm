@@ -8,7 +8,7 @@ import com.co.livestockFarm.entity.Materials;
 
 public interface MaterialsRepository extends CrudRepository<Materials, Long> {
 
-	@Query(value = "SELECT * FROM Materials WHERE Materials.name =:name")
+	@Query(value = "SELECT ma FROM Materials ma WHERE ma.name =:name")
 	Materials getByName(@Param("name") String name);
 
 }
