@@ -6,33 +6,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.co.livestockFarm.dto.FoodDTO;
+import com.co.livestockFarm.dto.ResponseDTO;
+
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.co.livestockFarm.service.FoodService;
 
-@Controller
-@RequestMapping(value = "/alimentos")
+@RestController
+@RequestMapping(value = "/food")
 public class FoodController {
 
 	@Autowired
-	private FoodService alimentosService;
+	private FoodService foodService;
 
-	@PostMapping("/registrarAlimentos")
-	public String registrarAlimentos(@RequestBody FoodDTO alimentos) {
+	@PostMapping("/registerFood")
+	public ResponseDTO registerFood(@RequestBody FoodDTO foodDTO) {
+		ResponseDTO<FoodDTO> responseDTO = new ResponseDTO<>();
 
 		try {
-			alimentosService.registrarAlimentos();
+			FoodDTO foodFromDB = foodService.registerFood(foodDTO.foodId);
+
+			responseDTO.message = foodFromDB.name;
+			responseDTO.statusCode = 200;
 		} catch (Exception e) {
-
+			responseDTO.message = "EX";
+			responseDTO.statusCode = 500;
 		}
-
-		return "Hello World";
+		return responseDTO;
 	}
 
-	@PostMapping("/agregarAlimentos")
-	public String agregarAlimentos(@RequestBody FoodDTO alimentos) {
+	@PostMapping("/addFood")
+	public String addFood(@RequestBody FoodDTO alimentos) {
 
 		try {
-			alimentosService.agregarAlimentos();
+//			foodService.agregarAlimentos();
 		} catch (Exception e) {
 
 		}
