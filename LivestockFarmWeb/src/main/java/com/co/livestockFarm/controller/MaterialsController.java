@@ -1,8 +1,6 @@
 package com.co.livestockFarm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.co.livestockFarm.dto.FoodDTO;
 import com.co.livestockFarm.dto.MaterialsDTO;
+import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.MaterialsService;
+import com.co.livestockFarm.util.Constant;
 
 @RestController
 @RequestMapping(value = "/materials")
@@ -20,15 +20,18 @@ public class MaterialsController {
 	private MaterialsService materialsService;
 
 	@PostMapping("/registerMaterials")
-	public ResponseEntity<?> registerMaterials(@RequestBody MaterialsDTO materials) {
+	public ResponseDTO registerMaterials(@RequestBody MaterialsDTO materials) {
+		ResponseDTO response = new ResponseDTO();
 		try {
-			materialsService.getMaterialsByName(materials.getName());
+			response = materialsService.registerMaterials(materials);
 		} catch (Exception e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			response.setStatusCode(Constant.ERROR_FATAL.getStatusCode());
+			response.setMessage(Constant.ERROR_FATAL.getMessage());
+			return response;
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(null);
+		return response;
 	}
 
 	@PostMapping("/addMaterials")
