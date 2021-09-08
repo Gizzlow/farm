@@ -10,7 +10,9 @@ public enum Constant {
 	FOOD_REPEATED(400, "El alimento que ha intentado registrar ya existe"),
 	ENTITY_NOT_FOUND(404, "Entidad no encontrada"),
 	INVENTORY_MATERIALS_SUCESSFUL(200,"El material se ha agregado con exito"),
-	ERROR_FATAL(500, "Ha ocurrido un error no controlado");
+	ERROR_FATAL(500, "Ha ocurrido un error no controlado"),
+	INPUT_OPERATION_TYPE(1, "Añadido"),
+	OUTPUT_OPERATION_TYPE(1, "Retirado");
 
 	private final int statusCode;
 	private final String message;

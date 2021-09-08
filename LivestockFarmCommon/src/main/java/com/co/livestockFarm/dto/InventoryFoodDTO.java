@@ -12,4 +12,5 @@ public class InventoryFoodDTO {
 	private String registroIca;
 	private String fechaVencimiento;
 	private String nombreAlmacen;
+	private String operationDate;
 }

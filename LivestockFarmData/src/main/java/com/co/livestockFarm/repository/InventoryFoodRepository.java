@@ -9,6 +9,6 @@ import com.co.livestockFarm.entity.InventoryFood;
 public interface InventoryFoodRepository extends CrudRepository<InventoryFood, Long>{
 
 	@Query(value = "SELECT inventory FROM InventoryFood inventory WHERE inventory.inventoryFoodId =:inventoryFoodId")
-	InventoryFood getInventoryFoodById(@Param("foodId") long inventoryFoodId);
+	InventoryFood getInventoryFoodById(@Param("inventoryFoodId") long inventoryFoodId);
 
 }
