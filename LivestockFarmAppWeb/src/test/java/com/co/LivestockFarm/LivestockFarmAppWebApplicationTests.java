@@ -1,10 +1,10 @@
-package com.co.livestockFarm;
+package com.co.LivestockFarm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LivestockFarmWebApplicationTests {
+class LivestockFarmAppWebApplicationTests {
 
 	@Test
 	void contextLoads() {
