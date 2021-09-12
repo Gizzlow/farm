@@ -8,6 +8,7 @@ import com.co.livestockFarm.entity.InventoryMaterials;
 
 public interface InventoryMaterialsRepository extends CrudRepository<InventoryMaterials, Long> {
 
-	@Query(value = "SELECT im FROM InventoryMaterials im WHERE im.materialsId.materialsId =:id")
-	InventoryMaterials getByMaterialsId(@Param("id") Long id);
+	@Query(value = "SELECT im FROM InventoryMaterials im WHERE im.materialsId.materialsId =:materialsId")
+	InventoryMaterials getByMaterialsId(@Param("materialsId") Long materialsId);
+
 }

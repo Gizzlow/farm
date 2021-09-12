@@ -1,18 +1,20 @@
 package com.co.livestockFarm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.MaterialsDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.MaterialsService;
-import com.co.livestockFarm.util.Constant;
+import com.co.livestockFarm.util.ConstantMaterials;
 
-@RestController
+@Controller
 @RequestMapping(value = "/materials")
 public class MaterialsController {
 
@@ -20,15 +22,33 @@ public class MaterialsController {
 	private MaterialsService materialsService;
 
 	@PostMapping("/registerMaterials")
-	public ResponseDTO<Object> registerMaterials(@RequestBody MaterialsDTO materials) {
+	@ResponseBody
+	public ResponseDTO<Object> registerMaterials(MaterialsDTO materialsDTO) {
 		ResponseDTO<Object> response;
 		try {
-			response = materialsService.registerMaterials(materials);
+			response = materialsService.registerMaterials(materialsDTO);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder()
-					.statusCode(Constant.ERROR_FATAL.getStatusCode())
-					.message(Constant.ERROR_FATAL.getMessage())
+					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage())
+					.build();
+		}
+
+		return response;
+	}
+
+	@GetMapping("/getAllMaterials")
+	@ResponseBody
+	public ResponseDTO<Object> getAllMaterials() {
+		ResponseDTO<Object> response;
+		try {
+			response = materialsService.getAllMaterials();
+		} catch (Exception e) {
+
+			return ResponseDTO.builder()
+					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage())
 					.build();
 		}
 
@@ -36,31 +56,48 @@ public class MaterialsController {
 	}
 
 	@PostMapping("/addMaterials")
-	public ResponseDTO<Object> addMaterials(@RequestBody InventoryMaterialsDTO inventoryMaterialsDTO) {
+	@ResponseBody
+	public ResponseDTO<Object> addMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
 		ResponseDTO<Object> response;
 		try {
 			response = materialsService.addMaterials(inventoryMaterialsDTO);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder()
-					.statusCode(Constant.ERROR_FATAL.getStatusCode())
-					.message(Constant.ERROR_FATAL.getMessage())
+					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage())
 					.build();
 		}
 
 		return response;
 	}
-	
+
 	@PostMapping("/removeMaterials")
-	public ResponseDTO<Object> removeMaterials(@RequestBody InventoryMaterialsDTO inventoryMaterialsDTO){
+	@ResponseBody
+	public ResponseDTO<Object> removeMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
 		ResponseDTO<Object> response;
 		try {
 			response = materialsService.removeMaterials(inventoryMaterialsDTO);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder()
-					.statusCode(Constant.ERROR_FATAL.getStatusCode())
-					.message(Constant.ERROR_FATAL.getMessage())
+					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage())
+					.build();
+		}
+
+		return response;
+	}
+	
+	public ResponseDTO<Object> deleteMaterials(MaterialsDTO materialsDTO) {
+		ResponseDTO<Object> response;
+		try {
+			response = materialsService.deleteMaterials(materialsDTO);
+		} catch (Exception e) {
+
+			return ResponseDTO.builder()
+					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage())
 					.build();
 		}
 

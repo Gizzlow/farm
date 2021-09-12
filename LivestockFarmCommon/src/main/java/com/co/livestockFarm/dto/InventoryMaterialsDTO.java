@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class InventoryMaterialsDTO {
-	private Long inventoryMaterialsid;
-	private Long materialsIdId;
-	private MaterialsDTO materialsId;
+	private Long inventoryMaterialsId;
+	private Long materialsId;
 	private Long amount;
+	private String name;
+	private String observation;
 }

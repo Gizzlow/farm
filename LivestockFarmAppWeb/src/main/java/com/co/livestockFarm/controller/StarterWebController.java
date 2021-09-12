@@ -10,8 +10,6 @@ public class StarterWebController {
 	@GetMapping("/")
 	public String starterWeb() {
 		
-		
 		return "index";
 	}
-	
 }

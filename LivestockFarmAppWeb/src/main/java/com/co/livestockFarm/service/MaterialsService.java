@@ -1,5 +1,8 @@
 package com.co.livestockFarm.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +11,13 @@ import org.springframework.stereotype.Service;
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.MaterialsDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
+import com.co.livestockFarm.entity.HistoryMaterials;
 import com.co.livestockFarm.entity.InventoryMaterials;
 import com.co.livestockFarm.entity.Materials;
 import com.co.livestockFarm.repository.HistoryMaterialsRepository;
 import com.co.livestockFarm.repository.InventoryMaterialsRepository;
 import com.co.livestockFarm.repository.MaterialsRepository;
-import com.co.livestockFarm.util.Constant;
+import com.co.livestockFarm.util.ConstantMaterials;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -34,42 +38,20 @@ public class MaterialsService {
 	public ResponseDTO<Object> registerMaterials(MaterialsDTO materialsDTO) {
 		MaterialsDTO materialsDB = getMaterialsByName(materialsDTO.getName().toLowerCase().trim());
 		if (materialsDB == null) {
-			Materials materials = objectMapper.convertValue(materialsDTO, Materials.class);
-			materials.setName(materials.getName().toLowerCase().trim());
-			materialsRepository.save(materials);
+			Materials materials = new Materials();
+			materials.setName(materialsDTO.getName().toLowerCase().trim());
+			materials = materialsRepository.save(materials);
+			InventoryMaterials inventoryMaterials = new InventoryMaterials();
+			inventoryMaterials.setMaterialsId(materials);
+			inventoryMaterials.setAmount(0L);
+			inventoryMaterialsRepository.save(inventoryMaterials);
 
-			return ResponseDTO.builder().statusCode(Constant.MATERIALS_SUCESSFUL.getStatusCode())
-					.message(Constant.MATERIALS_SUCESSFUL.getMessage()).build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.REGISTER_MATERIALS_SUCESSFUL.getStatusCode())
+					.message(ConstantMaterials.REGISTER_MATERIALS_SUCESSFUL.getMessage()).build();
 		}
 
-		return ResponseDTO.builder().statusCode(Constant.MATERIALS_REPEAT.getStatusCode())
-				.message(Constant.MATERIALS_REPEAT.getMessage()).build();
-	}
-
-	public ResponseDTO<Object> addMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
-		InventoryMaterialsDTO inventoryMaterialsDB = getInventoryMaterialsByMaterialsId(
-				inventoryMaterialsDTO.getMaterialsIdId());
-		Materials materials = new Materials();
-		materials.setMaterialsId(inventoryMaterialsDB.getMaterialsId().getMaterialsId());
-		InventoryMaterials inventoryMaterials = new InventoryMaterials();
-		inventoryMaterials.setInventoryMaterialsid(inventoryMaterialsDB.getInventoryMaterialsid());
-		inventoryMaterials.setMaterialsId(materials);
-		inventoryMaterials.setAmount(inventoryMaterialsDTO.getAmount() + inventoryMaterialsDB.getAmount());
-		inventoryMaterialsRepository.save(inventoryMaterials);
-
-		return ResponseDTO.builder().statusCode(Constant.INVENTORY_MATERIALS_SUCESSFUL.getStatusCode())
-				.message(Constant.INVENTORY_MATERIALS_SUCESSFUL.getMessage()).build();
-	}
-
-	public ResponseDTO<Object> removeMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
-		Optional<InventoryMaterials> inventoryMaterials = inventoryMaterialsRepository.findById(inventoryMaterialsDTO.getMaterialsIdId());
-		
-		if(inventoryMaterials != null) {
-			
-		}
-		
-		return ResponseDTO.builder().statusCode(Constant.INVENTORY_MATERIALS_SUCESSFUL.getStatusCode())
-				.message(Constant.INVENTORY_MATERIALS_SUCESSFUL.getMessage()).build();
+		return ResponseDTO.builder().statusCode(ConstantMaterials.MATERIALS_REPEAT.getStatusCode())
+				.message(ConstantMaterials.MATERIALS_REPEAT.getMessage()).build();
 	}
 
 	private MaterialsDTO getMaterialsByName(String name) {
@@ -82,17 +64,96 @@ public class MaterialsService {
 		return null;
 	}
 
-	private InventoryMaterialsDTO getInventoryMaterialsByMaterialsId(Long id) {
-		InventoryMaterials inventoryMaterials = inventoryMaterialsRepository.getByMaterialsId(id);
-		if (inventoryMaterials == null) {
-			InventoryMaterials request = new InventoryMaterials();
-			Materials materials = new Materials();
-			materials.setMaterialsId(id);
-			request.setMaterialsId(materials);
-			request.setAmount(0L);
-			inventoryMaterials = inventoryMaterialsRepository.save(request);
+	public ResponseDTO<Object> getAllMaterials() {
+		List<InventoryMaterialsDTO> response = new ArrayList<>();
+		Iterable<InventoryMaterials> listInventoryMaterials = inventoryMaterialsRepository.findAll();
+		InventoryMaterialsDTO aux;
+		for (InventoryMaterials inventoryMaterials : listInventoryMaterials) {
+			aux = new InventoryMaterialsDTO();
+			aux.setInventoryMaterialsId(inventoryMaterials.getInventoryMaterialsId());
+			aux.setMaterialsId(inventoryMaterials.getMaterialsId().getMaterialsId());
+			aux.setAmount(inventoryMaterials.getAmount());
+			aux.setName(inventoryMaterials.getMaterialsId().getName());
+			response.add(aux);
 		}
 
-		return objectMapper.convertValue(inventoryMaterials, InventoryMaterialsDTO.class);
+		return ResponseDTO.builder()
+				.statusCode(ConstantMaterials.GET_ALL_MATERIALS_SUCESSFUL.getStatusCode())
+				.message(ConstantMaterials.GET_ALL_MATERIALS_SUCESSFUL.getMessage())
+				.object(response)
+				.build();
+	}
+
+	public ResponseDTO<Object> addMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
+		Optional<InventoryMaterials> inventoryMaterials = inventoryMaterialsRepository
+				.findById(inventoryMaterialsDTO.getInventoryMaterialsId());
+		InventoryMaterials inventoryMaterialsDB;
+		if (inventoryMaterials.isPresent()) {
+			inventoryMaterialsDB = inventoryMaterials.get();
+			inventoryMaterialsDB.setAmount(inventoryMaterialsDB.getAmount() + inventoryMaterialsDTO.getAmount());
+			inventoryMaterialsRepository.save(inventoryMaterialsDB);
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getStatusCode())
+					.message(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getMessage()).build();
+		}
+		inventoryMaterialsDB = new InventoryMaterials();
+		Materials materials = new Materials();
+		materials.setMaterialsId(inventoryMaterialsDTO.getMaterialsId());
+		inventoryMaterialsDB.setMaterialsId(materials);
+		inventoryMaterialsDB.setAmount(inventoryMaterialsDTO.getAmount());
+		inventoryMaterialsRepository.save(inventoryMaterialsDB);
+
+		return ResponseDTO.builder().statusCode(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getStatusCode())
+				.message(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getMessage()).build();
+
+	}
+
+	public ResponseDTO<Object> removeMaterials(InventoryMaterialsDTO inventoryMaterialsDTO) {
+		Optional<InventoryMaterials> inventoryMaterials = inventoryMaterialsRepository
+				.findById(inventoryMaterialsDTO.getInventoryMaterialsId());
+		InventoryMaterials inventoryMaterialsDB;
+		if (inventoryMaterials.isPresent()) {
+			inventoryMaterialsDB = inventoryMaterials.get();
+			inventoryMaterialsDB.setAmount(inventoryMaterialsDB.getAmount() - inventoryMaterialsDTO.getAmount());
+			if (inventoryMaterialsDB.getAmount() >= 0) {
+				inventoryMaterialsRepository.save(inventoryMaterialsDB);
+
+				return ResponseDTO.builder().statusCode(ConstantMaterials.REMOVE_MATERIALS_SUCESSFUL.getStatusCode())
+						.message(ConstantMaterials.REMOVE_MATERIALS_SUCESSFUL.getMessage()).build();
+			}
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.REMOVE_MATERIALS_FAIL_MOUNT.getStatusCode())
+					.message(ConstantMaterials.REMOVE_MATERIALS_FAIL_MOUNT.getMessage()).build();
+		}
+
+		return ResponseDTO.builder().statusCode(ConstantMaterials.REMOVE_MATERIALS_FAIL.getStatusCode())
+				.message(ConstantMaterials.REMOVE_MATERIALS_FAIL.getMessage()).build();
+	}
+
+	public ResponseDTO<Object> deleteMaterials(MaterialsDTO materialsDTO) {
+		InventoryMaterials inventoryMaterials = inventoryMaterialsRepository
+				.getByMaterialsId(materialsDTO.getMaterialsId());
+		if (inventoryMaterials != null) {
+			inventoryMaterialsRepository.delete(inventoryMaterials);
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.DELETE_MATERIALS_SUCESSFUL.getStatusCode())
+					.message(ConstantMaterials.DELETE_MATERIALS_SUCESSFUL.getMessage()).build();
+		}
+
+		return ResponseDTO.builder().statusCode(ConstantMaterials.DELETE_MATERIALS_FAIL.getStatusCode())
+				.message(ConstantMaterials.DELETE_MATERIALS_FAIL.getMessage()).build();
+	}
+
+	private void registerHistorial(InventoryMaterialsDTO inventoryMaterialsDTO, Long input, Long output, Long residue) {
+		HistoryMaterials historyMaterials = new HistoryMaterials();
+		Materials materials = new Materials();
+		materials.setMaterialsId(inventoryMaterialsDTO.getMaterialsId());
+		historyMaterials.setMaterialsId(materials);
+		historyMaterials.setDate(new Date());
+		// historyMaterials.setObservation(materialsDTO.getObservation());
+		historyMaterials.setInput(input);
+		historyMaterials.setOutput(output);
+		historyMaterials.setResidue(residue);
+		historyMaterialsRepository.save(historyMaterials);
 	}
 }

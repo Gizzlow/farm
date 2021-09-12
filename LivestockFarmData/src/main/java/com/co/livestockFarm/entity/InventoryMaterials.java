@@ -16,7 +16,7 @@ public class InventoryMaterials {
 	@Id
 	@SequenceGenerator(name = "INVENTORY_MATERIALS_ID_GENERATOR", sequenceName = "INVENTORY_MATERIALS_ID", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "INVENTORY_MATERIALS_ID_GENERATOR")
-	private Long inventoryMaterialsid;
+	private Long inventoryMaterialsId;
 	@ManyToOne
 	@JoinColumn(name = "materialsId")
 	private Materials materialsId;
