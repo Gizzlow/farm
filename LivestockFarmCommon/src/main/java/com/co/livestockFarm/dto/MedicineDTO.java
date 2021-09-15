@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MedicineDTO {
-	private int medicineId;
+	private Long medicineId;
 	private String name;
 	private String codeICA;
 	private String tantamount;
@@ -12,5 +12,5 @@ public class MedicineDTO {
 	private String activeIngredient;
 	private String measurementUnit;
 	private String type;
-	private int timeRetirement;
+	private String timeRetirement;
 }

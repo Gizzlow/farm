@@ -10,7 +10,7 @@ import com.co.livestockFarm.dto.FoodDTO;
 import com.co.livestockFarm.dto.InventoryFoodDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.FoodService;
-import com.co.livestockFarm.util.Constant;
+import com.co.livestockFarm.util.ConstantFood;
 
 @RestController
 @RequestMapping(value = "/food")
@@ -27,8 +27,8 @@ public class FoodController {
 			responseDTO = foodService.registerFood(foodDTO);
 		} catch (Exception e) {			
 			return ResponseDTO.builder()
-			.statusCode(Constant.ERROR_FATAL.getStatusCode())
-			.message(Constant.ERROR_FATAL.getMessage())
+			.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+			.message(ConstantFood.ERROR_FATAL.getMessage())
 			.object(foodDTO)
 			.build();
 		}
@@ -43,7 +43,7 @@ public class FoodController {
 			responseDTO = foodService.addFood(inventoryFoodDTO);
 		} catch (Exception e) {
 			return ResponseDTO.builder()
-					.statusCode(Constant.ERROR_FATAL.getStatusCode())
+					.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
 					.message(e.getMessage())
 					.object(inventoryFoodDTO)
 					.build();
@@ -60,7 +60,7 @@ public class FoodController {
 			responseDTO = foodService.removeFood(inventoryFoodDTO);
 		} catch (Exception e) {
 			return ResponseDTO.builder()
-					.statusCode(Constant.ERROR_FATAL.getStatusCode())
+					.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
 					.message(e.getMessage())
 					.object(inventoryFoodDTO)
 					.build();

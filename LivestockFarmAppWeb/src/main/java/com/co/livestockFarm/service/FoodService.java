@@ -15,7 +15,7 @@ import com.co.livestockFarm.entity.InventoryFood;
 import com.co.livestockFarm.repository.FoodRepository;
 import com.co.livestockFarm.repository.HistoryFoodRepository;
 import com.co.livestockFarm.repository.InventoryFoodRepository;
-import com.co.livestockFarm.util.Constant;
+import com.co.livestockFarm.util.ConstantFood;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -40,13 +40,13 @@ public class FoodService {
 
 			foodDTO.foodId = food.getFoodId();
 
-			return ResponseDTO.builder().statusCode(Constant.FOOD_SUCESSFUL.getStatusCode())
-					.message(Constant.FOOD_SUCESSFUL.getMessage()).object(foodDTO).build();
+			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
+					.message(ConstantFood.FOOD_SUCESSFUL.getMessage()).object(foodDTO).build();
 		}
 
 		foodDTO.foodId = initialFood.getFoodId();
-		return ResponseDTO.builder().statusCode(Constant.FOOD_REPEATED.getStatusCode())
-				.message(Constant.FOOD_REPEATED.getMessage()).object(foodDTO).build();
+		return ResponseDTO.builder().statusCode(ConstantFood.FOOD_REPEATED.getStatusCode())
+				.message(ConstantFood.FOOD_REPEATED.getMessage()).object(foodDTO).build();
 
 	}
 
@@ -70,14 +70,14 @@ public class FoodService {
 			
 			int amount = inventoryFoodDTO.getCantidad();
 
-			registerTrace(traceAdd, amount, Constant.INPUT_OPERATION_TYPE.getMessage());
+			registerTrace(traceAdd, amount, ConstantFood.INPUT_OPERATION_TYPE.getMessage());
 
-			return ResponseDTO.builder().statusCode(Constant.FOOD_SUCESSFUL.getStatusCode())
-					.message(Constant.FOOD_SUCESSFUL.getMessage()).object(inventoryFoodDTO).build();
+			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
+					.message(ConstantFood.FOOD_SUCESSFUL.getMessage()).object(inventoryFoodDTO).build();
 		}
 
-		return ResponseDTO.builder().statusCode(Constant.ENTITY_NOT_FOUND.getStatusCode())
-				.message(Constant.ENTITY_NOT_FOUND.getMessage()).object(inventoryFoodDTO).build();
+		return ResponseDTO.builder().statusCode(ConstantFood.ENTITY_NOT_FOUND.getStatusCode())
+				.message(ConstantFood.ENTITY_NOT_FOUND.getMessage()).object(inventoryFoodDTO).build();
 
 	}
 
@@ -102,17 +102,17 @@ public class FoodService {
 				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO, dateNow, inventoryFoodDTO.getRegistroIca(),
 						inventoryFoodDTO.getLote());
 
-				registerTrace(traceAdd, amount, Constant.OUTPUT_OPERATION_TYPE.getMessage());
+				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage());
 
-				return ResponseDTO.builder().statusCode(Constant.FOOD_SUBSCTRACT_SUCESSFUL.getStatusCode())
-						.message(Constant.FOOD_SUBSCTRACT_SUCESSFUL.getMessage()).build();
+				return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUBSCTRACT_SUCESSFUL.getStatusCode())
+						.message(ConstantFood.FOOD_SUBSCTRACT_SUCESSFUL.getMessage()).build();
 			} else {
-				return ResponseDTO.builder().statusCode(Constant.FOOD_SUBSCTRACT_FAILED.getStatusCode())
-						.message(Constant.FOOD_SUBSCTRACT_FAILED.getMessage()).build();
+				return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUBSCTRACT_FAILED.getStatusCode())
+						.message(ConstantFood.FOOD_SUBSCTRACT_FAILED.getMessage()).build();
 			}
 		}
-		return ResponseDTO.builder().statusCode(Constant.ENTITY_NOT_FOUND.getStatusCode())
-				.message(Constant.ENTITY_NOT_FOUND.getMessage()).object(inventoryFoodDTO).build();
+		return ResponseDTO.builder().statusCode(ConstantFood.ENTITY_NOT_FOUND.getStatusCode())
+				.message(ConstantFood.ENTITY_NOT_FOUND.getMessage()).object(inventoryFoodDTO).build();
 	}
 
 	public void registerTrace(HistoryFoodDTO historyFoodDTO, int amount, String typeOperation) {
@@ -122,7 +122,7 @@ public class FoodService {
 
 			if (foodFromDB != null) {
 				int balance = 0;
-				if (typeOperation.equals(Constant.INPUT_OPERATION_TYPE.getMessage())) {
+				if (typeOperation.equals(ConstantFood.INPUT_OPERATION_TYPE.getMessage())) {
 					historyFoodDTO.setInput(amount);
 					// ToDo to add
 //					balance = inventoryFood.getCantidad() == 0 ? inventoryFoodDTO.getCantidad()
