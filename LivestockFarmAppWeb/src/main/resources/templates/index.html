@@ -64,7 +64,7 @@
 				<button onclick="openRegisterMedicine()">Registrar medicina</button>
 				<button onclick="openAddMedicine()">Adicionar medicina</button>
 				<div class="float-right">
-					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
+					<button onclick="generateHistoryMedicine()">Generar historial</button> </div>
 				<p>
 				<div class="table-responsive">
 					<table id="idTableMedicine" class="table-striped" style="width: 180%">
@@ -89,7 +89,7 @@
 				<div class="subheading mb-3">Materiales y Herramientas</div>
 				<button onclick="openRegisterMaterials()">Ingresar materiales</button>
 				<div class="float-right">
-					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
+					<button onclick="generateHistoryMaterials()">Generar historial</button> </div>
 				<p>
 				<div class="table-responsive">
 					<table id="idTableMaterials" class="table-striped" style="width: 180%">
@@ -112,9 +112,10 @@
 			<div class="resume-section-content">
 				<h2 class="mb-5">Alimentos</h2>
 				<div class="subheading mb-3">Alimentos</div>
-				<button onclick="openRegisterFood()">Ingresar alimentos</button>
+				<button onclick="openRegisterFood()">Registrar alimentos</button>
+				<button onclick="openAddFood()">Adicionar alimentos</button>
 				<div class="float-right">
-					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
+					<button onclick="generateHistoryFood()">Generar historial</button> </div>
 				<p>
 				<div class="table-responsive">
 					<table id="idTableFood" class="table-striped" style="width: 180%">
@@ -148,6 +149,7 @@
 	<div th:include="materials/registerMaterials.html"></div>
 	<div th:include="materials/addMaterials.html"></div>
 	<div th:include="materials/removeMaterials.html"></div>
+	<div th:include="materials/historyMaterials.html"></div>
 	<div th:include="medicine/registerMedicine.html"></div>
 	<div th:include="medicine/addMedicine.html"></div>
 	<div th:include="medicine/removeMedicine.html"></div>
@@ -162,7 +164,7 @@
 	$(document).ready(function () {
 		construirTablaMedicina();
 		construirTablaMateriales();
-		//construirTablaComida();
+		construirTablaComida();
 	});
 
 	//Medicine
@@ -192,7 +194,7 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				console.log(data)
+				//console.log(data)
 				loadMedicines(data.responseJSON);
 			}
 		});
@@ -308,25 +310,10 @@
 		$("#modalRegisterMaterials").modal("show");
 	}
 
-	function generateHistorialMateriales() {
-		Swal.fire({
-			title: 'Esta seguro?',
-			text: "Esta seguro de que desea generar el historial?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Cancelar',
-			confirmButtonText: 'Si, generar historial!'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				Swal.fire(
-					'Deleted!',
-					'Your file has been deleted.',
-					'success'
-				)
-			}
-		})
+	function generateHistoryMaterials() {
+		//$('#idRegisterMaterialsName').val("");
+		//$('#idRegisterMaterialsAmount').val("");
+		$("#modalHistoryMaterials").modal("show");
 	}
 
 	function cargarMateriales(data) {
@@ -393,6 +380,8 @@
 	function openAddMaterials(id, name) {
 		$('#idAddMaterialsId').val(id);
 		$('#idAddMaterialsName').val(name);
+		$('#idAddMaterialsAmount').val("");
+		$('#idAddMaterialsObservation').val("");
 		$("#modalAddMaterials").modal("show");
 	}
 
@@ -471,7 +460,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/ma/' + 'getAllMateria',
+			url: '/food/' + 'getAllFood',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -493,14 +482,81 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				cargarMateriales(data.responseJSON);
+				console.log(data)
+				//cargarMateriales(data.responseJSON);
 			}
 		});
 	}
 	
+	function cargarMateriales(data) {
+		contenido = "";
+		for (var i = 0; i < data.object.length; i++) {
+			contenido += '<tr>';
+			contenido += '<td>' + data.object[i].name + '</td>';
+			contenido += '<td>' + data.object[i].amount + '</td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteMaterials(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '</tr>';
+		}
+		$("#idTableMaterials").append(contenido)
+		tablaMaterialesGrafica();
+	}
+
+	function tablaMaterialesGrafica() {
+		$('#idTableMaterials  thead th').each(function () {
+			var title = $(this).text();
+			if (title !== "Acción") {
+				$(this).html('<div class="form-group" id="centrado2">' + '<label for="th" class="blanco">' + title + '</label>' + '<div class="centrado">' + '<input class="form-control filter" id="cssInputFiltro" type="text"  placeholder="Filtrar ' + title + '" />' + '</div>' + '</div>');
+			}
+		});
+
+		var tablaAsig = $('#idTableMaterials').DataTable({
+			"orderCellsTop": true,
+			"order": [0, 'desc'],
+			"processing": true,
+			"ordering": true,
+			"language": {
+				"info": '<div class="formato">_END_ de _TOTAL_ registros</div>',
+				"infoEmpty": '<div class="formato">0 de 0.</div>',
+				"infoFiltered": "(filtrados de un total de _MAX_ registros)",
+				"zeroRecords": "No se han encontrado coincidencias.",
+				"responsive": true,
+				"lengthMenu": "_MENU_",
+			},
+			"lengthMenu": [5, 10, 20, 50, 100],
+			"pageLength": 5,
+			"pagingType": "full_numbers",
+			"dom": "<'row'<'col-sm-5 col-md-7'>>" +
+				"<'row'<'col-sm-8 col-md-7'tr>>" +
+				"<'row'<'col-sm-8 col-md-7'><'col-sm-2 col-md-1'l><'col-sm-1 col-md-1'i><'col-sm-1 col-md-3'p>>",
+
+		});
+		tablaAsig.columns().every(function () {
+			var that = this;
+
+			$('input', this.header()).on('keyup change clear', function () {
+				if (that.search() !== this.value) {
+					that
+						.search(this.value)
+						.draw();
+				}
+			});
+		});
+
+		$('.filter').on('click', function (e) {
+			e.stopPropagation();
+		});
+	}
+	
 	function openRegisterFood() {
-		$('#idRegisterMaterials').val("");
+		$('#nameRegisterFood').val("");
 		$("#modalRegisterFood").modal("show");
+	}
+	
+	function openAddFood() {
+		$('#nameRegisterFood').val("");
+		$("#modalAddFood").modal("show");
 	}
 
 

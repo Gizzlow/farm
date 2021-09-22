@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Ingresar materiales</title>
+	<title>Registrar alimentos</title>
 </head>
 
 <body>
@@ -26,33 +26,8 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">Cantidad</label>
-							<input type="text" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">Lote</label>
-							<input type="text" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">Registro ICA</label>
-							<input type="text" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">Fecha vencimiento</label>
-							<input type="date" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">Nombre almacen</label>
-							<input type="date" class="form-control" id="idRegisterMaterials" name="name"
-								required="required" maxlength="90">
+							<input type="text" class="form-control" id="nameRegisterFood" name="name" required="required"
+								maxlength="90">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -65,6 +40,53 @@
 </html>
 
 <script th:inline="javascript">
+
+	$(document).on('submit', '#registerFood', function (e) {
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'POST',
+			url: '/food/' + 'registerFood ',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$("#modalRegisterFood").modal('hide');
+						//$('#idTableMaterials').DataTable().clear().destroy();
+						//construirTablaMateriales();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
+	});
 
 	function hiddenRegisterFood() {
 		$("#modalRegisterFood").modal("hide");

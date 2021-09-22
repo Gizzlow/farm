@@ -96,8 +96,11 @@ public class MaterialsService {
 		InventoryMaterials inventoryMaterialsDB;
 		if (inventoryMaterials.isPresent()) {
 			inventoryMaterialsDB = inventoryMaterials.get();
+			Long residue = inventoryMaterialsDB.getAmount() + inventoryMaterialsDTO.getAmount();
 			inventoryMaterialsDB.setAmount(inventoryMaterialsDB.getAmount() + inventoryMaterialsDTO.getAmount());
 			inventoryMaterialsRepository.save(inventoryMaterialsDB);
+			inventoryMaterialsDTO.setMaterialsId(inventoryMaterialsDB.getMaterialsId().getMaterialsId());
+			registerHistorial(inventoryMaterialsDTO, inventoryMaterialsDTO.getAmount(), null, residue);
 
 			return ResponseDTO.builder().statusCode(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getStatusCode())
 					.message(ConstantMaterials.ADD_MATERIALS_SUCESSFUL.getMessage()).build();
@@ -122,11 +125,12 @@ public class MaterialsService {
 		InventoryMaterials inventoryMaterialsDB;
 		if (inventoryMaterials.isPresent()) {
 			inventoryMaterialsDB = inventoryMaterials.get();
+			Long residue = inventoryMaterialsDB.getAmount() - inventoryMaterialsDTO.getAmount();
 			inventoryMaterialsDB.setAmount(inventoryMaterialsDB.getAmount() - inventoryMaterialsDTO.getAmount());
 			if (inventoryMaterialsDB.getAmount() >= 0) {
 				inventoryMaterialsRepository.save(inventoryMaterialsDB);
-				registerHistorial(inventoryMaterialsDTO, null, inventoryMaterialsDTO.getAmount(),
-						inventoryMaterialsDB.getAmount() - inventoryMaterialsDTO.getAmount());
+				inventoryMaterialsDTO.setMaterialsId(inventoryMaterialsDB.getMaterialsId().getMaterialsId());
+				registerHistorial(inventoryMaterialsDTO, null, inventoryMaterialsDTO.getAmount(), residue);
 
 				return ResponseDTO.builder().statusCode(ConstantMaterials.REMOVE_MATERIALS_SUCESSFUL.getStatusCode())
 						.message(ConstantMaterials.REMOVE_MATERIALS_SUCESSFUL.getMessage()).build();
