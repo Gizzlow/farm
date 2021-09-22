@@ -11,6 +11,6 @@ public interface FoodRepository extends CrudRepository<Food, Integer>{
 	Food getMaterialByName(String name);
 
 	@Query(value = "SELECT food FROM Food food WHERE food.id =:foodId")
-	Food getFoodById(int foodId);
+	Food getFoodById(long foodId);
 
 }

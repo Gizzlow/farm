@@ -10,7 +10,8 @@ public enum ConstantFood {
 	ENTITY_NOT_FOUND(404, "Entidad no encontrada"),
 	INPUT_OPERATION_TYPE(1, "Añadido"),
 	OUTPUT_OPERATION_TYPE(1, "Retirado"),
-	ERROR_FATAL(500, "Ha ocurrido un error no controlado");
+	ERROR_FATAL(500, "Ha ocurrido un error no controlado"),
+	GET_ALL_FOOD_SUCESSFUL(200, "Listado con éxito");
 
 	private final int statusCode;
 	private final String message;

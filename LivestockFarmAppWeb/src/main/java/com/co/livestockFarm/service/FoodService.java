@@ -1,6 +1,8 @@
 package com.co.livestockFarm.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +69,7 @@ public class FoodService {
 
 			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food, dateNow, inventoryFoodDTO.getRegistroIca(),
 					inventoryFoodDTO.getLote());
-			
+
 			int amount = inventoryFoodDTO.getCantidad();
 
 			registerTrace(traceAdd, amount, ConstantFood.INPUT_OPERATION_TYPE.getMessage());
@@ -141,6 +143,26 @@ public class FoodService {
 			// ToDo how to handle the exception
 		}
 
+	}
+
+	public ResponseDTO<Object> getAllFood() {
+		List<InventoryFoodDTO> response = new ArrayList<>();
+		Iterable<InventoryFood> listInventoryFood = inventoryFoodRepository.findAll();
+		InventoryFoodDTO aux;
+		for (InventoryFood item : listInventoryFood) {
+			aux = new InventoryFoodDTO();
+			aux.setInventoryFoodId(item.getInventoryFoodId());
+			FoodDTO foodDTO = objectMapper.convertValue(item.getFoodId(), FoodDTO.class);
+			aux.setFoodId(foodDTO);
+			aux.setCantidad(item.getCantidad());
+			aux.setLote(item.getLote());
+			aux.setRegistroIca(item.getRegistroIca());
+			aux.setFechaVencimiento(item.getFechaVencimiento());
+			aux.setNombreAlmacen(item.getNombreAlmacen());
+			response.add(aux);
+		}
+		return ResponseDTO.builder().statusCode(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getStatusCode())
+				.message(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getMessage()).object(response).build();
 	}
 
 }

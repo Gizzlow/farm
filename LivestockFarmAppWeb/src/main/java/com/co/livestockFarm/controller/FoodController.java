@@ -1,6 +1,7 @@
 package com.co.livestockFarm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +68,20 @@ public class FoodController {
 		}
 
 		return responseDTO;
+	}
+	@GetMapping("/getAllFood")
+	public ResponseDTO<Object> getAllFood(){
+		
+		ResponseDTO<Object> response;
+		try {
+			response = foodService.getAllFood();
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
 	}
 
 }

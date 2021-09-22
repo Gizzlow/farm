@@ -3,6 +3,6 @@ import lombok.Data;
 
 @Data
 public class FoodDTO {
-	public int foodId;
+	public long foodId;
 	public String name;
 }

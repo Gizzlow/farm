@@ -13,7 +13,7 @@ public class Food {
 	@Id
 	@SequenceGenerator(name = "FOOD_ID_GENERATOR", sequenceName = "FOOD_ID", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FOOD_ID_GENERATOR")
-	private int foodId;
+	private long foodId;
 	private String name;
 	public Food() {
 		
