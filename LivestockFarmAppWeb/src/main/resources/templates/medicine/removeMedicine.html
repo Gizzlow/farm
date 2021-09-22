@@ -1,1 +1,54 @@
-<html></html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Remover medicina</title>
+</head>
+
+<body>
+	<div class="modal fade" id="modalRemoveMedicine" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg1">
+					<div class="row">
+						<h3 class="titulo">Retirar materiales</h3>
+					</div>
+					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="removeMaterials" method="post">
+						<div class="form-group">
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idRemoveMaterialsId"
+								name="inventoryMaterialsId" required="required" readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Nombre</label>
+							<input type="text" class="form-control" id="idRemoveMaterialsName" name="name"
+								required="required" maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Cantidad</label>
+							<input type="text" class="form-control" id="idRemoveMaterialsAmount" name="amount"
+								required="required" maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Observación</label>
+							<input type="text" class="form-control" id="idRemoveMaterialsObservation" name="observation"
+								maxlength="90">
+						</div>
+						<button type="submit" class="btn btn-success">Guardar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

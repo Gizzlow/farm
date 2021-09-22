@@ -5,6 +5,8 @@ public enum ConstantMedicine {
 	REGISTER_MEDICINE_SUCESSFUL(200, "Medicamento registrado con exito"),
 	MEDICINE_REPEAT(400, "El medicamento que ha intentado registrar ya existe"),
 	GET_ALL_MEDICINES_SUCESSFUL(200, "Se han obtenido el inventario de medicinas"),
+	MEDICINE_ADD(200, "Se ha agregado medicina con exito"),
+	MEDICINE_ADD_ERROR(400, "Se ha intentado agregar una medicina inexistente"),
 	ERROR_FATAL(500, "Ha ocurrido un error no controlado");
 	
 	private final int statusCode;
