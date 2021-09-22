@@ -11,8 +11,8 @@ import lombok.Data;
 @Entity
 public class Food {
 	@Id
-	@SequenceGenerator(name = "MATERIALS_ID_GENERATOR", sequenceName = "MATERIALS_ID", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MATERIALS_ID_GENERATOR")
+	@SequenceGenerator(name = "FOOD_ID_GENERATOR", sequenceName = "FOOD_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FOOD_ID_GENERATOR")
 	private int foodId;
 	private String name;
 	public Food() {

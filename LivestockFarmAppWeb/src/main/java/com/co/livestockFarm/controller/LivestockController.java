@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.co.livestockFarm.dto.LivestockDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.LivestockService;
+import com.co.livestockFarm.util.ConstantFood;
 
 @Controller
 @RequestMapping(value = "/ganado")
@@ -19,22 +20,26 @@ public class LivestockController {
 	LivestockService ganadoService;
 
 	@PostMapping(path = "/agregar")
-	public ResponseDTO agregarGanado(@RequestBody LivestockDTO ganado) {
-
+	public ResponseDTO<Object> agregarGanado(@RequestBody LivestockDTO ganadoDTO) {
+		ResponseDTO<Object> responseDTO;
 		try {
-			ganadoService.ganado();
+			responseDTO = ganadoService.registerLivestock(ganadoDTO);
 		} catch (Exception e) {
-
+			return ResponseDTO.builder()
+					.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage())
+					.object(ganadoDTO)
+					.build();
 		}
 
-		return null;
+		return responseDTO;
 	}
 
 	@GetMapping("/obtenerTodos")
 	public String obtenerTodos() {
 
 		try {
-			ganadoService.ganado();
+			
 		} catch (Exception e) {
 
 		}
@@ -43,10 +48,10 @@ public class LivestockController {
 	}
 
 	@PostMapping(path = "/editar")
-	public ResponseDTO editarGanado(@RequestBody LivestockDTO ganado) {
+	public ResponseDTO<Object> editarGanado(@RequestBody LivestockDTO ganado) {
 
 		try {
-			ganadoService.ganado();
+			
 		} catch (Exception e) {
 
 		}
