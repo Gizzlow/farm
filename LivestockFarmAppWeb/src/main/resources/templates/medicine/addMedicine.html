@@ -13,7 +13,7 @@
 			<div class="modal-content">
 				<div class="modal-header bg1">
 					<div class="row">
-						<h3 class="titulo">Adicionar materiales</h3>
+						<h3 class="titulo">Adicionar medicina</h3>
 					</div>
 					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
 						aria-label="Close">
@@ -26,7 +26,7 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="" name="name" required="required"
+							<input type="text" class="form-control" id="" name="medicineId" required="required"
 								maxlength="90">
 						</div>
 						<div class="form-group">
@@ -35,9 +35,17 @@
 								maxlength="5">
 						</div>
 						<div class="form-group">
+							<label for="exampleInputPassword1">Lote</label>
+							<input type="text" class="form-control" id="" name="lot" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Fecha de vencimiento</label>
+							<input type="date" class="form-control" id="" name="expiration" required="required"
+								maxlength="5">
+						</div>
+						<div class="form-group">
 							<label for="exampleInputPassword1">Observación</label>
-							<input type="text" class="form-control" id="" name="observation"
-								maxlength="90">
+							<input type="text" class="form-control" id="" name="observation" maxlength="90">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -52,11 +60,55 @@
 <script th:inline="javascript">
 
 	$(document).on('submit', '#addMedicine', function (e) {
-		
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'POST',
+			url: '/medicine/' + 'addMedicine ',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$("#modalAddMedicine").modal('hide');
+						//$('#idTableMaterials').DataTable().clear().destroy();
+						//construirTablaMateriales();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
 	});
 
 
 	function hiddenMaterials() {
-		$("#addMedicine").modal("hide");
+		$("#modalAddMedicine").modal("hide");
 	}
 </script>

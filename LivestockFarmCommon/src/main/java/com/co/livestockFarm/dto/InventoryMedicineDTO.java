@@ -17,4 +17,6 @@ public class InventoryMedicineDTO {
 	private String name;
 	private String activeIngredient;
 	private String measurementUnit;
+	private String observation;
+	private String expiration;
 }

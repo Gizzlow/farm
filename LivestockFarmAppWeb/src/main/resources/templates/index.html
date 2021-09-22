@@ -62,7 +62,7 @@
 				<h2 class="mb-5">Medicamentos</h2>
 				<div class="subheading mb-3">Medicinas</div>
 				<button onclick="openRegisterMedicine()">Registrar medicina</button>
-				<button onclick="openRegisterMedicine()">Adicionar medicina</button>
+				<button onclick="openAddMedicine()">Adicionar medicina</button>
 				<div class="float-right">
 					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
 				<p>
@@ -192,6 +192,7 @@
 				},
 			complete: function (data) {
 				Swal.close();
+				console.log(data)
 				loadMedicines(data.responseJSON);
 			}
 		});
@@ -203,7 +204,8 @@
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="""></button><button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials()"></button><button type="button" id="btnDeleteMaterials" onclick=""></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
+			+'<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 

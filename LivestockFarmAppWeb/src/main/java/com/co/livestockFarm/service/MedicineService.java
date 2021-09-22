@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.InventoryMedicineDTO;
+import com.co.livestockFarm.dto.MaterialsDTO;
 import com.co.livestockFarm.dto.MedicineDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.entity.InventoryMaterials;
@@ -82,8 +83,27 @@ public class MedicineService {
 	}
 
 	public ResponseDTO<Object> addMedicines(InventoryMedicineDTO inventoryMedicineDTO) {
-
-		return null;
+		Optional<Medicine> medicine = medicineRepository.findById(inventoryMedicineDTO.getMedicineId());
+		if(medicine.isPresent()) {
+			InventoryMedicine inventoryMedicine = new InventoryMedicine();
+			Medicine medicineAux = new Medicine();
+			medicineAux.setMedicineId(inventoryMedicineDTO.getMedicineId());
+			inventoryMedicine.setMedicineId(medicineAux);
+			inventoryMedicine.setExpirationDate(inventoryMedicineDTO.getExpirationDate());
+			inventoryMedicine.setAmount(inventoryMedicineDTO.getAmount());
+			inventoryMedicine.setLot(inventoryMedicineDTO.getLot());
+			inventoryMedicineRepository.save(inventoryMedicine);
+			
+			return ResponseDTO.builder()
+					.statusCode(ConstantMedicine.MEDICINE_ADD.getStatusCode())
+					.message(ConstantMedicine.MEDICINE_ADD.getMessage())
+					.build();
+		}
+		
+		return ResponseDTO.builder()
+				.statusCode(ConstantMedicine.MEDICINE_ADD_ERROR.getStatusCode())
+				.message(ConstantMedicine.MEDICINE_ADD_ERROR.getMessage())
+				.build();
 	}
 
 }
