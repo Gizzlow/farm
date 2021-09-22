@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Ingresar materiales</title>
+</head>
+
+<body>
+	<div class="modal fade" id="modalAddMedicine" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg1">
+					<div class="row">
+						<h3 class="titulo">Adicionar materiales</h3>
+					</div>
+					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="addMedicine" method="post">
+						<div class="form-group">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Nombre</label>
+							<input type="text" class="form-control" id="" name="name" required="required"
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Cantidad</label>
+							<input type="text" class="form-control" id="" name="amount" required="required"
+								maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Observación</label>
+							<input type="text" class="form-control" id="" name="observation"
+								maxlength="90">
+						</div>
+						<button type="submit" class="btn btn-success">Guardar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script th:inline="javascript">
+
+	$(document).on('submit', '#addMedicine', function (e) {
+		
+	});
+
+
+	function hiddenMaterials() {
+		$("#addMedicine").modal("hide");
+	}
+</script>

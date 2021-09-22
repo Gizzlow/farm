@@ -29,10 +29,8 @@ public class MedicineController {
 			response = medicineService.registerMedicine(medicineDTO);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMedicine.ERROR_FATAL.getStatusCode())
-					.message(ConstantMedicine.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMedicine.ERROR_FATAL.getStatusCode())
+					.message(ConstantMedicine.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
@@ -46,10 +44,8 @@ public class MedicineController {
 			response = medicineService.getAllMedicines();
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
@@ -63,10 +59,8 @@ public class MedicineController {
 			response = medicineService.addMedicines(inventoryMedicineDTO);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;

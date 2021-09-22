@@ -62,6 +62,7 @@
 				<h2 class="mb-5">Medicamentos</h2>
 				<div class="subheading mb-3">Medicinas</div>
 				<button onclick="openRegisterMedicine()">Registrar medicina</button>
+				<button onclick="openRegisterMedicine()">Adicionar medicina</button>
 				<div class="float-right">
 					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
 				<p>
@@ -111,6 +112,27 @@
 			<div class="resume-section-content">
 				<h2 class="mb-5">Alimentos</h2>
 				<div class="subheading mb-3">Alimentos</div>
+				<button onclick="openRegisterFood()">Ingresar alimentos</button>
+				<div class="float-right">
+					<button onclick="generateHistorialMateriales()">Generar historial</button> </div>
+				<p>
+				<div class="table-responsive">
+					<table id="idTableFood" class="table-striped" style="width: 180%">
+						<thead>
+							<tr class="color">
+								<th style="width: 9%;" class="color-head">Nombre<br></th>
+								<th style="width: 9%;" class="color-head">Cantidad<br></th>
+								<th style="width: 9%;" class="color-head">Lote<br></th>
+								<th style="width: 9%;" class="color-head">Registro ICA<br></th>
+								<th style="width: 9%;" class="color-head">Fecha vencimiento<br></th>
+								<th style="width: 9%;" class="color-head">Nombre almacen<br></th>
+								<th style="width: 4%;" class="color-head">Acción</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</section>
 		<hr class="m-0" />
@@ -126,42 +148,26 @@
 	<div th:include="materials/registerMaterials.html"></div>
 	<div th:include="materials/addMaterials.html"></div>
 	<div th:include="materials/removeMaterials.html"></div>
-	<div th:include="materials/registerMedicine.html"></div>
+	<div th:include="medicine/registerMedicine.html"></div>
+	<div th:include="medicine/addMedicine.html"></div>
+	<div th:include="medicine/removeMedicine.html"></div>
+	<div th:include="food/addFood.html"></div>
+	<div th:include="food/registerFood.html"></div>
+	<div th:include="food/removeFood.html"></div>
 </body>
 
 </html>
 <script th:inline="javascript">
 
 	$(document).ready(function () {
+		construirTablaMedicina();
+		construirTablaMateriales();
+		//construirTablaComida();
+	});
+
+	//Medicine
+	function construirTablaMedicina() {
 		var data;
-		$.ajax({
-			type: 'GET',
-			url: '/materials/' + 'getAllMaterials/',
-			data: data,
-			beforeSend: function () {
-				Swal.fire({
-					title: 'Cargando...',
-					position: 'top',
-					allowOutsideClick: () => !Swal.isLoading(),
-					onBeforeOpen: () => {
-						Swal.showLoading();
-					}
-				});
-			},
-			success: function (data) {
-				Swal.close();
-				mensajeRespuesta = data.msgRespuesta;
-			},
-			error:
-				function () {
-					Swal.close();
-				},
-			complete: function (data) {
-				Swal.close();
-				cargarMateriales(data.responseJSON);
-			}
-		});
-		
 		$.ajax({
 			type: 'GET',
 			url: '/medicine/' + 'getAllMedicines/',
@@ -186,33 +192,25 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				console.log(data)
 				loadMedicines(data.responseJSON);
 			}
 		});
-
-	});
-	
-	//Medicine
-	
-	function openRegisterMedicine(){
-		$("#modalRegisterMedicine").modal("show");
 	}
-	
+
 	function loadMedicines(data) {
 		contenido = "";
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials()""></button><button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials()"></button><button type="button" id="btnDeleteMaterials" onclick="openDeleteMaterials()"></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="""></button><button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials()"></button><button type="button" id="btnDeleteMaterials" onclick=""></button></td>';
 			contenido += '</tr>';
 		}
 
 		$("#idTableMedicine").append(contenido)
 		tablaMedicineGrafica();
 	}
-	
+
 	function tablaMedicineGrafica() {
 		$('#idTableMedicine  thead th').each(function () {
 			var title = $(this).text();
@@ -259,14 +257,55 @@
 		});
 	}
 	
-	//END Medicine
-	
-	//Materials
-	
-	function openRegisterMaterials(){
-		$("#modalRegisterMaterials").modal("show");
+	function openRegisterMedicine() {
+		$("#modalRegisterMedicine").modal("show");
 	}
 	
+	function openAddMedicine() {
+		$("#modalAddMedicine").modal("show");
+	}
+
+	//END Medicine
+
+	//Materials
+
+	function construirTablaMateriales() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/materials/' + 'getAllMaterials/',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				cargarMateriales(data.responseJSON);
+			}
+		});
+	}
+
+	function openRegisterMaterials() {
+		$('#idRegisterMaterialsName').val("");
+		$('#idRegisterMaterialsAmount').val("");
+		$("#modalRegisterMaterials").modal("show");
+	}
+
 	function generateHistorialMateriales() {
 		Swal.fire({
 			title: 'Esta seguro?',
@@ -287,17 +326,18 @@
 			}
 		})
 	}
-	
+
 	function cargarMateriales(data) {
 		contenido = "";
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials()""></button><button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials()"></button><button type="button" id="btnDeleteMaterials" onclick="openDeleteMaterials()"></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteMaterials(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
-
 		$("#idTableMaterials").append(contenido)
 		tablaMaterialesGrafica();
 	}
@@ -347,19 +387,122 @@
 			e.stopPropagation();
 		});
 	}
-	
-	function openAddMaterials(){
+
+	function openAddMaterials(id, name) {
+		$('#idAddMaterialsId').val(id);
+		$('#idAddMaterialsName').val(name);
 		$("#modalAddMaterials").modal("show");
 	}
-	
-	function openRemoveMaterials(){
+
+	function openRemoveMaterials(id, name) {
+		$('#idRemoveMaterialsId').val(id);
+		$('#idRemoveMaterialsName').val(name);
 		$("#modalRemoveMaterials").modal("show");
 	}
-	
-	function openDeleteMaterials(){
-		
+
+	function deleteMaterials(id) {
+		Swal.fire({
+			title: 'Esta seguro?',
+			text: "Esta seguro de que desea eliminar el material?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Cancelar',
+			confirmButtonText: 'Si, eliminar material!'
+		}).then((result) => {
+			if (result.value) {
+				openDeleteMaterials(id);
+			}
+		})
+	}
+
+	function openDeleteMaterials(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/materials/' + 'deleteMaterials/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$('#idTableMaterials').DataTable().clear().destroy();
+						construirTablaMateriales();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
+	}
+
+	//END Materials
+
+	//Food
+
+	function construirTablaComida() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/ma/' + 'getAllMateria',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				cargarMateriales(data.responseJSON);
+			}
+		});
 	}
 	
-	//END Materials
+	function openRegisterFood() {
+		$('#idRegisterMaterials').val("");
+		$("#modalRegisterFood").modal("show");
+	}
+
+
+	//END Food
+
 
 </script>
