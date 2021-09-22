@@ -41,16 +41,12 @@ public class MedicineService {
 			Medicine medicine = objectMapper.convertValue(medicineDTO, Medicine.class);
 			medicineRepository.save(medicine);
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMedicine.REGISTER_MEDICINE_SUCESSFUL.getStatusCode())
-					.message(ConstantMedicine.REGISTER_MEDICINE_SUCESSFUL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMedicine.REGISTER_MEDICINE_SUCESSFUL.getStatusCode())
+					.message(ConstantMedicine.REGISTER_MEDICINE_SUCESSFUL.getMessage()).build();
 		}
 
-		return ResponseDTO.builder()
-				.statusCode(ConstantMedicine.MEDICINE_REPEAT.getStatusCode())
-				.message(ConstantMedicine.MEDICINE_REPEAT.getMessage())
-				.build();
+		return ResponseDTO.builder().statusCode(ConstantMedicine.MEDICINE_REPEAT.getStatusCode())
+				.message(ConstantMedicine.MEDICINE_REPEAT.getMessage()).build();
 	}
 
 	private MedicineDTO getMedicineByName(String name) {
@@ -70,7 +66,8 @@ public class MedicineService {
 		Medicine medicineDB;
 		for (InventoryMedicine inventoryMedicine : listInventoryMedicine) {
 			aux = new InventoryMedicineDTO();
-			Optional<Medicine> medicine = medicineRepository.findById(inventoryMedicine.getMedicineId().getMedicineId());
+			Optional<Medicine> medicine = medicineRepository
+					.findById(inventoryMedicine.getMedicineId().getMedicineId());
 			medicineDB = medicine.get();
 			aux.setName(medicineDB.getName());
 			aux.setActiveIngredient(medicineDB.getActiveIngredient());
@@ -79,16 +76,13 @@ public class MedicineService {
 			aux.setMeasurementUnit(medicineDB.getMeasurementUnit());
 			response.add(aux);
 		}
-		
-		return ResponseDTO.builder()
-				.statusCode(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getStatusCode())
-				.message(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getMessage())
-				.object(response)
-				.build();
+
+		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getStatusCode())
+				.message(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getMessage()).object(response).build();
 	}
-	
+
 	public ResponseDTO<Object> addMedicines(InventoryMedicineDTO inventoryMedicineDTO) {
-		
+
 		return null;
 	}
 

@@ -6,4 +6,5 @@ import lombok.Data;
 public class MaterialsDTO {
 	private Long materialsId;
 	private String name;
+	private Long amount;
 }

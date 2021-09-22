@@ -3,8 +3,8 @@ package com.co.livestockFarm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,10 +29,8 @@ public class MaterialsController {
 			response = materialsService.registerMaterials(materialsDTO);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
@@ -46,10 +44,8 @@ public class MaterialsController {
 			response = materialsService.getAllMaterials();
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
@@ -63,10 +59,8 @@ public class MaterialsController {
 			response = materialsService.addMaterials(inventoryMaterialsDTO);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
@@ -80,25 +74,23 @@ public class MaterialsController {
 			response = materialsService.removeMaterials(inventoryMaterialsDTO);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
 	}
-	
-	public ResponseDTO<Object> deleteMaterials(MaterialsDTO materialsDTO) {
+
+	@GetMapping("/deleteMaterials/{id}")
+	@ResponseBody
+	public ResponseDTO<Object> deleteMaterials(@PathVariable("id") Long id) {
 		ResponseDTO<Object> response;
 		try {
-			response = materialsService.deleteMaterials(materialsDTO);
+			response = materialsService.deleteMaterials(id);
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
-					.message(ConstantMaterials.ERROR_FATAL.getMessage())
-					.build();
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
 		}
 
 		return response;
