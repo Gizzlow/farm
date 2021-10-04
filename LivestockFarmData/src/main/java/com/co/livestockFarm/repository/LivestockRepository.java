@@ -7,7 +7,7 @@ import com.co.livestockFarm.entity.Livestock;
 
 public interface LivestockRepository extends CrudRepository<Livestock, Long> {
 
-	@Query(value = "SELECT livestock FROM Livestock livestock WHERE livestock.motherId.livestockId =:livestockId")
+	@Query(value = "SELECT livestock FROM Livestock livestock WHERE livestock.livestockId =:livestockId")
 	Livestock getLivestockById(long livestockId);
 
 }
