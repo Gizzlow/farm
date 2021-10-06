@@ -8,12 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Entity
-@Builder
 public class Livestock {
 	@Id
 	@SequenceGenerator(name = "LIVESTOCK_ID_GENERATOR", sequenceName = "LIVESTOCK_ID", allocationSize = 1)
@@ -26,4 +24,8 @@ public class Livestock {
 	private String type;
 	private boolean active;
 	private String observation;
+	
+	public Livestock() {
+		
+	}
 }

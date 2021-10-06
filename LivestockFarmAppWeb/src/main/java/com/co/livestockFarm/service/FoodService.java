@@ -53,18 +53,24 @@ public class FoodService {
 	}
 
 	public ResponseDTO<Object> addFood(InventoryFoodDTO inventoryFoodDTO) {
-
-		Food foodFromDB = foodRepository.getFoodById(inventoryFoodDTO.getFoodId().foodId);
+		
+		Food foodFromDB = foodRepository.getFoodById(inventoryFoodDTO.getFoodId());
 
 		if (foodFromDB != null) {
-			InventoryFood inventoryFood = objectMapper.convertValue(inventoryFoodDTO, InventoryFood.class);
+			 
+			InventoryFood inventoryFood = new InventoryFood();
+			inventoryFood.setFoodId(foodFromDB);
+			inventoryFood.setCantidad(inventoryFoodDTO.getCantidad());
+			inventoryFood.setFechaVencimiento(inventoryFoodDTO.getFechaVencimiento());
+			inventoryFood.setLote(inventoryFoodDTO.getLote());
+			inventoryFood.setNombreAlmacen(inventoryFoodDTO.getNombreAlmacen());
+			inventoryFood.setRegistroIca(inventoryFoodDTO.getRegistroIca());
 
 			inventoryFoodRepository.save(inventoryFood);
 			inventoryFoodDTO.inventoryFoodId = inventoryFood.getInventoryFoodId();
-			inventoryFoodDTO.foodId.name = foodFromDB.getName();
+			inventoryFoodDTO.setName(foodFromDB.getName());
 
 			FoodDTO food = objectMapper.convertValue(foodFromDB, FoodDTO.class);
-
 			String dateNow = LocalDateTime.now().toLocalDate().toString();
 
 			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food, dateNow, inventoryFoodDTO.getRegistroIca(),
@@ -94,7 +100,7 @@ public class FoodService {
 				inventoryFoodFromDB.setCantidad(inventoryFoodFromDB.getCantidad() - inventoryFoodDTO.getCantidad());
 				inventoryFoodRepository.save(inventoryFoodFromDB);
 
-				Food food = foodRepository.getFoodById(inventoryFoodDTO.foodId.foodId);
+				Food food = foodRepository.getFoodById(inventoryFoodDTO.foodId);
 				FoodDTO foodDTO = objectMapper.convertValue(food, FoodDTO.class);
 
 				String dateNow = LocalDateTime.now().toLocalDate().toString();
@@ -152,8 +158,7 @@ public class FoodService {
 		for (InventoryFood item : listInventoryFood) {
 			aux = new InventoryFoodDTO();
 			aux.setInventoryFoodId(item.getInventoryFoodId());
-			FoodDTO foodDTO = objectMapper.convertValue(item.getFoodId(), FoodDTO.class);
-			aux.setFoodId(foodDTO);
+			aux.setFoodId(item.getFoodId().getFoodId());
 			aux.setCantidad(item.getCantidad());
 			aux.setLote(item.getLote());
 			aux.setRegistroIca(item.getRegistroIca());
