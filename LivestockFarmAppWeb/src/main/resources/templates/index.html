@@ -71,7 +71,10 @@
 						<thead>
 							<tr class="color">
 								<th style="width: 9%;" class="color-head">Nombre<br></th>
+								<th style="width: 9%;" class="color-head">Ingrediente activo<br></th>
+								<th style="width: 9%;" class="color-head">Fecha vencimiento<br></th>
 								<th style="width: 9%;" class="color-head">Cantidad<br></th>
+								<th style="width: 9%;" class="color-head">Unidad<br></th>
 								<th style="width: 4%;" class="color-head">Acción</th>
 							</tr>
 						</thead>
@@ -172,7 +175,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/medicine/' + 'getAllMedicines/',
+			url: '/medicine/' + 'getAllInventoryMedicines/',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -194,7 +197,7 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				//console.log(data)
+				console.log(data)
 				loadMedicines(data.responseJSON);
 			}
 		});
@@ -482,7 +485,7 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				console.log(data)
+				//console.log(data)
 				//cargarMateriales(data.responseJSON);
 			}
 		});

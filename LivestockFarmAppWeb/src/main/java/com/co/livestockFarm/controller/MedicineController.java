@@ -51,6 +51,21 @@ public class MedicineController {
 		return response;
 	}
 
+	@GetMapping("/getAllInventoryMedicines")
+	@ResponseBody
+	public ResponseDTO<Object> getAllInventoryMedicines() {
+		ResponseDTO<Object> response;
+		try {
+			response = medicineService.getAllInventoryMedicines();
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
+
 	@PostMapping("/addMedicine")
 	@ResponseBody
 	public ResponseDTO<Object> addMedicine(InventoryMedicineDTO inventoryMedicineDTO) {

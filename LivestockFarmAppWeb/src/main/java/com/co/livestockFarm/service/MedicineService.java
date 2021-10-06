@@ -61,6 +61,26 @@ public class MedicineService {
 	}
 
 	public ResponseDTO<Object> getAllMedicines() {
+		List<MedicineDTO> response = new ArrayList<>();
+		Iterable<Medicine> listMedicine = medicineRepository.findAll();
+		MedicineDTO aux;
+		for (Medicine medicine : listMedicine) {
+			aux = new MedicineDTO();
+			aux.setName(medicine.getName());
+			aux.setCodeICA(medicine.getCodeICA());
+			aux.setTantamount(medicine.getTantamount());
+			aux.setGroupe(medicine.getGroupe());
+			aux.setActiveIngredient(medicine.getActiveIngredient());
+			aux.setMeasurementUnit(medicine.getMeasurementUnit());
+			aux.setType(medicine.getType());
+			response.add(aux);
+		}
+
+		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getStatusCode())
+				.message(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getMessage()).object(response).build();
+	}
+
+	public ResponseDTO<Object> getAllInventoryMedicines() {
 		List<InventoryMedicineDTO> response = new ArrayList<>();
 		Iterable<InventoryMedicine> listInventoryMedicine = inventoryMedicineRepository.findAll();
 		InventoryMedicineDTO aux;
@@ -84,7 +104,7 @@ public class MedicineService {
 
 	public ResponseDTO<Object> addMedicines(InventoryMedicineDTO inventoryMedicineDTO) {
 		Optional<Medicine> medicine = medicineRepository.findById(inventoryMedicineDTO.getMedicineId());
-		if(medicine.isPresent()) {
+		if (medicine.isPresent()) {
 			InventoryMedicine inventoryMedicine = new InventoryMedicine();
 			Medicine medicineAux = new Medicine();
 			medicineAux.setMedicineId(inventoryMedicineDTO.getMedicineId());
@@ -93,17 +113,13 @@ public class MedicineService {
 			inventoryMedicine.setAmount(inventoryMedicineDTO.getAmount());
 			inventoryMedicine.setLot(inventoryMedicineDTO.getLot());
 			inventoryMedicineRepository.save(inventoryMedicine);
-			
-			return ResponseDTO.builder()
-					.statusCode(ConstantMedicine.MEDICINE_ADD.getStatusCode())
-					.message(ConstantMedicine.MEDICINE_ADD.getMessage())
-					.build();
+
+			return ResponseDTO.builder().statusCode(ConstantMedicine.MEDICINE_ADD.getStatusCode())
+					.message(ConstantMedicine.MEDICINE_ADD.getMessage()).build();
 		}
-		
-		return ResponseDTO.builder()
-				.statusCode(ConstantMedicine.MEDICINE_ADD_ERROR.getStatusCode())
-				.message(ConstantMedicine.MEDICINE_ADD_ERROR.getMessage())
-				.build();
+
+		return ResponseDTO.builder().statusCode(ConstantMedicine.MEDICINE_ADD_ERROR.getStatusCode())
+				.message(ConstantMedicine.MEDICINE_ADD_ERROR.getMessage()).build();
 	}
 
 }
