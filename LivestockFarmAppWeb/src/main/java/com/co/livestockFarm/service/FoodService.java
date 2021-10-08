@@ -73,7 +73,7 @@ public class FoodService {
 			FoodDTO food = objectMapper.convertValue(foodFromDB, FoodDTO.class);
 			String dateNow = LocalDateTime.now().toLocalDate().toString();
 
-			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food, dateNow, inventoryFoodDTO.getRegistroIca(),
+			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
 					inventoryFoodDTO.getLote());
 
 			int amount = inventoryFoodDTO.getCantidad();
@@ -107,7 +107,7 @@ public class FoodService {
 
 				int amount = inventoryFoodDTO.getCantidad();
 
-				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO, dateNow, inventoryFoodDTO.getRegistroIca(),
+				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
 						inventoryFoodDTO.getLote());
 
 				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage());
@@ -126,7 +126,7 @@ public class FoodService {
 	public void registerTrace(HistoryFoodDTO historyFoodDTO, int amount, String typeOperation) {
 		Food foodFromDB = null;
 		try {
-			foodFromDB = foodRepository.getFoodById(historyFoodDTO.getFoodId().foodId);
+			foodFromDB = foodRepository.getFoodById(historyFoodDTO.foodId);
 
 			if (foodFromDB != null) {
 				int balance = 0;
@@ -164,6 +164,20 @@ public class FoodService {
 			aux.setRegistroIca(item.getRegistroIca());
 			aux.setFechaVencimiento(item.getFechaVencimiento());
 			aux.setNombreAlmacen(item.getNombreAlmacen());
+			response.add(aux);
+		}
+		return ResponseDTO.builder().statusCode(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getStatusCode())
+				.message(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getMessage()).object(response).build();
+	}
+
+	public ResponseDTO<Object> getAllFoodItems() {
+		List<FoodDTO> response = new ArrayList<>();
+		Iterable<Food> listInventoryFood = foodRepository.findAll();
+		FoodDTO aux;
+		for (Food item : listInventoryFood) {
+			aux = new FoodDTO();
+			aux.setFoodId(item.getFoodId());
+			aux.setName(item.getName());			
 			response.add(aux);
 		}
 		return ResponseDTO.builder().statusCode(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getStatusCode())

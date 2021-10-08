@@ -7,7 +7,7 @@ public class HistoryFoodDTO {
 	public HistoryFoodDTO() {
 		
 	}
-	public HistoryFoodDTO(FoodDTO food, String dateNow, String icaRegistration,
+	public HistoryFoodDTO(Long food, String dateNow, String icaRegistration,
 			String lote) {
 		foodId = food;
 		date = dateNow;
@@ -15,7 +15,7 @@ public class HistoryFoodDTO {
 		this.lote = lote;
 	}
 	private int id;
-	public FoodDTO foodId;
+	public Long foodId;
 	private String date;
 	private int input;
 	private int output;

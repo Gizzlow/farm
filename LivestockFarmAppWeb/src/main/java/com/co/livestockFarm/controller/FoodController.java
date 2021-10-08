@@ -83,5 +83,19 @@ public class FoodController {
 
 		return response;
 	}
+	@GetMapping("/getAllFoodItems")
+	public ResponseDTO<Object> getAllFoodItems(){
+		
+		ResponseDTO<Object> response;
+		try {
+			response = foodService.getAllFoodItems();
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
 
 }
