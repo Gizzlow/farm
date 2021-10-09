@@ -19,4 +19,5 @@ public class InventoryFoodDTO {
 	private String nombreAlmacen;
 	private String operationDate;
 	private String name;
+	private String observation;
 }

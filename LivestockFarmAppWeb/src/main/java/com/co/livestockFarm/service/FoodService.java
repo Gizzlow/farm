@@ -65,6 +65,7 @@ public class FoodService {
 			inventoryFood.setLote(inventoryFoodDTO.getLote());
 			inventoryFood.setNombreAlmacen(inventoryFoodDTO.getNombreAlmacen());
 			inventoryFood.setRegistroIca(inventoryFoodDTO.getRegistroIca());
+			inventoryFood.setObservation(inventoryFoodDTO.getObservation());
 
 			inventoryFoodRepository.save(inventoryFood);
 			inventoryFoodDTO.inventoryFoodId = inventoryFood.getInventoryFoodId();
@@ -156,7 +157,9 @@ public class FoodService {
 		Iterable<InventoryFood> listInventoryFood = inventoryFoodRepository.findAll();
 		InventoryFoodDTO aux;
 		for (InventoryFood item : listInventoryFood) {
+			Food auxFood = foodRepository.getFoodById(item.getFoodId().getFoodId());
 			aux = new InventoryFoodDTO();
+			aux.setName(auxFood.getName());
 			aux.setInventoryFoodId(item.getInventoryFoodId());
 			aux.setFoodId(item.getFoodId().getFoodId());
 			aux.setCantidad(item.getCantidad());
@@ -164,6 +167,7 @@ public class FoodService {
 			aux.setRegistroIca(item.getRegistroIca());
 			aux.setFechaVencimiento(item.getFechaVencimiento());
 			aux.setNombreAlmacen(item.getNombreAlmacen());
+			aux.setObservation(item.getObservation());
 			response.add(aux);
 		}
 		return ResponseDTO.builder().statusCode(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getStatusCode())
