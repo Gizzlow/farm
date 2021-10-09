@@ -2,6 +2,7 @@ package com.co.livestockFarm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +90,20 @@ public class FoodController {
 		ResponseDTO<Object> response;
 		try {
 			response = foodService.getAllFoodItems();
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
+	@GetMapping("/deleteInventory/{id}")
+	public ResponseDTO<Object> deleteInventory(@PathVariable Long id){
+		
+		ResponseDTO<Object> response;
+		try {
+			response = foodService.deleteInventory(id);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())

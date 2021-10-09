@@ -53,11 +53,11 @@ public class FoodService {
 	}
 
 	public ResponseDTO<Object> addFood(InventoryFoodDTO inventoryFoodDTO) {
-		
+
 		Food foodFromDB = foodRepository.getFoodById(inventoryFoodDTO.getFoodId());
 
 		if (foodFromDB != null) {
-			 
+
 			InventoryFood inventoryFood = new InventoryFood();
 			inventoryFood.setFoodId(foodFromDB);
 			inventoryFood.setCantidad(inventoryFoodDTO.getCantidad());
@@ -108,8 +108,8 @@ public class FoodService {
 
 				int amount = inventoryFoodDTO.getCantidad();
 
-				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
-						inventoryFoodDTO.getLote());
+				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO.getFoodId(), dateNow,
+						inventoryFoodDTO.getRegistroIca(), inventoryFoodDTO.getLote());
 
 				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage());
 
@@ -181,11 +181,26 @@ public class FoodService {
 		for (Food item : listInventoryFood) {
 			aux = new FoodDTO();
 			aux.setFoodId(item.getFoodId());
-			aux.setName(item.getName());			
+			aux.setName(item.getName());
 			response.add(aux);
 		}
 		return ResponseDTO.builder().statusCode(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getStatusCode())
 				.message(ConstantFood.GET_ALL_FOOD_SUCESSFUL.getMessage()).object(response).build();
+	}
+
+	public ResponseDTO<Object> deleteInventory(Long id) {
+		InventoryFood inventory = inventoryFoodRepository.getInventoryFoodById(id);
+
+		if (inventory != null) {
+			inventoryFoodRepository.deleteById(id);
+
+			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_DELETED_SUCESSFUL.getStatusCode())
+					.message(ConstantFood.FOOD_DELETED_SUCESSFUL.getMessage()).build();
+		} else {
+			return ResponseDTO.builder().statusCode(ConstantFood.ENTITY_NOT_FOUND.getStatusCode())
+					.message(ConstantFood.ENTITY_NOT_FOUND.getMessage()).build();
+		}
+
 	}
 
 }
