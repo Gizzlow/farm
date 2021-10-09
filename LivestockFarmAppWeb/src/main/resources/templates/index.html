@@ -18,6 +18,7 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/sweetalert2.css}">
 	<link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet">
 	<link th:href="@{/css/resume.min.css}" rel="stylesheet">
+	<link th:href="@{/css/select2.css}" rel="stylesheet">
 
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" th:src="@{/js/sweetalert2.js}"></script>
@@ -25,6 +26,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
 	<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body id="page-top">
@@ -168,6 +170,21 @@
 		construirTablaMedicina();
 		construirTablaMateriales();
 		construirTablaComida();
+
+		$.fn.modal.Constructor.prototype._enforceFocus = function () {};
+		$('.selectRequerido').select2({
+			language: {
+
+				noResults: function () {
+
+					return "No hay resultado";
+				},
+				searching: function () {
+
+					return "Buscando..";
+				}
+			}
+		});
 	});
 
 	//Medicine
@@ -197,7 +214,6 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				console.log(data)
 				loadMedicines(data.responseJSON);
 			}
 		});
@@ -210,7 +226,7 @@
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
 			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
-			+'<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
+				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 
@@ -263,13 +279,51 @@
 			e.stopPropagation();
 		});
 	}
-	
+
 	function openRegisterMedicine() {
 		$("#modalRegisterMedicine").modal("show");
 	}
-	
+
 	function openAddMedicine() {
 		$("#modalAddMedicine").modal("show");
+		$("#idAddMedicineSelect").empty();
+		var select = document.getElementById("idAddMedicineSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadMedicine();
+	}
+
+	function getAllMedicines() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllMedicines/',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				//console.log(data)
+			}
+		});
 	}
 
 	//END Medicine
@@ -485,36 +539,40 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				//console.log(data)
-				//cargarMateriales(data.responseJSON);
+				cargarComida(data.responseJSON);
 			}
 		});
 	}
-	
-	function cargarMateriales(data) {
+
+	function cargarComida(data) {
 		contenido = "";
+		console.log(data)
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
-			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
-				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteMaterials(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td>' + data.object[i].cantidad + '</td>';
+			contenido += '<td>' + data.object[i].lote + '</td>';
+			contenido += '<td>' + data.object[i].registroIca + '</td>';
+			contenido += '<td>' + data.object[i].fechaVencimiento + '</td>';
+			contenido += '<td>' + data.object[i].nombreAlmacen + '</td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveFood(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" onclick="openDeleteFood(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
-		$("#idTableMaterials").append(contenido)
-		tablaMaterialesGrafica();
+		$("#idTableFood").append(contenido)
+		tablaComidaGrafica();
 	}
 
-	function tablaMaterialesGrafica() {
-		$('#idTableMaterials  thead th').each(function () {
+	function tablaComidaGrafica() {
+		$('#idTableFood  thead th').each(function () {
 			var title = $(this).text();
 			if (title !== "Acción") {
 				$(this).html('<div class="form-group" id="centrado2">' + '<label for="th" class="blanco">' + title + '</label>' + '<div class="centrado">' + '<input class="form-control filter" id="cssInputFiltro" type="text"  placeholder="Filtrar ' + title + '" />' + '</div>' + '</div>');
 			}
 		});
 
-		var tablaAsig = $('#idTableMaterials').DataTable({
+		var tablaAsig = $('#idTableFood').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
 			"processing": true,
@@ -551,15 +609,73 @@
 			e.stopPropagation();
 		});
 	}
-	
+
 	function openRegisterFood() {
 		$('#nameRegisterFood').val("");
 		$("#modalRegisterFood").modal("show");
 	}
-	
+
 	function openAddFood() {
-		$('#nameRegisterFood').val("");
 		$("#modalAddFood").modal("show");
+		$("#idAddFoodSelect").empty();
+		var select = document.getElementById("idAddFoodSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadFood();
+	}
+	
+	function openSumarFood(){
+		$("#modalAddMaterials").modal("show");
+	}
+	
+	function openRemoveFood(){
+		$("#modalRemoveFood").modal("show");
+	}
+	
+	function openDeleteFood(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/materials/' + 'deleteMaterials/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$('#idTableMaterials').DataTable().clear().destroy();
+						construirTablaMateriales();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
 	}
 
 

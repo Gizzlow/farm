@@ -2,7 +2,6 @@ package com.co.livestockFarm.util;
 
 public enum ConstantFood {
 
-
 	FOOD_SUCESSFUL(200, "Alimento registrado con éxito"),
 	FOOD_SUBSCTRACT_SUCESSFUL(200, "Alimento retirado con éxito"),
 	FOOD_SUBSCTRACT_FAILED(400, "Hay menos unidades de la que intenta retirar"),

@@ -77,8 +77,8 @@
 				}).then((result) => {
 					if (result.value) {
 						$("#modalRegisterFood").modal('hide');
-						//$('#idTableMaterials').DataTable().clear().destroy();
-						//construirTablaMateriales();
+						$('#idTableFood').DataTable().clear().destroy();
+						construirTablaComida();
 					}
 				}
 				);

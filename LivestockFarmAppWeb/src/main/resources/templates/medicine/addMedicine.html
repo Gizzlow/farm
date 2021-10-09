@@ -23,11 +23,11 @@
 				<div class="modal-body">
 					<form id="addMedicine" method="post">
 						<div class="form-group">
-						</div>
-						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="" name="medicineId" required="required"
-								maxlength="90">
+							<select class="form-control selectRequerido" id="idAddMedicineSelect" name="medicineId"
+								style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+							</select>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad</label>
@@ -106,6 +106,43 @@
 
 		return false;
 	});
+	
+	function loadMedicine() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllMedicines',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				var select = document.getElementById("idAddMedicineSelect");
+				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					let opcion = document.createElement('option');
+					opcion.value = data.responseJSON.object[i].medicineId;
+					opcion.text = data.responseJSON.object[i].name;
+					select.add(opcion);
+				}
+			}
+		});
+	}
 
 
 	function hiddenMaterials() {

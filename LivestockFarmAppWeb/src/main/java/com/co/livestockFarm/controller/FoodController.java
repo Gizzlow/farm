@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -37,7 +36,7 @@ public class FoodController {
 
 	@PostMapping("/addFood")
 	@ResponseBody
-	public ResponseDTO<Object> addFood(@RequestBody InventoryFoodDTO inventoryFoodDTO) {
+	public ResponseDTO<Object> addFood(InventoryFoodDTO inventoryFoodDTO) {
 		ResponseDTO<Object> responseDTO;
 
 		try {
@@ -52,7 +51,7 @@ public class FoodController {
 
 	@PostMapping("/removeFood")
 	@ResponseBody
-	public ResponseDTO<Object> removeFood(@RequestBody InventoryFoodDTO inventoryFoodDTO) {
+	public ResponseDTO<Object> removeFood(InventoryFoodDTO inventoryFoodDTO) {
 		ResponseDTO<Object> responseDTO;
 
 		try {
@@ -68,7 +67,6 @@ public class FoodController {
 	@GetMapping("/getAllFood")
 	@ResponseBody
 	public ResponseDTO<Object> getAllFood() {
-
 		ResponseDTO<Object> response;
 		try {
 			response = foodService.getAllFood();
@@ -80,9 +78,10 @@ public class FoodController {
 
 		return response;
 	}
+
 	@GetMapping("/getAllFoodItems")
-	public ResponseDTO<Object> getAllFoodItems(){
-		
+	@ResponseBody
+	public ResponseDTO<Object> getAllFoodItems() {
 		ResponseDTO<Object> response;
 		try {
 			response = foodService.getAllFoodItems();
