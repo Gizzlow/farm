@@ -25,6 +25,7 @@ public class InventoryFood {
 	private String registroIca;
 	private String fechaVencimiento;
 	private String nombreAlmacen;
+	private String observation;
 	
 	public InventoryFood() {
 		
