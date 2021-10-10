@@ -7,39 +7,40 @@
 </head>
 
 <body>
-	<div class="modal fade" id="modalRemoveFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	<div class="modal fade" id="modalSumarFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header bg1">
 					<div class="row">
-						<h3 class="titulo">Retirar materiales</h3>
+						<h3 class="titulo">Adicionar alimento</h3>
 					</div>
-					<button type="button" class="close" onclick="hiddenFood()" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
+						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="removeFood" method="post">
+					<form id="addMaterials" method="post">
 						<div class="form-group">
 						</div>
 						<div class="form-group">
-							<input type="hidden" class="form-control" id="idRemoveFoodId" name="inventoryFoodId"
-								required="required" maxlength="90">
+							<input type="hidden" class="form-control" id="idSumarFoodId" name="inventoryFoodId"
+								required="required" readonly maxlength="90">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="idRemoveFoodName" readonly name=""
-								required="required" maxlength="90">
+							<input type="text" class="form-control" id="idSumarFoodName" name="" required="required"
+								readonly maxlength="90">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad</label>
-							<input type="text" class="form-control" id="" name="cantidad"
-								required="required" maxlength="90">
+							<input type="text" class="form-control" id="idSumarFoodAmount" name="cantidad"
+								required="required" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Observación</label>
-							<input type="text" class="form-control" id="" name="observation"
+							<input type="text" class="form-control" id="idSumarFoodObservation" name="observation"
 								maxlength="90">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
@@ -54,7 +55,7 @@
 
 <script th:inline="javascript">
 
-	$(document).on('submit', '#removeFood', function (e) {
+	$(document).on('submit', '#addMaterials', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
@@ -90,7 +91,7 @@
 					allowOutsideClick: () => false
 				}).then((result) => {
 					if (result.value) {
-						$("#modalRemoveFood").modal('hide');
+						$("#modalSumarFood").modal('hide');
 						$('#idTableFood').DataTable().clear().destroy();
 						construirTablaComida();
 					}
@@ -102,8 +103,9 @@
 		return false;
 	});
 
-	function hiddenFood() {
-		$("#modalRemoveFood").modal("hide");
+
+	function hiddenMaterials() {
+		$("#modalSumarFood").modal("hide");
 	}
 
 </script>

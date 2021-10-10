@@ -30,6 +30,29 @@
 							</select>
 						</div>
 						<div class="form-group">
+							<label for="exampleInputPassword1">Grupo</label>
+							<input type="text" class="form-control" id="idAddMedicineGroup" readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Equivalente</label>
+							<input type="text" class="form-control" id="idAddMedicineTantamount" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Ingrediente activo</label>
+							<input type="text" class="form-control" id="idAddMedicineActiveIngredient" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Codigo ICA</label>
+							<input type="text" class="form-control" id="idAddMedicineCodeICA" readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Unidad de medida</label>
+							<input type="text" class="form-control" id="idAddMedicineMeasurementUnit" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad</label>
 							<input type="text" class="form-control" id="" name="amount" required="required"
 								maxlength="5">
@@ -106,7 +129,7 @@
 
 		return false;
 	});
-	
+
 	function loadMedicine() {
 		var data;
 		$.ajax({

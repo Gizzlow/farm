@@ -94,9 +94,11 @@ public class FoodController {
 
 		return response;
 	}
+
 	@GetMapping("/deleteInventory/{id}")
-	public ResponseDTO<Object> deleteInventory(@PathVariable Long id){
-		
+	@ResponseBody
+	public ResponseDTO<Object> deleteInventory(@PathVariable Long id) {
+
 		ResponseDTO<Object> response;
 		try {
 			response = foodService.deleteInventory(id);

@@ -7,6 +7,8 @@ public enum ConstantMedicine {
 	GET_ALL_MEDICINES_SUCESSFUL(200, "Se han obtenido el inventario de medicinas"),
 	MEDICINE_ADD(200, "Se ha agregado medicina con exito"),
 	MEDICINE_ADD_ERROR(400, "Se ha intentado agregar una medicina inexistente"),
+	GET_INVENTORY_BY_ID(200, "Se ha obtenido satisfactoriamente"),
+	GET_INVENTORY_BY_ID_ERROR(400, "No existe"),
 	ERROR_FATAL(500, "Ha ocurrido un error no controlado");
 	
 	private final int statusCode;

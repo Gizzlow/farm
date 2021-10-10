@@ -119,6 +119,7 @@
 				<div class="subheading mb-3">Alimentos</div>
 				<button onclick="openRegisterFood()">Registrar alimentos</button>
 				<button onclick="openAddFood()">Adicionar alimentos</button>
+				<button onclick="openEditFood()">Editar alimentos</button>
 				<div class="float-right">
 					<button onclick="generateHistoryFood()">Generar historial</button> </div>
 				<p>
@@ -151,15 +152,16 @@
 
 	<!-- Custom scripts for this template -->
 	<script th:src="@{/js/resume.min.js}"></script>
+	<div th:include="medicine/registerMedicine.html"></div>
+	<div th:include="medicine/addMedicine.html"></div>
+	<div th:include="medicine/removeMedicine.html"></div>
 	<div th:include="materials/registerMaterials.html"></div>
 	<div th:include="materials/addMaterials.html"></div>
 	<div th:include="materials/removeMaterials.html"></div>
 	<div th:include="materials/historyMaterials.html"></div>
-	<div th:include="medicine/registerMedicine.html"></div>
-	<div th:include="medicine/addMedicine.html"></div>
-	<div th:include="medicine/removeMedicine.html"></div>
-	<div th:include="food/addFood.html"></div>
 	<div th:include="food/registerFood.html"></div>
+	<div th:include="food/addFood.html"></div>
+	<div th:include="food/sumarFood.html"></div>
 	<div th:include="food/removeFood.html"></div>
 </body>
 
@@ -281,6 +283,12 @@
 	}
 
 	function openRegisterMedicine() {
+		$('#idRegisterMedicineName').val("");
+		$('#idRegisterMedicineGroup').val("");
+		$('#idRegisterMedicineTantamount').val("");
+		$('#idRegisterMedicineActiveIngredient').val("");
+		$('#idRegisterMedicineCodeICA').val("");
+		$('#idRegisterMedicineMeasurementUnit').val("");
 		$("#modalRegisterMedicine").modal("show");
 	}
 
@@ -445,6 +453,8 @@
 	function openRemoveMaterials(id, name) {
 		$('#idRemoveMaterialsId').val(id);
 		$('#idRemoveMaterialsName').val(name);
+		$('#idRemoveMaterialsAmount').val("");
+		$('#idRemoveMaterialsObservation').val("");
 		$("#modalRemoveMaterials").modal("show");
 	}
 
@@ -546,7 +556,6 @@
 
 	function cargarComida(data) {
 		contenido = "";
-		console.log(data)
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
@@ -555,9 +564,9 @@
 			contenido += '<td>' + data.object[i].registroIca + '</td>';
 			contenido += '<td>' + data.object[i].fechaVencimiento + '</td>';
 			contenido += '<td>' + data.object[i].nombreAlmacen + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
-				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveFood(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMaterials" onclick="openDeleteFood(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteFood(' + data.object[i].inventoryFoodId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 		$("#idTableFood").append(contenido)
@@ -616,7 +625,12 @@
 	}
 
 	function openAddFood() {
-		$("#modalAddFood").modal("show");
+		$('#idAddFoodAmount').val("");
+		$('#idAddFoodLot').val("");
+		$('#idAddFoodCodeICA').val("");
+		$('#idAddFoodExpiredDate').val("");
+		$('#idAddFoodNameWarehouse').val("");
+		$('#idAddFoodObservation').val("");
 		$("#idAddFoodSelect").empty();
 		var select = document.getElementById("idAddFoodSelect");
 		let opcion = document.createElement('option');
@@ -624,22 +638,48 @@
 		opcion.text = "Selecciona una opción";
 		select.add(opcion);
 		loadFood();
+		$("#modalAddFood").modal("show");
 	}
 	
-	function openSumarFood(){
-		$("#modalAddMaterials").modal("show");
+	function openEditFood(){
+		
 	}
-	
-	function openRemoveFood(){
+
+	function openSumarFood(inventoryFoodId, name) {
+		$('#idSumarFoodId').val(inventoryFoodId);
+		$('#idSumarFoodName').val(name);
+		$("#modalSumarFood").modal("show");
+	}
+
+	function openRemoveFood(inventoryFoodId, name) {
+		$('#idRemoveFoodId').val(inventoryFoodId);
+		$('#idRemoveFoodName').val(name);
 		$("#modalRemoveFood").modal("show");
 	}
-	
+
+	function deleteFood(id) {
+		Swal.fire({
+			title: 'Esta seguro?',
+			text: "Esta seguro de que desea eliminar el alimento?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Cancelar',
+			confirmButtonText: 'Si, eliminar alimento!'
+		}).then((result) => {
+			if (result.value) {
+				openDeleteFood(id);
+			}
+		})
+	}
+
 	function openDeleteFood(id) {
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'GET',
-			url: '/materials/' + 'deleteMaterials/' + id,
+			url: '/food/' + 'deleteInventory/' + id,
 			beforeSend: function () {
 				Swal.fire({
 					title: 'Cargando...',
@@ -667,8 +707,8 @@
 					allowOutsideClick: () => false
 				}).then((result) => {
 					if (result.value) {
-						$('#idTableMaterials').DataTable().clear().destroy();
-						construirTablaMateriales();
+						$('#idTableFood').DataTable().clear().destroy();
+						construirTablaComida();
 					}
 				}
 				);

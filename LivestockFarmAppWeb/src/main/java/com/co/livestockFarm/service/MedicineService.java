@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.InventoryMedicineDTO;
@@ -18,6 +19,7 @@ import com.co.livestockFarm.entity.Medicine;
 import com.co.livestockFarm.repository.HistoryMedicineRepository;
 import com.co.livestockFarm.repository.InventoryMedicineRepository;
 import com.co.livestockFarm.repository.MedicineRepository;
+import com.co.livestockFarm.util.ConstantMaterials;
 import com.co.livestockFarm.util.ConstantMedicine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -120,6 +122,19 @@ public class MedicineService {
 
 		return ResponseDTO.builder().statusCode(ConstantMedicine.MEDICINE_ADD_ERROR.getStatusCode())
 				.message(ConstantMedicine.MEDICINE_ADD_ERROR.getMessage()).build();
+	}
+
+	public ResponseDTO<Object> getInventoryMedicinesById(Long id) {
+		Optional<InventoryMedicine> inventoryMedicineDB = inventoryMedicineRepository.findById(id);
+		if (inventoryMedicineDB.isPresent()) {
+			InventoryMedicine inventoryMedicine = inventoryMedicineDB.get();
+
+			return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID.getStatusCode())
+					.message(ConstantMedicine.GET_INVENTORY_BY_ID.getMessage()).object(inventoryMedicine).build();
+		}
+
+		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getStatusCode())
+				.message(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getMessage()).build();
 	}
 
 }
