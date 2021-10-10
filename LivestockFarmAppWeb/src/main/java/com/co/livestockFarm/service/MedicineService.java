@@ -1,5 +1,7 @@
 package com.co.livestockFarm.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +70,7 @@ public class MedicineService {
 		MedicineDTO aux;
 		for (Medicine medicine : listMedicine) {
 			aux = new MedicineDTO();
+			aux.setMedicineId(medicine.getMedicineId());
 			aux.setName(medicine.getName());
 			aux.setCodeICA(medicine.getCodeICA());
 			aux.setTantamount(medicine.getTantamount());
@@ -104,14 +107,14 @@ public class MedicineService {
 				.message(ConstantMedicine.GET_ALL_MEDICINES_SUCESSFUL.getMessage()).object(response).build();
 	}
 
-	public ResponseDTO<Object> addMedicines(InventoryMedicineDTO inventoryMedicineDTO) {
+	public ResponseDTO<Object> addMedicines(InventoryMedicineDTO inventoryMedicineDTO) throws ParseException {
 		Optional<Medicine> medicine = medicineRepository.findById(inventoryMedicineDTO.getMedicineId());
 		if (medicine.isPresent()) {
 			InventoryMedicine inventoryMedicine = new InventoryMedicine();
 			Medicine medicineAux = new Medicine();
 			medicineAux.setMedicineId(inventoryMedicineDTO.getMedicineId());
 			inventoryMedicine.setMedicineId(medicineAux);
-			inventoryMedicine.setExpirationDate(inventoryMedicineDTO.getExpirationDate());
+			inventoryMedicine.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(inventoryMedicineDTO.getExpiration()));
 			inventoryMedicine.setAmount(inventoryMedicineDTO.getAmount());
 			inventoryMedicine.setLot(inventoryMedicineDTO.getLot());
 			inventoryMedicineRepository.save(inventoryMedicine);
@@ -124,13 +127,13 @@ public class MedicineService {
 				.message(ConstantMedicine.MEDICINE_ADD_ERROR.getMessage()).build();
 	}
 
-	public ResponseDTO<Object> getInventoryMedicinesById(Long id) {
-		Optional<InventoryMedicine> inventoryMedicineDB = inventoryMedicineRepository.findById(id);
-		if (inventoryMedicineDB.isPresent()) {
-			InventoryMedicine inventoryMedicine = inventoryMedicineDB.get();
+	public ResponseDTO<Object> getMedicineById(Long id) {
+		Optional<Medicine> medicineDB = medicineRepository.findById(id);
+		if (medicineDB.isPresent()) {
+			Medicine medicine = medicineDB.get();
 
 			return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID.getStatusCode())
-					.message(ConstantMedicine.GET_INVENTORY_BY_ID.getMessage()).object(inventoryMedicine).build();
+					.message(ConstantMedicine.GET_INVENTORY_BY_ID.getMessage()).object(medicine).build();
 		}
 
 		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getStatusCode())

@@ -82,12 +82,12 @@ public class MedicineController {
 		return response;
 	}
 
-	@GetMapping("/getInventoryMedicinesById/{id}")
+	@GetMapping("/getMedicineById/{id}")
 	@ResponseBody
-	public ResponseDTO<Object> getInventoryMedicinesById(@PathVariable("id") Long id) {
+	public ResponseDTO<Object> getMedicinesById(@PathVariable("id") Long id) {
 		ResponseDTO<Object> response;
 		try {
-			response = medicineService.getInventoryMedicinesById(id);
+			response = medicineService.getMedicineById(id);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())

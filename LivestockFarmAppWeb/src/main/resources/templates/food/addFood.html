@@ -72,7 +72,6 @@
 	$(document).on('submit', '#addFood', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
-		console.log(data)
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
@@ -117,7 +116,7 @@
 		return false;
 	});
 
-	function loadFood() {
+	function loadAddFood() {
 		var data;
 		$.ajax({
 			type: 'GET',
@@ -143,7 +142,6 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				console.log(data)
 				var select = document.getElementById("idAddFoodSelect");
 				for (let i = 0; i < data.responseJSON.object.length; i++) {
 					let opcion = document.createElement('option');

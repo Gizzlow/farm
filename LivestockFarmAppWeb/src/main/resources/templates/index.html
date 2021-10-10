@@ -161,8 +161,9 @@
 	<div th:include="materials/historyMaterials.html"></div>
 	<div th:include="food/registerFood.html"></div>
 	<div th:include="food/addFood.html"></div>
+	<div th:include="food/editFood.html"></div>
 	<div th:include="food/sumarFood.html"></div>
-	<div th:include="food/removeFood.html"></div>
+	<div th:include="food/restarFood.html"></div>
 </body>
 
 </html>
@@ -226,7 +227,10 @@
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
+			contenido += '<td>' + data.object[i].activeIngredient + '</td>';
+			contenido += '<td>' + data.object[i].expirationDate + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
+			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
 			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
 				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
@@ -637,12 +641,19 @@
 		opcion.value = -1;
 		opcion.text = "Selecciona una opción";
 		select.add(opcion);
-		loadFood();
+		loadAddFood();
 		$("#modalAddFood").modal("show");
 	}
 	
 	function openEditFood(){
-		
+		$('#idAddFoodAmount').val("");
+		var select = document.getElementById("idAddFoodSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadEditFood();
+		$("#modalEditFood").modal("show");
 	}
 
 	function openSumarFood(inventoryFoodId, name) {

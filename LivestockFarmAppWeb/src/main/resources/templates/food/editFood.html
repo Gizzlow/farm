@@ -23,11 +23,16 @@
 				<div class="modal-body">
 					<form id="registerFood" method="post">
 						<div class="form-group">
+							<label for="exampleInputPassword1">Nombre</label>
+							<select class="form-control selectRequerido" id="idEditFoodSelect" name=""
+								style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+							</select>
 						</div>
 						<div class="form-group">
-							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="nameRegisterFood" name="name" required="required"
-								maxlength="90">
+							<label for="exampleInputPassword1">Nuevo nombre</label>
+							<input type="text" class="form-control" id="idEditFoodName" name=""
+								required="required" maxlength="5">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -47,7 +52,7 @@
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
-			url: '/food/' + 'registerFood ',
+			url: '/food/' + '',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -87,6 +92,43 @@
 
 		return false;
 	});
+	
+	function loadEditFood() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/food/' + 'getAllFoodItems',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				var select = document.getElementById("idEditFoodSelect");
+				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					let opcion = document.createElement('option');
+					opcion.value = data.responseJSON.object[i].foodId;
+					opcion.text = data.responseJSON.object[i].name;
+					select.add(opcion);
+				}
+			}
+		});
+	}
 
 	function hiddenRegisterFood() {
 		$("#modalRegisterFood").modal("hide");

@@ -82,6 +82,21 @@
 
 <script th:inline="javascript">
 
+	$(document).ready(function () {
+		$('#idAddMedicineSelect').on('change', function () {
+			let valor = this.value;
+			if (valor == -1) {
+				$('#idAddMedicineGroup').val("");
+				$('#idAddMedicineTantamount').val("");
+				$('#idAddMedicineActiveIngredient').val("");
+				$('#idAddMedicineCodeICA').val("");
+				$('#idAddMedicineMeasurementUnit').val("");
+			} else {
+				loadData(valor);
+			}
+		});
+	});
+
 	$(document).on('submit', '#addMedicine', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
@@ -119,8 +134,8 @@
 				}).then((result) => {
 					if (result.value) {
 						$("#modalAddMedicine").modal('hide');
-						//$('#idTableMaterials').DataTable().clear().destroy();
-						//construirTablaMateriales();
+						$('#idTableMedicine').DataTable().clear().destroy();
+						construirTablaMedicina();
 					}
 				}
 				);
@@ -155,7 +170,7 @@
 					Swal.close();
 				},
 			complete: function (data) {
-				Swal.close();
+				Swal.close(data);
 				var select = document.getElementById("idAddMedicineSelect");
 				for (let i = 0; i < data.responseJSON.object.length; i++) {
 					let opcion = document.createElement('option');
@@ -167,8 +182,59 @@
 		});
 	}
 
+	function loadData(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getMedicineById/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				if (data.responseJSON.statusCode == 200) {
+					$('#idAddMedicineGroup').val(data.responseJSON.object.groupe);
+					$('#idAddMedicineTantamount').val(data.responseJSON.object.tantamount);
+					$('#idAddMedicineActiveIngredient').val(data.responseJSON.object.activeIngredient);
+					$('#idAddMedicineCodeICA').val(data.responseJSON.object.codeICA);
+					$('#idAddMedicineMeasurementUnit').val(data.responseJSON.object.measurementUnit);
+				} else {
+					$('#idAddMedicineGroup').val("");
+					$('#idAddMedicineTantamount').val("");
+					$('#idAddMedicineActiveIngredient').val("");
+					$('#idAddMedicineCodeICA').val("");
+					$('#idAddMedicineMeasurementUnit').val("");
+					Swal.fire({
+						title: "¡Información!",
+						text: mensajeRespuesta,
+						icon: "warning",
+						confirmButtonText: 'Aceptar',
+						allowOutsideClick: () => false
+					});
+				}
+			}
+		});
+
+		return false;
+	}
 
 	function hiddenMaterials() {
 		$("#modalAddMedicine").modal("hide");
 	}
+
 </script>
