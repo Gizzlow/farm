@@ -55,7 +55,24 @@
 		<section class="resume-section" id="Ganado">
 			<div class="resume-section-content">
 				<h2 class="mb-5">Ganado</h2>
-			</div>
+				<div class="subheading mb-3">Ganado</div>
+				<button onclick="openRegisterMedicine()">Registrar ganado</button>
+				<button onclick="openAddMedicine()">Editar ganado</button>
+				<div class="float-right">
+					<button onclick="generateHistoryMedicine()">Generar registros de tratamientos</button> </div>
+				<p>
+				<div class="table-responsive">
+					<table id="idTableLivestock" class="table-striped" style="width: 180%">
+						<thead>
+							<tr class="color">
+								<th style="width: 9%;" class="color-head">Nombre<br></th>
+								<th style="width: 4%;" class="color-head">Acción</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
 		</section>
 		<hr class="m-0" />
 		<!-- Medicamentos-->
@@ -170,6 +187,7 @@
 <script th:inline="javascript">
 
 	$(document).ready(function () {
+		construirTablaGanado();
 		construirTablaMedicina();
 		construirTablaMateriales();
 		construirTablaComida();
@@ -189,6 +207,158 @@
 			}
 		});
 	});
+
+	//Livestock
+
+	function construirTablaGanado() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllInventoryMedicines/',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				loadMedicines(data.responseJSON);
+			}
+		});
+	}
+
+	function loadMedicines(data) {
+		contenido = "";
+		for (var i = 0; i < data.object.length; i++) {
+			contenido += '<tr>';
+			contenido += '<td>' + data.object[i].name + '</td>';
+			contenido += '<td>' + data.object[i].activeIngredient + '</td>';
+			contenido += '<td>' + data.object[i].expirationDate + '</td>';
+			contenido += '<td>' + data.object[i].amount + '</td>';
+			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
+			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
+			contenido += '</tr>';
+		}
+
+		$("#idTableMedicine").append(contenido)
+		tablaMedicineGrafica();
+	}
+
+	function tablaMedicineGrafica() {
+		$('#idTableMedicine  thead th').each(function () {
+			var title = $(this).text();
+			if (title !== "Acción") {
+				$(this).html('<div class="form-group" id="centrado2">' + '<label for="th" class="blanco">' + title + '</label>' + '<div class="centrado">' + '<input class="form-control filter" id="cssInputFiltro" type="text"  placeholder="Filtrar ' + title + '" />' + '</div>' + '</div>');
+			}
+		});
+
+		var tablaAsig = $('#idTableMedicine').DataTable({
+			"orderCellsTop": true,
+			"order": [0, 'desc'],
+			"processing": true,
+			"ordering": true,
+			"language": {
+				"info": '<div class="formato">_END_ de _TOTAL_ registros</div>',
+				"infoEmpty": '<div class="formato">0 de 0.</div>',
+				"infoFiltered": "(filtrados de un total de _MAX_ registros)",
+				"zeroRecords": "No se han encontrado coincidencias.",
+				"responsive": true,
+				"lengthMenu": "_MENU_",
+			},
+			"lengthMenu": [5, 10, 20, 50, 100],
+			"pageLength": 5,
+			"pagingType": "full_numbers",
+			"dom": "<'row'<'col-sm-5 col-md-7'>>" +
+				"<'row'<'col-sm-8 col-md-7'tr>>" +
+				"<'row'<'col-sm-8 col-md-7'><'col-sm-2 col-md-1'l><'col-sm-1 col-md-1'i><'col-sm-1 col-md-3'p>>",
+
+		});
+		tablaAsig.columns().every(function () {
+			var that = this;
+
+			$('input', this.header()).on('keyup change clear', function () {
+				if (that.search() !== this.value) {
+					that
+						.search(this.value)
+						.draw();
+				}
+			});
+		});
+
+		$('.filter').on('click', function (e) {
+			e.stopPropagation();
+		});
+	}
+
+	function openRegisterMedicine() {
+		$('#idRegisterMedicineName').val("");
+		$('#idRegisterMedicineGroup').val("");
+		$('#idRegisterMedicineTantamount').val("");
+		$('#idRegisterMedicineActiveIngredient').val("");
+		$('#idRegisterMedicineCodeICA').val("");
+		$('#idRegisterMedicineMeasurementUnit').val("");
+		$("#modalRegisterMedicine").modal("show");
+	}
+
+	function openAddMedicine() {
+		$("#modalAddMedicine").modal("show");
+		$("#idAddMedicineSelect").empty();
+		var select = document.getElementById("idAddMedicineSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadMedicine();
+	}
+
+	function getAllMedicines() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllMedicines/',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				//console.log(data)
+			}
+		});
+	}
+
+
+	//END Livestock
 
 	//Medicine
 	function construirTablaMedicina() {
@@ -644,8 +814,8 @@
 		loadAddFood();
 		$("#modalAddFood").modal("show");
 	}
-	
-	function openEditFood(){
+
+	function openEditFood() {
 		$('#idAddFoodAmount').val("");
 		var select = document.getElementById("idAddFoodSelect");
 		let opcion = document.createElement('option');
