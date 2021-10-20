@@ -55,6 +55,8 @@ public class FoodService {
 	public ResponseDTO<Object> addFood(InventoryFoodDTO inventoryFoodDTO) {
 
 		Food foodFromDB = foodRepository.getFoodById(inventoryFoodDTO.getFoodId());
+		String operation = "default";
+		int initialAmount = 0;
 
 		if (foodFromDB != null) {
 			InventoryFood inventoryFood;
@@ -70,9 +72,9 @@ public class FoodService {
 			}else {
 				inventoryFood = inventoryFoodRepository
 						.getInventoryFoodById(inventoryFoodDTO.getInventoryFoodId());
-				int intialAmount = inventoryFood.getCantidad();
-				inventoryFood.setCantidad(intialAmount + inventoryFoodDTO.getCantidad());
-		
+				initialAmount = inventoryFood.getCantidad();
+				inventoryFood.setCantidad(initialAmount + inventoryFoodDTO.getCantidad());
+				operation = ConstantFood.INPUT_OPERATION_TYPE.getMessage();
 			}
 			inventoryFood.setObservation(inventoryFoodDTO.getObservation());
 			
@@ -85,7 +87,7 @@ public class FoodService {
 
 			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
 					inventoryFoodDTO.getLote(), inventoryFood.getObservation());
-			registerTrace(traceAdd, inventoryFoodDTO.getCantidad(), ConstantFood.FIRST_OPERATION_TYPE.getMessage(), 0);
+			registerTrace(traceAdd, inventoryFoodDTO.getCantidad(), operation, initialAmount);
 
 			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
 					.message(ConstantFood.FOOD_SUCESSFUL.getMessage()).object(inventoryFoodDTO).build();
@@ -151,8 +153,9 @@ public class FoodService {
 					balance = initialAmount - amount;
 					historyFood.setOutput(amount);
 				} else {
-					historyFoodDTO.setOutput(amount);
+					historyFoodDTO.setInput(amount);
 					balance = amount;
+					historyFood.setInput(amount);
 				}
 				historyFoodDTO.setBalance(balance);
 
