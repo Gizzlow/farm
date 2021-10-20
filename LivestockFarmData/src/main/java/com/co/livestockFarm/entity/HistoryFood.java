@@ -33,4 +33,5 @@ public class HistoryFood {
 	private int balance;
 	private String icaRegistration;
 	private String lote;
+	private String observation;
 }

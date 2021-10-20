@@ -12,7 +12,9 @@ public enum ConstantFood {
 	OUTPUT_OPERATION_TYPE(1, "Retirado"),
 	ERROR_FATAL(500, "Ha ocurrido un error no controlado"),
 	GET_ALL_FOOD_SUCESSFUL(200, "Listado con éxito"),
-	FOOD_DELETED_SUCESSFUL(200, "Alimento eliminado con éxito");
+	FOOD_DELETED_SUCESSFUL(200, "Alimento eliminado con éxito"),
+	FIRST_OPERATION_TYPE(1, "Añadido"),
+	FOOD_ADD_SUCESSFUL(200, "Alimento añadito con éxito");
 
 	private final int statusCode;
 	private final String message;

@@ -57,16 +57,25 @@ public class FoodService {
 		Food foodFromDB = foodRepository.getFoodById(inventoryFoodDTO.getFoodId());
 
 		if (foodFromDB != null) {
-
-			InventoryFood inventoryFood = new InventoryFood();
-			inventoryFood.setFoodId(foodFromDB);
-			inventoryFood.setCantidad(inventoryFoodDTO.getCantidad());
-			inventoryFood.setFechaVencimiento(inventoryFoodDTO.getFechaVencimiento());
-			inventoryFood.setLote(inventoryFoodDTO.getLote());
-			inventoryFood.setNombreAlmacen(inventoryFoodDTO.getNombreAlmacen());
-			inventoryFood.setRegistroIca(inventoryFoodDTO.getRegistroIca());
+			InventoryFood inventoryFood;
+			if(inventoryFoodDTO.getInventoryFoodId() == null) {
+				inventoryFood = new InventoryFood();
+				inventoryFood.setFoodId(foodFromDB);
+				inventoryFood.setCantidad(inventoryFoodDTO.getCantidad());
+				inventoryFood.setFechaVencimiento(inventoryFoodDTO.getFechaVencimiento());
+				inventoryFood.setLote(inventoryFoodDTO.getLote());
+				inventoryFood.setNombreAlmacen(inventoryFoodDTO.getNombreAlmacen());
+				inventoryFood.setRegistroIca(inventoryFoodDTO.getRegistroIca());
+				
+			}else {
+				inventoryFood = inventoryFoodRepository
+						.getInventoryFoodById(inventoryFoodDTO.getInventoryFoodId());
+				int intialAmount = inventoryFood.getCantidad();
+				inventoryFood.setCantidad(intialAmount + inventoryFoodDTO.getCantidad());
+		
+			}
 			inventoryFood.setObservation(inventoryFoodDTO.getObservation());
-
+			
 			inventoryFoodRepository.save(inventoryFood);
 			inventoryFoodDTO.inventoryFoodId = inventoryFood.getInventoryFoodId();
 			inventoryFoodDTO.setName(foodFromDB.getName());
@@ -75,11 +84,8 @@ public class FoodService {
 			String dateNow = LocalDateTime.now().toLocalDate().toString();
 
 			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
-					inventoryFoodDTO.getLote());
-
-			int amount = inventoryFoodDTO.getCantidad();
-
-			registerTrace(traceAdd, amount, ConstantFood.INPUT_OPERATION_TYPE.getMessage());
+					inventoryFoodDTO.getLote(), inventoryFood.getObservation());
+			registerTrace(traceAdd, inventoryFoodDTO.getCantidad(), ConstantFood.FIRST_OPERATION_TYPE.getMessage(), 0);
 
 			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
 					.message(ConstantFood.FOOD_SUCESSFUL.getMessage()).object(inventoryFoodDTO).build();
@@ -98,10 +104,12 @@ public class FoodService {
 		if (inventoryFoodFromDB != null) {
 
 			if (inventoryFoodDTO.getCantidad() <= inventoryFoodFromDB.getCantidad()) {
+				int initialAmount = inventoryFoodFromDB.getCantidad();
 				inventoryFoodFromDB.setCantidad(inventoryFoodFromDB.getCantidad() - inventoryFoodDTO.getCantidad());
+				inventoryFoodFromDB.setObservation(inventoryFoodDTO.getObservation());
 				inventoryFoodRepository.save(inventoryFoodFromDB);
 
-				Food food = foodRepository.getFoodById(inventoryFoodDTO.foodId);
+				Food food = foodRepository.getFoodById(inventoryFoodFromDB.getFoodId().getFoodId());
 				FoodDTO foodDTO = objectMapper.convertValue(food, FoodDTO.class);
 
 				String dateNow = LocalDateTime.now().toLocalDate().toString();
@@ -109,12 +117,14 @@ public class FoodService {
 				int amount = inventoryFoodDTO.getCantidad();
 
 				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO.getFoodId(), dateNow,
-						inventoryFoodDTO.getRegistroIca(), inventoryFoodDTO.getLote());
+						inventoryFoodFromDB.getRegistroIca(), inventoryFoodFromDB.getLote(),
+						inventoryFoodFromDB.getObservation());
 
-				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage());
+				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage(), initialAmount);
 
 				return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUBSCTRACT_SUCESSFUL.getStatusCode())
 						.message(ConstantFood.FOOD_SUBSCTRACT_SUCESSFUL.getMessage()).build();
+
 			} else {
 				return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUBSCTRACT_FAILED.getStatusCode())
 						.message(ConstantFood.FOOD_SUBSCTRACT_FAILED.getMessage()).build();
@@ -124,26 +134,34 @@ public class FoodService {
 				.message(ConstantFood.ENTITY_NOT_FOUND.getMessage()).object(inventoryFoodDTO).build();
 	}
 
-	public void registerTrace(HistoryFoodDTO historyFoodDTO, int amount, String typeOperation) {
+	public void registerTrace(HistoryFoodDTO historyFoodDTO, int amount, String typeOperation, int initialAmount) {
+		System.out.println("entra al historial");
 		Food foodFromDB = null;
 		try {
 			foodFromDB = foodRepository.getFoodById(historyFoodDTO.foodId);
-
 			if (foodFromDB != null) {
 				int balance = 0;
+				HistoryFood historyFood = new HistoryFood();
 				if (typeOperation.equals(ConstantFood.INPUT_OPERATION_TYPE.getMessage())) {
 					historyFoodDTO.setInput(amount);
-					// ToDo to add
-//					balance = inventoryFood.getCantidad() == 0 ? inventoryFoodDTO.getCantidad()
-//							: inventoryFoodDTO.getCantidad() + inventoryFood.getCantidad();
+					balance = initialAmount + amount;
+					historyFood.setInput(amount);
+				} else if (typeOperation.equals(ConstantFood.OUTPUT_OPERATION_TYPE.getMessage())) {
+					historyFoodDTO.setOutput(amount);
+					balance = initialAmount - amount;
+					historyFood.setOutput(amount);
 				} else {
 					historyFoodDTO.setOutput(amount);
-					// ToDo to substract
-//					balance = inventoryFood.getCantidad() == 0 ? inventoryFoodDTO.getCantidad()
-//							: inventoryFoodDTO.getCantidad() + inventoryFood.getCantidad();
+					balance = amount;
 				}
 				historyFoodDTO.setBalance(balance);
-				HistoryFood historyFood = objectMapper.convertValue(historyFoodDTO, HistoryFood.class);
+
+				historyFood.setBalance(balance);
+				historyFood.setDate(historyFoodDTO.getDate());
+				historyFood.setIcaRegistration(historyFoodDTO.getIcaRegistration());
+				historyFood.setFoodId(foodFromDB);
+				historyFood.setObservation(historyFoodDTO.getObservation());
+				historyFood.setLote(historyFoodDTO.getLote());
 				historyFoodRepository.save(historyFood);
 			}
 		} catch (Exception e) {

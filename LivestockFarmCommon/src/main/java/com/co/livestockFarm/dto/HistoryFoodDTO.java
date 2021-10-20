@@ -8,11 +8,12 @@ public class HistoryFoodDTO {
 		
 	}
 	public HistoryFoodDTO(Long food, String dateNow, String icaRegistration,
-			String lote) {
+			String lote, String obsertvation) {
 		foodId = food;
 		date = dateNow;
 		this.icaRegistration = icaRegistration;
 		this.lote = lote;
+		this.observation = obsertvation;
 	}
 	private int id;
 	public Long foodId;
@@ -22,4 +23,5 @@ public class HistoryFoodDTO {
 	private int balance;
 	private String icaRegistration;
 	private String lote;
+	private String observation;
 }
