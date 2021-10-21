@@ -214,7 +214,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/medicine/' + 'getAllInventoryMedicines/',
+			url: '/livestock/' + 'getAllInventoryMedicines/',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -236,38 +236,34 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				loadMedicines(data.responseJSON);
+				loadLivestock(data.responseJSON);
 			}
 		});
 	}
 
-	function loadMedicines(data) {
+	function loadLivestock(data) {
 		contenido = "";
 		for (var i = 0; i < data.object.length; i++) {
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
-			contenido += '<td>' + data.object[i].activeIngredient + '</td>';
-			contenido += '<td>' + data.object[i].expirationDate + '</td>';
-			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
 			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
 				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 
-		$("#idTableMedicine").append(contenido)
-		tablaMedicineGrafica();
+		$("#idTableLivestock").append(contenido)
+		tablaLivestockGrafica();
 	}
 
-	function tablaMedicineGrafica() {
-		$('#idTableMedicine  thead th').each(function () {
+	function tablaLivestockGrafica() {
+		$('#idTableLivestock  thead th').each(function () {
 			var title = $(this).text();
 			if (title !== "Acción") {
 				$(this).html('<div class="form-group" id="centrado2">' + '<label for="th" class="blanco">' + title + '</label>' + '<div class="centrado">' + '<input class="form-control filter" id="cssInputFiltro" type="text"  placeholder="Filtrar ' + title + '" />' + '</div>' + '</div>');
 			}
 		});
 
-		var tablaAsig = $('#idTableMedicine').DataTable({
+		var tablaAsig = $('#idTableLivestock').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
 			"processing": true,
@@ -398,10 +394,10 @@
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].activeIngredient + '</td>';
-			contenido += '<td>' + data.object[i].expirationDate + '</td>';
+			contenido += '<td>' + data.object[i].expiration + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
 			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="""><i class="fas fa-minus-circle"></i></button>'
+			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick=""><i class="fas fa-minus-circle"></i></button>'
 				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
@@ -506,6 +502,14 @@
 				//console.log(data)
 			}
 		});
+	}
+	
+	function openRemoveMedicine(id, name) {
+		$('#idRemoveMaterialsId').val(id);
+		$('#idRemoveMaterialsName').val(name);
+		$('#idRemoveMaterialsAmount').val("");
+		$('#idRemoveMaterialsObservation').val("");
+		$("#modalRemoveMaterials").modal("show");
 	}
 
 	//END Medicine

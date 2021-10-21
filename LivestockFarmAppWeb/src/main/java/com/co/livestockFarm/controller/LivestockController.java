@@ -13,7 +13,7 @@ import com.co.livestockFarm.service.LivestockService;
 import com.co.livestockFarm.util.ConstantFood;
 
 @RestController
-@RequestMapping(value = "/ganado")
+@RequestMapping(value = "/livestock")
 public class LivestockController {
 
 	@Autowired

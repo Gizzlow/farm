@@ -1,5 +1,6 @@
 package com.co.livestockFarm.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,6 +91,8 @@ public class MedicineService {
 		Iterable<InventoryMedicine> listInventoryMedicine = inventoryMedicineRepository.findAll();
 		InventoryMedicineDTO aux;
 		Medicine medicineDB;
+		String pattern = "dd/MM/yyyy";
+		DateFormat df = new SimpleDateFormat(pattern);
 		for (InventoryMedicine inventoryMedicine : listInventoryMedicine) {
 			aux = new InventoryMedicineDTO();
 			Optional<Medicine> medicine = medicineRepository
@@ -97,7 +100,7 @@ public class MedicineService {
 			medicineDB = medicine.get();
 			aux.setName(medicineDB.getName());
 			aux.setActiveIngredient(medicineDB.getActiveIngredient());
-			aux.setExpirationDate(inventoryMedicine.getExpirationDate());
+			aux.setExpiration(df.format(inventoryMedicine.getExpirationDate()));
 			aux.setAmount(inventoryMedicine.getAmount());
 			aux.setMeasurementUnit(medicineDB.getMeasurementUnit());
 			response.add(aux);
@@ -114,7 +117,8 @@ public class MedicineService {
 			Medicine medicineAux = new Medicine();
 			medicineAux.setMedicineId(inventoryMedicineDTO.getMedicineId());
 			inventoryMedicine.setMedicineId(medicineAux);
-			inventoryMedicine.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(inventoryMedicineDTO.getExpiration()));
+			inventoryMedicine
+					.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(inventoryMedicineDTO.getExpiration()));
 			inventoryMedicine.setAmount(inventoryMedicineDTO.getAmount());
 			inventoryMedicine.setLot(inventoryMedicineDTO.getLot());
 			inventoryMedicineRepository.save(inventoryMedicine);
