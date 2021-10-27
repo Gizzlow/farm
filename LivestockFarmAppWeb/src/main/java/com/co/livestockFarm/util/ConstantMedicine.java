@@ -9,6 +9,11 @@ public enum ConstantMedicine {
 	MEDICINE_ADD_ERROR(400, "Se ha intentado agregar una medicina inexistente"),
 	GET_INVENTORY_BY_ID(200, "Se ha obtenido satisfactoriamente"),
 	GET_INVENTORY_BY_ID_ERROR(400, "No existe"),
+	REMOVE_MEDICINE_SUCESSFUL(200, "Se ha removido correctamente"),
+	REMOVE_MEDICINE_AMOUNT_FAIL(400, "La cantidad que intenta remover es mayor a la cantidad existente"),
+	REMOVE_MEDICINE_ERROR(400, "Se ha removido correctamente"),
+	DELETE_MEDICINE_SUCESSFUL(200, "Medicina eliminada correctamente"),
+	DELETE_MEDICINE_ERROR(400, "ha ocurrido un error al intentar eliminar la medicina"),
 	ERROR_FATAL(500, "Ha ocurrido un error no controlado");
 	
 	private final int statusCode;

@@ -214,7 +214,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/livestock/' + 'getAllInventoryMedicines/',
+			url: '/livestock/' + 'getAllInventoryM',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -397,8 +397,8 @@
 			contenido += '<td>' + data.object[i].expiration + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
 			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick=""><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMedicine" onclick=""><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="openRemoveMedicine(' + data.object[i].inventoryMedicineId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMedicine" onclick="deleteMedicines(' + data.object[i].inventoryMedicineId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 
@@ -499,17 +499,77 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				//console.log(data)
 			}
 		});
 	}
-	
+
 	function openRemoveMedicine(id, name) {
-		$('#idRemoveMaterialsId').val(id);
-		$('#idRemoveMaterialsName').val(name);
-		$('#idRemoveMaterialsAmount').val("");
-		$('#idRemoveMaterialsObservation').val("");
-		$("#modalRemoveMaterials").modal("show");
+		$('#idRemoveMedicineId').val(id);
+		$('#idRemoveMedicineName').val(name);
+		$('#idRemoveMedicineAmount').val("");
+		$('#idRemoveMedicineObservation').val("");
+		$("#modalRemoveMedicine").modal("show");
+	}
+
+	function deleteMedicines(id) {
+		Swal.fire({
+			title: 'Esta seguro?',
+			text: "Esta seguro de que desea eliminar la medicina?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Cancelar',
+			confirmButtonText: 'Si, eliminar la medicina!'
+		}).then((result) => {
+			if (result.value) {
+				openDeleteMedicine(id);
+			}
+		})
+	}
+
+	function openDeleteMedicine(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'deleteMedicine/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$('#idTableMedicine').DataTable().clear().destroy();
+						construirTablaMedicina();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
 	}
 
 	//END Medicine

@@ -97,4 +97,34 @@ public class MedicineController {
 		return response;
 	}
 
+	@PostMapping("/removeMedicines")
+	@ResponseBody
+	public ResponseDTO<Object> removeMedicines(InventoryMedicineDTO inventoryMedicineDTO) {
+		ResponseDTO<Object> response;
+		try {
+			response = medicineService.removeMedicines(inventoryMedicineDTO);
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
+
+	@GetMapping("/deleteMedicine/{id}")
+	@ResponseBody
+	public ResponseDTO<Object> deleteMedicine(@PathVariable("id") Long id) {
+		ResponseDTO<Object> response;
+		try {
+			response = medicineService.deleteMedicine(id);
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
+
 }

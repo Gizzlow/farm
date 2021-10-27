@@ -15,18 +15,18 @@
 					<div class="row">
 						<h3 class="titulo">Retirar medicina</h3>
 					</div>
-					<button type="button" class="close" onclick="hiddenMedicine()" data-dismiss="modal"
+					<button type="button" class="close" onclick="hiddenRemoveMedicine()" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="removeMaterials" method="post">
+					<form id="removeMedicine" method="post">
 						<div class="form-group">
 						</div>
 						<div class="form-group">
 							<input type="hidden" class="form-control" id="idRemoveMedicineId"
-								name="inventoryMaterialsId" required="required" readonly maxlength="90">
+								name="inventoryMedicineId" required="required" readonly maxlength="90">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
@@ -50,5 +50,58 @@
 		</div>
 	</div>
 </body>
-
 </html>
+<script th:inline="javascript">
+	$(document).on('submit', '#removeMedicine', function (e) {
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'POST',
+			url: '/medicine/' + 'removeMedicines ',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$("#modalRemoveMedicine").modal('hide');
+						$('#idTableMedicine').DataTable().clear().destroy();
+						construirTablaMedicina();
+					}
+				}
+				);
+			}
+		});
+
+		return false;
+	});
+
+
+	function hiddenRemoveMedicine() {
+		$("#modalRemoveMedicine").modal("hide");
+	}
+</script>

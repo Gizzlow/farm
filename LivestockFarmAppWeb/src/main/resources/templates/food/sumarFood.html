@@ -21,7 +21,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="addMaterials" method="post">
+					<form id="sumarFood" method="post">
 						<div class="form-group">
 						</div>
 						<div class="form-group">
@@ -55,7 +55,7 @@
 
 <script th:inline="javascript">
 
-	$(document).on('submit', '#addMaterials', function (e) {
+	$(document).on('submit', '#sumarFood', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
