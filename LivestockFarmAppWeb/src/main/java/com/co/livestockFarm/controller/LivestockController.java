@@ -1,18 +1,19 @@
 package com.co.livestockFarm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.livestockFarm.dto.LivestockDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.LivestockService;
 import com.co.livestockFarm.util.ConstantFood;
 
-@RestController
+@Controller
 @RequestMapping(value = "/livestock")
 public class LivestockController {
 
@@ -20,22 +21,22 @@ public class LivestockController {
 	LivestockService ganadoService;
 
 	@PostMapping(path = "/agregar")
-	public ResponseDTO<Object> agregarGanado(@RequestBody LivestockDTO ganadoDTO) {
+	@ResponseBody
+	public ResponseDTO<Object> agregarGanado(LivestockDTO ganadoDTO) {
 		ResponseDTO<Object> responseDTO;
 		try {
 			responseDTO = ganadoService.registerLivestock(ganadoDTO);
 		} catch (Exception e) {
-			return ResponseDTO.builder()
-					.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
-					.message(ConstantFood.ERROR_FATAL.getMessage())
-					.object(ganadoDTO)
-					.build();
+
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).object(ganadoDTO).build();
 		}
 
 		return responseDTO;
 	}
 
 	@GetMapping("/obtenerTodos")
+	@ResponseBody
 	public ResponseDTO<Object> obtenerTodos() {
 
 		ResponseDTO<Object> response;
@@ -51,10 +52,11 @@ public class LivestockController {
 	}
 
 	@PostMapping(path = "/editar")
+	@ResponseBody
 	public ResponseDTO<Object> editarGanado(@RequestBody LivestockDTO ganado) {
 
 		try {
-			
+
 		} catch (Exception e) {
 
 		}

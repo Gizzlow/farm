@@ -56,10 +56,10 @@
 			<div class="resume-section-content">
 				<h2 class="mb-5">Ganado</h2>
 				<div class="subheading mb-3">Ganado</div>
-				<button onclick="openRegisterMedicine()">Registrar ganado</button>
-				<button onclick="openAddMedicine()">Editar ganado</button>
+				<button onclick="openRegisterLivestock()">Registrar ganado</button>
+				<button onclick="openAddLivestock()">Editar ganado</button>
 				<div class="float-right">
-					<button onclick="generateHistoryMedicine()">Generar registros de tratamientos</button> </div>
+					<button onclick="generateHistoryLivestock()">Generar registros de tratamientos</button> </div>
 				<p>
 				<div class="table-responsive">
 					<table id="idTableLivestock" class="table-striped" style="width: 180%">
@@ -169,6 +169,7 @@
 
 	<!-- Custom scripts for this template -->
 	<script th:src="@{/js/resume.min.js}"></script>
+	<div th:include="livestock/registerLivestock.html"></div>
 	<div th:include="medicine/registerMedicine.html"></div>
 	<div th:include="medicine/addMedicine.html"></div>
 	<div th:include="medicine/removeMedicine.html"></div>
@@ -214,7 +215,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/livestock/' + 'getAllInventoryM',
+			url: '/livestock/' + 'obtenerTodos',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -301,18 +302,20 @@
 		});
 	}
 
-	function openRegisterMedicine() {
-		$('#idRegisterMedicineName').val("");
-		$('#idRegisterMedicineGroup').val("");
-		$('#idRegisterMedicineTantamount').val("");
-		$('#idRegisterMedicineActiveIngredient').val("");
-		$('#idRegisterMedicineCodeICA').val("");
-		$('#idRegisterMedicineMeasurementUnit').val("");
-		$("#modalRegisterMedicine").modal("show");
+	function openRegisterLivestock() {
+		$("#idRegisterLivestockMother").empty();
+		var select = document.getElementById("idRegisterLivestockMother");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadLivestockMother();
+		$('#idRegisterLivestockName').val("");
+		$('#idRegisterLivestockType').val("");
+		$("#modalRegisterLivestock").modal("show");
 	}
 
-	function openAddMedicine() {
-		$("#modalAddMedicine").modal("show");
+	function openAddLivestock() {
 		$("#idAddMedicineSelect").empty();
 		var select = document.getElementById("idAddMedicineSelect");
 		let opcion = document.createElement('option');
@@ -320,9 +323,19 @@
 		opcion.text = "Selecciona una opción";
 		select.add(opcion);
 		loadMedicine();
+		$('#idAddMedicineGroup').val("");
+		$('#idAddMedicineTantamount').val("");
+		$('#idAddMedicineActiveIngredient').val("");
+		$('#idAddMedicineCodeICA').val("");
+		$('#idAddMedicineMeasurementUnit').val("");
+		$('#idAddMedicineAmount').val("");
+		$('#idAddMedicineLot').val("");
+		$('#idAddMedicineExpirationDate').val("");
+		$('#idAddMedicineObservation').val("");
+		$("#modalAddMedicine").modal("show");
 	}
 
-	function getAllMedicines() {
+	function getAllLivestock() {
 		var data;
 		$.ajax({
 			type: 'GET',
@@ -348,7 +361,6 @@
 				},
 			complete: function (data) {
 				Swal.close();
-				//console.log(data)
 			}
 		});
 	}
@@ -463,7 +475,6 @@
 	}
 
 	function openAddMedicine() {
-		$("#modalAddMedicine").modal("show");
 		$("#idAddMedicineSelect").empty();
 		var select = document.getElementById("idAddMedicineSelect");
 		let opcion = document.createElement('option');
@@ -471,6 +482,16 @@
 		opcion.text = "Selecciona una opción";
 		select.add(opcion);
 		loadMedicine();
+		$('#idAddMedicineGroup').val("");
+		$('#idAddMedicineTantamount').val("");
+		$('#idAddMedicineActiveIngredient').val("");
+		$('#idAddMedicineCodeICA').val("");
+		$('#idAddMedicineMeasurementUnit').val("");
+		$('#idAddMedicineAmount').val("");
+		$('#idAddMedicineLot').val("");
+		$('#idAddMedicineExpirationDate').val("");
+		$('#idAddMedicineObservation').val("");
+		$("#modalAddMedicine").modal("show");
 	}
 
 	function getAllMedicines() {
@@ -802,7 +823,7 @@
 			contenido += '<td>' + data.object[i].registroIca + '</td>';
 			contenido += '<td>' + data.object[i].fechaVencimiento + '</td>';
 			contenido += '<td>' + data.object[i].nombreAlmacen + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\', \'' + data.object[i].foodId + '\')"><i class="fas fa-plus-circle"></i></button>'
 				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
 				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteFood(' + data.object[i].inventoryFoodId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
@@ -890,9 +911,12 @@
 		$("#modalEditFood").modal("show");
 	}
 
-	function openSumarFood(inventoryFoodId, name) {
-		$('#idSumarFoodId').val(inventoryFoodId);
+	function openSumarFood(inventoryFoodId, name, foodId) {
+		$('#idSumarInventoryFoodId').val(inventoryFoodId);
+		$('#idSumarFoodId').val(foodId);
 		$('#idSumarFoodName').val(name);
+		$('#idSumarFoodAmount').val("");
+		$('#idSumarFoodObservation').val("");
 		$("#modalSumarFood").modal("show");
 	}
 

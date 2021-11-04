@@ -25,7 +25,11 @@
 						<div class="form-group">
 						</div>
 						<div class="form-group">
-							<input type="hidden" class="form-control" id="idSumarFoodId" name="inventoryFoodId"
+							<input type="hidden" class="form-control" id="idSumarInventoryFoodId" name="inventoryFoodId"
+								required="required" readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idSumarFoodId" name="foodId"
 								required="required" readonly maxlength="90">
 						</div>
 						<div class="form-group">
@@ -61,7 +65,7 @@
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
-			url: '/food/' + 'removeFood ',
+			url: '/food/' + 'addFood ',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({

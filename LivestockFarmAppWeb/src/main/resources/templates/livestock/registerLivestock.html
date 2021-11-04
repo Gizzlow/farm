@@ -21,18 +21,25 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="registerMaterials" method="post">
+					<form id="registerLivestock" method="post">
 						<div class="form-group">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<input type="text" class="form-control" id="idRegisterMaterialsName" name="name" required="required"
-								maxlength="90">
+							<input type="text" class="form-control" id="idRegisterLivestockName" name="name"
+								required="required" maxlength="90">
 						</div>
 						<div class="form-group">
-							<label for="exampleInputPassword1">Cantidad</label>
-							<input type="text" class="form-control" id="idRegisterMaterialsAmount" name="amount" required="required"
-								maxlength="90">
+							<label for="exampleInputPassword1">Tipo</label>
+							<input type="text" class="form-control" id="idRegisterLivestockType" name="type"
+								required="required" maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Madre</label>
+							<select class="form-control selectRequerido" id="idRegisterLivestockMother" name="motherId"
+								style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+							</select>
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -46,13 +53,13 @@
 
 <script th:inline="javascript">
 
-	$(document).on('submit', '#registerMaterials', function (e) {
+	$(document).on('submit', '#registerLivestock', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
-			url: '/materials/' + 'registerMaterials ',
+			url: '/livestock/' + 'agregar ',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -81,9 +88,9 @@
 					allowOutsideClick: () => false
 				}).then((result) => {
 					if (result.value) {
-						$("#modalRegisterMaterials").modal('hide');
-						$('#idTableMaterials').DataTable().clear().destroy();
-						construirTablaMateriales();
+						$("#modalRegisterLivestock").modal('hide');
+						$('#idTableLivestock').DataTable().clear().destroy();
+						construirTablaGanado();
 					}
 				}
 				);
@@ -93,6 +100,43 @@
 		return false;
 	});
 
+	function loadLivestockMother() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/livestock/' + 'obtenerTodos',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close(data);
+				console.log(data)
+				var select = document.getElementById("idRegisterLivestockMother");
+				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					let opcion = document.createElement('option');
+					opcion.value = data.responseJSON.object[i].livestockId;
+					opcion.text = data.responseJSON.object[i].name;
+					select.add(opcion);
+				}
+			}
+		});
+	}
 
 	function hiddenRegisterMaterials() {
 		$("#modalRegisterMaterials").modal("hide");
