@@ -26,6 +26,7 @@ public class LivestockService {
 		if (ganadoDTO.getMotherId() == null) {
 			// Is a Mother cow
 			Livestock livestock = objectMapper.convertValue(ganadoDTO, Livestock.class);
+			livestock.setActive(true);
 			livestockRepository.save(livestock);
 			responseDTO = ResponseDTO.builder().statusCode(ConstantLivestock.LIVESTOCK_SUCCESSFUL.getStatusCode())
 					.message(ConstantLivestock.LIVESTOCK_SUCCESSFUL.getMessage()).object(ganadoDTO).build();
@@ -37,12 +38,16 @@ public class LivestockService {
 			if (initiaLlivestock != null) {
 //				Livestock livestock = objectMapper.convertValue(ganadoDTO, Livestock.class);
 
-				Livestock livestock = new Livestock();
-				livestock.setActive(ganadoDTO.isActive());
-				livestock.setMotherId(initiaLlivestock);
-				livestock.setType(ganadoDTO.getType());
-				livestock.setName(ganadoDTO.getName());
-				livestock.setObservation(ganadoDTO.getObservation());
+				Livestock livestock = new Livestock();				
+				livestock.setMotherId(initiaLlivestock);				
+				livestock.setActive(true);
+				
+				if(ganadoDTO.getName() != null)
+					livestock.setName(ganadoDTO.getName());
+				if(ganadoDTO.getType() != null)
+					livestock.setType(ganadoDTO.getType());
+				if(ganadoDTO.getObservation() != null)
+					livestock.setObservation(ganadoDTO.getObservation());
 
 				livestockRepository.save(livestock);
 				responseDTO = ResponseDTO.builder().statusCode(ConstantLivestock.LIVESTOCK_SUCCESSFUL.getStatusCode())
@@ -74,6 +79,29 @@ public class LivestockService {
 		}
 		return ResponseDTO.builder().statusCode(ConstantLivestock.GET_ALL_LIVESTOCK_SUCESSFUL.getStatusCode())
 				.message(ConstantLivestock.GET_ALL_LIVESTOCK_SUCESSFUL.getMessage()).object(response).build();
+	}
+
+	public ResponseDTO<Object> editLiveStock(LivestockDTO ganado) {
+		ResponseDTO<Object> responseDTO;
+		Livestock entity = livestockRepository.getLivestockById(ganado.getLivestockId());		
+		if(entity != null) {
+			
+			if(ganado.getName() != null)
+				entity.setName(ganado.getName());
+			if(ganado.getType() != null)
+				entity.setType(ganado.getType());
+			if(ganado.getObservation() != null)
+				entity.setObservation(ganado.getObservation());
+			if(ganado.getActive() != null)
+				entity.setActive(ganado.getActive());
+			livestockRepository.save(entity);
+			responseDTO = ResponseDTO.builder().statusCode(ConstantLivestock.LIVESTOCK_EDIT_SUCCESSFUL.getStatusCode())
+					.message(ConstantLivestock.LIVESTOCK_EDIT_SUCCESSFUL.getMessage()).object(ganado).build();
+		}else {
+			responseDTO = ResponseDTO.builder().statusCode(ConstantLivestock.ENTITY_NOT_FOUND.getStatusCode())
+					.message(ConstantLivestock.ENTITY_NOT_FOUND.getMessage()).object(ganado).build();
+		}
+		return responseDTO;
 	}
 
 }

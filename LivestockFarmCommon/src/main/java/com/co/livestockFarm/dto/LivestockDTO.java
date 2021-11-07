@@ -12,6 +12,6 @@ public class LivestockDTO {
 	private String name;
 	private Long motherId;
 	private String type;
-	private boolean active;
+	private Boolean active;
 	private String observation;
 }

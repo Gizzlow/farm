@@ -22,7 +22,7 @@ public class LivestockController {
 
 	@PostMapping(path = "/agregar")
 	@ResponseBody
-	public ResponseDTO<Object> agregarGanado(LivestockDTO ganadoDTO) {
+	public ResponseDTO<Object> agregarGanado(@RequestBody LivestockDTO ganadoDTO) {
 		ResponseDTO<Object> responseDTO;
 		try {
 			responseDTO = ganadoService.registerLivestock(ganadoDTO);
@@ -51,16 +51,19 @@ public class LivestockController {
 		return response;
 	}
 
-	@PostMapping(path = "/editar")
+	@PostMapping("/editar")
 	@ResponseBody
 	public ResponseDTO<Object> editarGanado(@RequestBody LivestockDTO ganado) {
 
+		ResponseDTO<Object> response;
 		try {
-
+			response = ganadoService.editLiveStock(ganado);
 		} catch (Exception e) {
 
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).build();
 		}
 
-		return null;
+		return response;
 	}
 }
