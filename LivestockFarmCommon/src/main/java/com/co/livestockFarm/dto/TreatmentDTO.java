@@ -1,19 +1,22 @@
 package com.co.livestockFarm.dto;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
 public class TreatmentDTO {
-	private int id;
-	private int livestockId;
-	private int medicineId;
-	private Date date;
-	private Date expirationDate;
+	private Long id;
+	private Long livestockId;
+	private Long medicineId;
+	private String date;
+	private String expirationDate;
 	private String medicineLot;
 	private int amount;
 	private String treatment;
-	private Date endTreatment;
+	private String endTreatment;
 	private String personEncharge;
+	private String medicineName;
+	private String icaCode;
+	private String medicineType;
+	private String retireTime;
+	private Long inventoryId;
 }
