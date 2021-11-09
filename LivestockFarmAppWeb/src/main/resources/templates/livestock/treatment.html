@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Editar ganado</title>
+</head>
+
+<body>
+	<div class="modal fade" id="modalTreatmentLivestock" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg1">
+					<div class="row">
+						<h3 class="titulo">Tratamiento</h3>
+					</div>
+					<button type="button" class="close" onclick="hiddenRegisterFood()" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="registerFood" method="post">
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentId"
+								name="inventoryMaterialsId" required="required" maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Ganado</label>
+							<input type="text" class="form-control" id="idTreatmentLivestock" name=""
+								required="required" readonly>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">medicina</label>
+							<select class="form-control selectRequerido" id="" name="" style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Fecha</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Fecha de vencimiento</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Lote</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Cantidad</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Tratamiento</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Fecha fin tratamiento</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Persona encargada</label>
+							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+						</div>
+						<button type="submit" class="btn btn-success">Guardar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
