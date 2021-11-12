@@ -11,21 +11,22 @@ import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.entity.Livestock;
 import com.co.livestockFarm.repository.LivestockRepository;
 import com.co.livestockFarm.util.ConstantLivestock;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class LivestockService {
 
 	@Autowired
-	private ObjectMapper objectMapper;
-	@Autowired
 	private LivestockRepository livestockRepository;
 
 	public ResponseDTO<Object> registerLivestock(LivestockDTO ganadoDTO) {
 		ResponseDTO<Object> responseDTO;
-		if (ganadoDTO.getMotherId() == null) {
+		if (ganadoDTO.getMotherId().equals(-1L)) {
 			// Is a Mother cow
-			Livestock livestock = objectMapper.convertValue(ganadoDTO, Livestock.class);
+//			Livestock livestock = objectMapper.convertValue(ganadoDTO, Livestock.class);
+			
+			Livestock livestock = new Livestock();
+			livestock.setName(ganadoDTO.getName());
+			livestock.setType(ganadoDTO.getType());
 			livestock.setActive(true);
 			livestockRepository.save(livestock);
 			responseDTO = ResponseDTO.builder().statusCode(ConstantLivestock.LIVESTOCK_SUCCESSFUL.getStatusCode())
