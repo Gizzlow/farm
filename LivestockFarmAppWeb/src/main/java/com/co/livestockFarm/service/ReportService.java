@@ -19,32 +19,32 @@ public class ReportService {
 	@Autowired
 	private ReportRepository reportRepository;
 
-	public ResponseDTO<Object> reportTreatment(Date fechaInicial, Date fechafinal) {
+	public List<ReportTreatmentDTO> reportTreatment(Date fechaInicial, Date fechafinal) {
 
 		List<ReportTreatmentDTO> response = reportRepository.getReportTreatment(fechaInicial, fechafinal);
 		System.out.println(response.toString());
-		return null;
+		return response;
 	}
 
-	public ResponseDTO<Object> reportMedicine(Date fechaInicial, Date fechafinal) {
+	public List<HistoryMedicine> reportMedicine(Date fechaInicial, Date fechafinal) {
 
 		List<HistoryMedicine> response = reportRepository.getReportMedicine(fechaInicial, fechafinal);
 		System.out.println(response.toString());
-		return null;
+		return response;
 	}
 
-	public ResponseDTO<Object> reportMaterials(Date fechaInicial, Date fechafinal) {
+	public List<HistoryMaterials> reportMaterials(Date fechaInicial, Date fechafinal) {
 
 		List<HistoryMaterials> response = reportRepository.getReportMaterials(fechaInicial, fechafinal);
 		System.out.println(response.toString());
-		return null;
+		return response;
 	}
 
-	public ResponseDTO<Object> reportFood(Date fechaInicial, Date fechafinal) {
+	public List<HistoryFood> reportFood(Date fechaInicial, Date fechafinal) {
 
 		List<HistoryFood> response = reportRepository.getReportFood(fechaInicial, fechafinal);
 		System.out.println(response.toString());
-		return null;
+		return response;
 	}
 
 }
