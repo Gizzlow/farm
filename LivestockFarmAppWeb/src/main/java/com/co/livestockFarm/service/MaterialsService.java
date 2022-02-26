@@ -1,5 +1,7 @@
 package com.co.livestockFarm.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.co.livestockFarm.dto.HistoryMaterialsDTO;
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.MaterialsDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
@@ -168,5 +171,17 @@ public class MaterialsService {
 		historyMaterials.setOutput(output);
 		historyMaterials.setResidue(residue);
 		historyMaterialsRepository.save(historyMaterials);
+	}
+
+	public void getReport(HistoryMaterialsDTO historyMaterialsDTO) throws ParseException {
+		if (historyMaterialsDTO.getInitDate() == null || historyMaterialsDTO.getEndDate() == null) {
+
+		}
+		String sDate1 = historyMaterialsDTO.getInitDate();
+		Date date1 = new SimpleDateFormat("yyyy/MM/dd").parse(sDate1);
+		String sDate2 = historyMaterialsDTO.getEndDate();
+		Date date2 = new SimpleDateFormat("yyyy/MM/dd").parse(sDate2);
+		List<HistoryMaterials> response = historyMaterialsRepository.getReport(date1, date2);
+		System.out.print(response.toString());
 	}
 }

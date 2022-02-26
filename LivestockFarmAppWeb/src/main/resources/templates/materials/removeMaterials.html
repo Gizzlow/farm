@@ -91,9 +91,11 @@
 					allowOutsideClick: () => false
 				}).then((result) => {
 					if (result.value) {
-						$("#modalRemoveMaterials").modal('hide');
-						$('#idTableMaterials').DataTable().clear().destroy();
-						construirTablaMateriales();
+						if (data.responseJSON.statusCode == 200) {
+							$("#modalRemoveMaterials").modal('hide');
+							$('#idTableMaterials').DataTable().clear().destroy();
+							construirTablaMateriales();
+						}
 					}
 				}
 				);

@@ -15,16 +15,16 @@
 					<div class="row">
 						<h3 class="titulo">Tratamiento</h3>
 					</div>
-					<button type="button" class="close" onclick="hiddenRegisterFood()" data-dismiss="modal"
+					<button type="button" class="close" onclick="hiddenModalTreatmentLivestock()" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="registerFood" method="post">
+					<form id="treatment" method="post">
 						<div class="form-group">
-							<input type="hidden" class="form-control" id="idTreatmentId"
-								name="inventoryMaterialsId" required="required" maxlength="90">
+							<input type="hidden" class="form-control" id="idTreatmentId" name="livestockId"
+								required="required" maxlength="90">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Ganado</label>
@@ -33,37 +33,68 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">medicina</label>
-							<select class="form-control selectRequerido" id="" name="" style="width: 100%;">
+							<select class="form-control selectRequerido" id="idMedicineTreatmentSelect" name=""
+								style="width: 100%;">
 								<option value="">Selecciona una opción</option>
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="exampleInputPassword1">Fecha</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
-						</div>
-						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha de vencimiento</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<input type="text" class="form-control" id="idTreatmentExpireDate" name="expirationDate"
+								required="required" readonly>
 						</div>
 						<div class="form-group">
-							<label for="exampleInputPassword1">Lote</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<label for="exampleInputPassword1">Cantidad en inventario</label>
+							<input type="text" class="form-control" id="idTreatmentAmountMedicine" name="" required="required"
+								readonly>
 						</div>
 						<div class="form-group">
-							<label for="exampleInputPassword1">Cantidad</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<label for="exampleInputPassword1">Fecha de tratamiento</label>
+							<input type="date" class="form-control" id="idTreatmentDate" name="date" required="required"
+								maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Tratamiento</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<input type="text" class="form-control" id="idTreatmentTreatment" name="treatment"
+								required="required">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Dosis</label>
+							<input type="text" class="form-control" id="idTreatmentAmount" name="amount" required="required"
+								maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha fin tratamiento</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<input type="date" class="form-control" id="idTreatmentDateTreatment" name="endTreatment" required="required"
+								maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Persona encargada</label>
-							<input type="text" class="form-control" id="" name="" required="required" maxlength="5">
+							<input type="text" class="form-control" id="idTreatmentPersonEncharge" name="personEncharge" required="required">
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentLot" name="medicineLot"
+								required="required" readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentMedicineName" name="medicineName"
+								required="required" readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentICACode" name="icaCode"
+								required="required" readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentType" name="type"
+								required="required" readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentTimeRetirement"
+								name="timeRetirement" required="required" readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="idTreatmentMedicineId" name="inventoryId"
+								required="required" readonly>
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -74,3 +105,169 @@
 </body>
 
 </html>
+
+<script th:inline="javascript">
+
+	$(document).ready(function () {
+		$('#idMedicineTreatmentSelect').on('change', function () {
+			let valor = this.value;
+			if (valor == -1) {
+				$('#idTreatmentDate').val("");
+				$('#idTreatmentExpireDate').val("");
+				$('#idTreatmentLot').val("");
+				$('#idTreatmentAmount').val("");
+				$('#idTreatmentTreatment').val("");
+			} else {
+				loadDataMedicineTreatment(valor);
+				$('#idTreatmentMedicineId').val(valor);
+			}
+		});
+	});
+
+	$(document).on('submit', '#treatment', function (e) {
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'POST',
+			url: '/treatment/' + 'add ',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$('#idTableLivestock').DataTable().clear().destroy();
+						construirTablaGanado();
+						$('#idTableMedicine').DataTable().clear().destroy();
+						construirTablaMedicina();
+						$("#modalTreatmentLivestock").modal('hide');
+					}
+				}
+				);
+			}
+		});
+
+		return false;
+	});
+
+	function loadMedicineTreatment() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllMedicines',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				var select = document.getElementById("idMedicineTreatmentSelect");
+				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					let opcion = document.createElement('option');
+					opcion.value = data.responseJSON.object[i].medicineId;
+					opcion.text = data.responseJSON.object[i].name;
+					select.add(opcion);
+				}
+			}
+		});
+	}
+
+	function loadDataMedicineTreatment(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getInventoryMedicineById/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				console.log(data)
+				if (data.responseJSON.statusCode == 200) {
+					$('#idTreatmentDate').val("");
+					$('#idTreatmentExpireDate').val(data.responseJSON.object.expirationDate.substring(0, 10));
+					$('#idTreatmentLot').val(data.responseJSON.object.lot);
+					$('#idTreatmentAmountMedicine').val(data.responseJSON.object.amount);
+					$('#idTreatmentTreatment').val("");
+					$('#idTreatmentICACode').val(data.responseJSON.object.codeICA);
+					$('#idTreatmentType').val(data.responseJSON.object.type);
+					$('#idTreatmentTimeRetirement').val(data.responseJSON.object.timeRetirement);
+				} else {
+					$('#idAddMedicineGroup').val("");
+					$('#idAddMedicineTantamount').val("");
+					$('#idAddMedicineActiveIngredient').val("");
+					$('#idAddMedicineCodeICA').val("");
+					$('#idAddMedicineMeasurementUnit').val("");
+					Swal.fire({
+						title: "¡Información!",
+						text: mensajeRespuesta,
+						icon: "warning",
+						confirmButtonText: 'Aceptar',
+						allowOutsideClick: () => false
+					});
+				}
+			}
+		});
+
+		return false;
+	}
+
+	function hiddenModalTreatmentLivestock() {
+		$("#modalTreatmentLivestock").modal("hide");
+	}
+
+</script>

@@ -5,9 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.co.livestockFarm.dto.HistoryMaterialsDTO;
 import com.co.livestockFarm.dto.InventoryMaterialsDTO;
 import com.co.livestockFarm.dto.MaterialsDTO;
 import com.co.livestockFarm.dto.ResponseDTO;
@@ -94,5 +96,15 @@ public class MaterialsController {
 		}
 
 		return response;
+	}
+
+	@PostMapping("/getReport")
+	@ResponseBody
+	public void getReport(@RequestBody HistoryMaterialsDTO historyMaterialsDTO) {
+		try {
+			materialsService.getReport(historyMaterialsDTO);
+		} catch (Exception e) {
+			System.out.print("error" + e.getMessage());
+		}
 	}
 }

@@ -57,7 +57,7 @@
 				<h2 class="mb-5">Ganado</h2>
 				<div class="subheading mb-3">Ganado</div>
 				<button onclick="openRegisterLivestock()">Registrar ganado</button>
-				<button onclick="openEditLivestock()">Editar ganado</button>
+				<button onclick="openEditLivestock()">Tratamiento grupal</button>
 				<div class="float-right">
 					<button onclick="generateHistoryLivestock()">Generar registros de tratamientos</button> </div>
 				<p>
@@ -177,6 +177,7 @@
 	<div th:include="medicine/registerMedicine.html"></div>
 	<div th:include="medicine/addMedicine.html"></div>
 	<div th:include="medicine/removeMedicine.html"></div>
+	<div th:include="medicine/deleteRegisterMedicine.html"></div>
 	<div th:include="materials/registerMaterials.html"></div>
 	<div th:include="materials/addMaterials.html"></div>
 	<div th:include="materials/removeMaterials.html"></div>
@@ -254,11 +255,13 @@
 			contenido += '<td>' + data.object[i].type + '</td>';
 			if (data.object[i].active) {
 				contenido += '<td>Activo</td>';
+				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+					+ '<button type="button" id="btnTreatmentLivestock" onclick="openTreatmentLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-trash"></i></button>';
 			} else {
 				contenido += '<td>Inactivo</td>';
+				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+					+ '<button type="button" id="btnTreatmentLivestock" onclick=""><i class="fas fa-trash"></i></button>';
 			}
-			contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" onclick="openEditLivestock()"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnTreatmentLivestock" onclick="openTreatmentLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-trash"></i></button>';
 			contenido += '</tr>';
 		}
 
@@ -325,11 +328,35 @@
 		$("#modalRegisterLivestock").modal("show");
 	}
 
-	function openEditLivestock() {
+	function openEditLivestock(id, name) {
+		$('#idEditLivestockId').val(id);
+		$('#idEditLivestockName').val(name);
+		$('#idEditLivestockNewName').val("");
 		$("#modalEditLivestock").modal("show");
 	}
 
 	function openTreatmentLivestock(id, name) {
+		$('#idTreatmentLivestock').val("");
+		$('#idTreatmentExpireDate').val("");
+		$('#idTreatmentAmount').val("");
+		$('#idTreatmentDate').val("");
+		$('#idTreatmentTreatment').val("");
+		$('#idTreatmentAmountMedicine').val("");
+		$('#idTreatmentDateTreatment').val("");
+		$('#idTreatmentPersonEncharge').val("");
+		$('#idTreatmentLot').val("");
+		$('#idTreatmentMedicineName').val("");
+		$('#idTreatmentICACode').val("");
+		$('#idTreatmentType').val("");
+		$('#idTreatmentTimeRetirement').val("");
+		$('#idTreatmentMedicineId').val("");
+		$("#idMedicineTreatmentSelect").empty();
+		var select = document.getElementById("idMedicineTreatmentSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadMedicineTreatment();
 		$('#idTreatmentId').val(id);
 		$('#idTreatmentLivestock').val(name);
 		$("#modalTreatmentLivestock").modal("show");
@@ -469,6 +496,7 @@
 		$('#idRegisterMedicineGroup').val("");
 		$('#idRegisterMedicineTantamount').val("");
 		$('#idRegisterMedicineActiveIngredient').val("");
+		$('#idRegisterMedicineTimeRetirement').val("");
 		$('#idRegisterMedicineCodeICA').val("");
 		$('#idRegisterMedicineMeasurementUnit').val("");
 		$("#modalRegisterMedicine").modal("show");
@@ -492,6 +520,23 @@
 		$('#idAddMedicineExpirationDate').val("");
 		$('#idAddMedicineObservation').val("");
 		$("#modalAddMedicine").modal("show");
+	}
+
+	function deleteRegisterMedicine() {
+		$("#idDeleteRegisterMedicineSelect").empty();
+		var select = document.getElementById("idDeleteRegisterMedicineSelect");
+		let opcion = document.createElement('option');
+		opcion.value = -1;
+		opcion.text = "Selecciona una opción";
+		select.add(opcion);
+		loadDeleteRegisterMedicine();
+		$('#idDeleteRegisterMedicineGroup').val("");
+		$('#idDeleteRegisterMedicineTantamount').val("");
+		$('#idDeleteRegisterMedicineActiveIngredient').val("");
+		$('#idDeleteRegisterMedicineCodeICA').val("");
+		$('#idDeleteRegisterMedicineMeasurementUnit').val("");
+		$('#idDeleteRegisterMedicineType').val("");
+		$("#modalDeleteRegisterMedicine").modal("show");
 	}
 
 	function getAllMedicines() {

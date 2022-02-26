@@ -19,4 +19,7 @@ public class InventoryMedicineDTO {
 	private String measurementUnit;
 	private String observation;
 	private String expiration;
+	private String type;
+	private String timeRetirement;
+	private String codeICA;
 }

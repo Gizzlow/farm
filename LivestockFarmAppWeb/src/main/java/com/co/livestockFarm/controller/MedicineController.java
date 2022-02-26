@@ -96,6 +96,21 @@ public class MedicineController {
 
 		return response;
 	}
+	
+	@GetMapping("/getInventoryMedicineById/{id}")
+	@ResponseBody
+	public ResponseDTO<Object> getInventoryMedicineById(@PathVariable("id") Long id) {
+		ResponseDTO<Object> response;
+		try {
+			response = medicineService.getInventoryMedicineById(id);
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantMaterials.ERROR_FATAL.getStatusCode())
+					.message(ConstantMaterials.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
 
 	@PostMapping("/removeMedicines")
 	@ResponseBody

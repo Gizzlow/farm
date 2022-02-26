@@ -6,7 +6,6 @@ import lombok.Data;
 public class TreatmentDTO {
 	private Long id;
 	private Long livestockId;
-	private Long medicineId;
 	private String date;
 	private String expirationDate;
 	private String medicineLot;
@@ -19,4 +18,6 @@ public class TreatmentDTO {
 	private String medicineType;
 	private String retireTime;
 	private Long inventoryId;
+	private String type;
+	private String timeRetirement;
 }

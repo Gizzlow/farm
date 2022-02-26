@@ -27,4 +27,6 @@ public class HistoryMedicine {
 	private Long input;
 	private Long output;
 	private Long residue;
+	private Date expirationDate;
+	private String lot;
 }

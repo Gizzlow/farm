@@ -25,7 +25,6 @@ public class FoodController {
 	@ResponseBody
 	public ResponseDTO<Object> registerFood(FoodDTO foodDTO) {
 		ResponseDTO<Object> responseDTO;
-
 		try {
 			responseDTO = foodService.registerFood(foodDTO);
 		} catch (Exception e) {
@@ -98,10 +97,24 @@ public class FoodController {
 	@GetMapping("/deleteInventory/{id}")
 	@ResponseBody
 	public ResponseDTO<Object> deleteInventory(@PathVariable Long id) {
-
 		ResponseDTO<Object> response;
 		try {
 			response = foodService.deleteInventory(id);
+		} catch (Exception e) {
+
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).build();
+		}
+
+		return response;
+	}
+
+	@PostMapping("/editFood")
+	@ResponseBody
+	public ResponseDTO<Object> editFood(FoodDTO foodDTO) {
+		ResponseDTO<Object> response;
+		try {
+			response = foodService.editFood(foodDTO);
 		} catch (Exception e) {
 
 			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())

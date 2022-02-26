@@ -45,6 +45,11 @@
 								maxlength="90">
 						</div>
 						<div class="form-group">
+							<label for="exampleInputPassword1">Tiempo de retiro</label>
+							<input type="text" class="form-control" id="idRegisterMedicineTimeRetirement" name="timeRetirement" required="required"
+								maxlength="90">
+						</div>
+						<div class="form-group">
 							<label for="exampleInputPassword1">Codigo ICA</label>
 							<input type="text" class="form-control" id="idRegisterMedicineCodeICA" name="codeICA" required="required"
 								maxlength="90">
@@ -53,6 +58,19 @@
 							<label for="exampleInputPassword1">Unidad de medida</label>
 							<input type="text" class="form-control" id="idRegisterMedicineMeasurementUnit" name="measurementUnit" required="required"
 								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Via de aplicación</label>
+							<select class="form-control selectRequerido" id="idRegisterMedicineType" name="type"
+								style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+								<option value="Intramuscular">Intramuscular</option>
+								<option value="Intravenosa ">Intravenosa</option>
+								<option value="subcutanea">Subcutánea</option>
+								<option value="Oral">Oral</option>
+								<option value="Intramamaria">Intramamaria</option>
+								<option value="Intrauterina">Intrauterina</option>
+							</select>
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>

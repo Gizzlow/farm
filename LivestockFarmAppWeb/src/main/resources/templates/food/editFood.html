@@ -15,13 +15,13 @@
 					<div class="row">
 						<h3 class="titulo">Editar alimentos</h3>
 					</div>
-					<button type="button" class="close" onclick="hiddenRegisterFood()" data-dismiss="modal"
+					<button type="button" class="close" onclick="hiddenEditFood()" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="registerFood" method="post">
+					<form id="editFood" method="post">
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
 							<select class="form-control selectRequerido" id="idEditFoodSelect" name=""
@@ -46,13 +46,13 @@
 
 <script th:inline="javascript">
 
-	$(document).on('submit', '#registerFood', function (e) {
+	$(document).on('submit', '#editFood', function (e) {
 		e.preventDefault();
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
-			url: '/food/' + '',
+			url: '/food/' + 'editFood',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -119,8 +119,10 @@
 				},
 			complete: function (data) {
 				Swal.close();
+				console.log(data)
 				var select = document.getElementById("idEditFoodSelect");
 				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					console.log("1")
 					let opcion = document.createElement('option');
 					opcion.value = data.responseJSON.object[i].foodId;
 					opcion.text = data.responseJSON.object[i].name;
@@ -130,7 +132,7 @@
 		});
 	}
 
-	function hiddenRegisterFood() {
+	function hiddenEditFood() {
 		$("#modalRegisterFood").modal("hide");
 	}
 

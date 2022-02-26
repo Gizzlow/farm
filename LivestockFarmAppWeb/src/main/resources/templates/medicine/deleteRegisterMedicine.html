@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Eliminar registro medicina</title>
+</head>
+
+<body>
+	<div class="modal fade" id="modalDeleteRegisterMedicine" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg1">
+					<div class="row">
+						<h3 class="titulo">Eliminar registro medicina</h3>
+					</div>
+					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="DeleteRegisterMedicine" method="post">
+						<div class="form-group">
+							<label for="exampleInputPassword1">Nombre</label>
+							<select class="form-control selectRequerido" id="idDeleteRegisterMedicineSelect"
+								name="medicineId" style="width: 100%;">
+								<option value="">Selecciona una opción</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Grupo</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineGroup" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Equivalente</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineTantamount" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Ingrediente activo</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineActiveIngredient"
+								readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Codigo ICA</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineCodeICA" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Unidad de medida</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineMeasurementUnit"
+								readonly maxlength="90">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Via de aplicación</label>
+							<input type="text" class="form-control" id="idDeleteRegisterMedicineType" readonly
+								maxlength="90">
+						</div>
+						<button type="submit" class="btn btn-success">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script th:inline="javascript">
+
+	$(document).ready(function () {
+		$('#idDeleteRegisterMedicineSelect').on('change', function () {
+			let valor = this.value;
+			if (valor == -1) {
+				$('#idDeleteRegisterMedicineGroup').val("");
+				$('#idDeleteRegisterMedicineTantamount').val("");
+				$('#idDeleteRegisterMedicineActiveIngredient').val("");
+				$('#idDeleteRegisterMedicineCodeICA').val("");
+				$('#idDeleteRegisterMedicineMeasurementUnit').val("");
+				$('#idDeleteRegisterMedicineType').val("");
+			} else {
+				loadDataDeleteRegisterMedicine(valor);
+			}
+		});
+	});
+
+	$(document).on('submit', '#DeleteRegisterMedicine', function (e) {
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		var id = $('#idDeleteRegisterMedicineSelect').val();
+		Swal.fire({
+			title: 'Esta seguro?',
+			text: "Esta seguro de que desea eliminar el registro de medicina?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Cancelar',
+			confirmButtonText: 'Si, eliminar el registro medicina!'
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					type: 'GET',
+					url: '/medicine/' + 'deleteMedicine ' + id,
+					data: data,
+					beforeSend: function () {
+						Swal.fire({
+							title: 'Cargando...',
+							position: 'top',
+							allowOutsideClick: () => !Swal.isLoading(),
+							onBeforeOpen: () => {
+								Swal.showLoading();
+							}
+						});
+					},
+					success: function (data) {
+						Swal.close();
+						mensajeRespuesta = data.message;
+					},
+					error:
+						function () {
+							Swal.close();
+						},
+					complete: function (data) {
+						Swal.close();
+						Swal.fire({
+							title: "¡Información!",
+							text: mensajeRespuesta,
+							icon: "warning",
+							confirmButtonText: 'Aceptar',
+							allowOutsideClick: () => false
+						}).then((result) => {
+							if (result.value) {
+								$("#modalAddMedicine").modal('hide');
+								$('#idTableMedicine').DataTable().clear().destroy();
+								construirTablaMedicina();
+							}
+						}
+						);
+					}
+				});
+
+				return false;
+			}
+		});
+
+		return false;
+	});
+
+	function loadDeleteRegisterMedicine() {
+		var data;
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getAllMedicines',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.msgRespuesta;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close(data);
+				var select = document.getElementById("idDeleteRegisterMedicineSelect");
+				for (let i = 0; i < data.responseJSON.object.length; i++) {
+					let opcion = document.createElement('option');
+					opcion.value = data.responseJSON.object[i].medicineId;
+					opcion.text = data.responseJSON.object[i].name;
+					select.add(opcion);
+				}
+			}
+		});
+	}
+
+	function loadDataDeleteRegisterMedicine(id) {
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'GET',
+			url: '/medicine/' + 'getMedicineById/' + id,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error: function () {
+				Swal.close();
+			},
+			complete: function (data) {
+				Swal.close();
+				if (data.responseJSON.statusCode == 200) {
+					$('#idDeleteRegisterMedicineGroup').val(data.responseJSON.object.groupe);
+					$('#idDeleteRegisterMedicineTantamount').val(data.responseJSON.object.tantamount);
+					$('#idDeleteRegisterMedicineActiveIngredient').val(data.responseJSON.object.activeIngredient);
+					$('#idDeleteRegisterMedicineCodeICA').val(data.responseJSON.object.codeICA);
+					$('#idDeleteRegisterMedicineMeasurementUnit').val(data.responseJSON.object.measurementUnit);
+					$('#idDeleteRegisterMedicineType').val(data.responseJSON.object.type);
+				} else {
+					$('#idDeleteRegisterMedicineGroup').val("");
+					$('#idDeleteRegisterMedicineTantamount').val("");
+					$('#idDeleteRegisterMedicineActiveIngredient').val("");
+					$('#idDeleteRegisterMedicineCodeICA').val("");
+					$('#idDeleteRegisterMedicineMeasurementUnit').val("");
+					$('#idDeleteRegisterMedicineType').val("");
+					Swal.fire({
+						title: "¡Información!",
+						text: mensajeRespuesta,
+						icon: "warning",
+						confirmButtonText: 'Aceptar',
+						allowOutsideClick: () => false
+					});
+				}
+			}
+		});
+
+		return false;
+	}
+
+	function hiddenMaterials() {
+		$("#modalAddMedicine").modal("hide");
+	}
+
+</script>

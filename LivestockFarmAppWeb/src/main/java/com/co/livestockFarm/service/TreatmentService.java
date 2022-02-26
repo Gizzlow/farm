@@ -15,6 +15,7 @@ import com.co.livestockFarm.util.ConstantTreatment;
 
 @Service
 public class TreatmentService {
+	
 	@Autowired
 	private TreatmentRepository treatmentRepository;
 	@Autowired

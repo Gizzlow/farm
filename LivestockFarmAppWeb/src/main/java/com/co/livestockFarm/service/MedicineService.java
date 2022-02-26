@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.co.livestockFarm.dto.InventoryMedicineDTO;
 import com.co.livestockFarm.dto.MedicineDTO;
@@ -137,6 +136,29 @@ public class MedicineService {
 
 			return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID.getStatusCode())
 					.message(ConstantMedicine.GET_INVENTORY_BY_ID.getMessage()).object(medicine).build();
+		}
+
+		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getStatusCode())
+				.message(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getMessage()).build();
+	}
+
+	public ResponseDTO<Object> getInventoryMedicineById(Long id) {
+		Optional<InventoryMedicine> inventoryMedicineDB = inventoryMedicineRepository.findById(id);
+		if (inventoryMedicineDB.isPresent()) {
+			InventoryMedicine medicine = inventoryMedicineDB.get();
+			
+			InventoryMedicineDTO inventoryMedicineDTO = new InventoryMedicineDTO();
+			inventoryMedicineDTO.setInventoryMedicineId(medicine.getInventoryMedicineId());
+			inventoryMedicineDTO.setName(medicine.getMedicineId().getName());
+			inventoryMedicineDTO.setExpirationDate(medicine.getExpirationDate());
+			inventoryMedicineDTO.setLot(medicine.getLot());
+			inventoryMedicineDTO.setAmount(medicine.getAmount());
+			inventoryMedicineDTO.setType(medicine.getMedicineId().getType());
+			inventoryMedicineDTO.setTimeRetirement(medicine.getMedicineId().getTimeRetirement());
+			inventoryMedicineDTO.setCodeICA(medicine.getMedicineId().getCodeICA());
+
+			return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID.getStatusCode())
+					.message(ConstantMedicine.GET_INVENTORY_BY_ID.getMessage()).object(inventoryMedicineDTO).build();
 		}
 
 		return ResponseDTO.builder().statusCode(ConstantMedicine.GET_INVENTORY_BY_ID_ERROR.getStatusCode())

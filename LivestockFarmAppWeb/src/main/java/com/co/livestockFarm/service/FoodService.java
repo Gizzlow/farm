@@ -38,15 +38,15 @@ public class FoodService {
 		Food initialFood = foodRepository.getMaterialByName(foodDTO.name.toLowerCase());
 		if (initialFood == null) {
 			Food food = objectMapper.convertValue(foodDTO, Food.class);
+			food.setName(food.getName().toLowerCase());
 			foodRepository.save(food);
-
 			foodDTO.foodId = food.getFoodId();
 
 			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
 					.message(ConstantFood.FOOD_SUCESSFUL.getMessage()).object(foodDTO).build();
 		}
-
 		foodDTO.foodId = initialFood.getFoodId();
+
 		return ResponseDTO.builder().statusCode(ConstantFood.FOOD_REPEATED.getStatusCode())
 				.message(ConstantFood.FOOD_REPEATED.getMessage()).object(foodDTO).build();
 
@@ -60,7 +60,7 @@ public class FoodService {
 
 		if (foodFromDB != null) {
 			InventoryFood inventoryFood;
-			if(inventoryFoodDTO.getInventoryFoodId() == null) {
+			if (inventoryFoodDTO.getInventoryFoodId() == null) {
 				inventoryFood = new InventoryFood();
 				inventoryFood.setFoodId(foodFromDB);
 				inventoryFood.setCantidad(inventoryFoodDTO.getCantidad());
@@ -68,16 +68,15 @@ public class FoodService {
 				inventoryFood.setLote(inventoryFoodDTO.getLote());
 				inventoryFood.setNombreAlmacen(inventoryFoodDTO.getNombreAlmacen());
 				inventoryFood.setRegistroIca(inventoryFoodDTO.getRegistroIca());
-				
-			}else {
-				inventoryFood = inventoryFoodRepository
-						.getInventoryFoodById(inventoryFoodDTO.getInventoryFoodId());
+
+			} else {
+				inventoryFood = inventoryFoodRepository.getInventoryFoodById(inventoryFoodDTO.getInventoryFoodId());
 				initialAmount = inventoryFood.getCantidad();
 				inventoryFood.setCantidad(initialAmount + inventoryFoodDTO.getCantidad());
 				operation = ConstantFood.INPUT_OPERATION_TYPE.getMessage();
 			}
 			inventoryFood.setObservation(inventoryFoodDTO.getObservation());
-			
+
 			inventoryFoodRepository.save(inventoryFood);
 			inventoryFoodDTO.inventoryFoodId = inventoryFood.getInventoryFoodId();
 			inventoryFoodDTO.setName(foodFromDB.getName());
@@ -222,6 +221,14 @@ public class FoodService {
 					.message(ConstantFood.ENTITY_NOT_FOUND.getMessage()).build();
 		}
 
+	}
+	
+	public ResponseDTO<Object> editFood(FoodDTO foodDTO){
+		
+		
+		
+		return ResponseDTO.builder()
+				.build();
 	}
 
 }

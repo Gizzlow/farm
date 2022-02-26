@@ -15,7 +15,7 @@
 					<div class="row">
 						<h3 class="titulo">Adicionar alimentos</h3>
 					</div>
-					<button type="button" class="close" onclick="hiddenMaterials()" data-dismiss="modal"
+					<button type="button" class="close" onclick="hiddenAddFood()" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -24,7 +24,7 @@
 					<form id="addFood" method="post" object="inventoryFoodDTO">
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<select class="form-control selectRequerido" id="idAddFoodSelect" name="foodId"
+							<select class="form-control selectRequerido" id="idAddFoodSelect" name="foodId" required="required"
 								style="width: 100%;">
 								<option value="">Selecciona una opción</option>
 							</select>
@@ -75,7 +75,7 @@
 		var mensajeRespuesta = "";
 		$.ajax({
 			type: 'POST',
-			url: '/food/' + 'addFood ',
+			url: '/food/' + 'addFood',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -153,8 +153,8 @@
 		});
 	}
 
-	function hiddenRegisterFood() {
-		$("#modalRegisterFood").modal("hide");
+	function hiddenAddFood() {
+		$("#modalAddFood").modal("hide");
 	}
 
 </script>

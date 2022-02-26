@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Ingresar materiales</title>
+	<title>Ingresar medicine</title>
 </head>
 
 <body>
@@ -53,6 +53,11 @@
 								maxlength="90">
 						</div>
 						<div class="form-group">
+							<label for="exampleInputPassword1">Via de aplicación</label>
+							<input type="text" class="form-control" id="idAddMedicineType" readonly
+								maxlength="90">
+						</div>
+						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad</label>
 							<input type="text" class="form-control" id="idAddMedicineAmount" name="amount" required="required"
 								maxlength="5">
@@ -91,6 +96,7 @@
 				$('#idAddMedicineActiveIngredient').val("");
 				$('#idAddMedicineCodeICA').val("");
 				$('#idAddMedicineMeasurementUnit').val("");
+				$('#idAddMedicineType').val("");
 			} else {
 				loadData(valor);
 			}
@@ -213,6 +219,7 @@
 					$('#idAddMedicineActiveIngredient').val(data.responseJSON.object.activeIngredient);
 					$('#idAddMedicineCodeICA').val(data.responseJSON.object.codeICA);
 					$('#idAddMedicineMeasurementUnit').val(data.responseJSON.object.measurementUnit);
+					$('#idAddMedicineType').val(data.responseJSON.object.type);
 				} else {
 					$('#idAddMedicineGroup').val("");
 					$('#idAddMedicineTantamount').val("");

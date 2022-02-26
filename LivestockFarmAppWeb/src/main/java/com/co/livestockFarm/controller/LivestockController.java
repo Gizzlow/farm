@@ -22,7 +22,7 @@ public class LivestockController {
 
 	@PostMapping(path = "/agregar")
 	@ResponseBody
-	public ResponseDTO<Object> agregarGanado(@RequestBody LivestockDTO ganadoDTO) {
+	public ResponseDTO<Object> agregarGanado(LivestockDTO ganadoDTO) {
 		ResponseDTO<Object> responseDTO;
 		try {
 			responseDTO = ganadoService.registerLivestock(ganadoDTO);
@@ -53,7 +53,7 @@ public class LivestockController {
 
 	@PostMapping("/editar")
 	@ResponseBody
-	public ResponseDTO<Object> editarGanado(@RequestBody LivestockDTO ganado) {
+	public ResponseDTO<Object> editarGanado(LivestockDTO ganado) {
 
 		ResponseDTO<Object> response;
 		try {

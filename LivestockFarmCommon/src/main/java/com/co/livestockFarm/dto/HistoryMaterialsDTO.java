@@ -13,4 +13,6 @@ public class HistoryMaterialsDTO {
 	private int input;
 	private int output;
 	private int residue;
+	private String initDate;
+	private String endDate;
 }
