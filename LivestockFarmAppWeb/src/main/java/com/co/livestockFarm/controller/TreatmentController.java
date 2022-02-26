@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,10 +20,10 @@ import com.co.livestockFarm.util.ConstantFood;
 @Controller
 @RequestMapping(value = "/treatment")
 public class TreatmentController {
-	
+
 	@Autowired
 	private TreatmentService treatmenService;
-	
+
 	@Autowired
 	private ReportService reportService;
 
@@ -42,7 +41,7 @@ public class TreatmentController {
 
 		return responseDTO;
 	}
-	
+
 	@GetMapping("/getreport")
 	@ResponseBody
 	public ResponseDTO<Object> getreport() {
@@ -50,16 +49,16 @@ public class TreatmentController {
 		try {
 			Date date = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
 			reportService.reportTreatment(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(), new Date());
+			reportService.reportMaterials(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(), new Date());
+			reportService.reportFood(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(), new Date());
+			reportService.reportMedicine(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(), new Date());
 		} catch (Exception e) {
 
-			return ResponseDTO.builder()
-					.statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
-					.message(ConstantFood.ERROR_FATAL.getMessage())
-					.object(null).build();
+			return ResponseDTO.builder().statusCode(ConstantFood.ERROR_FATAL.getStatusCode())
+					.message(ConstantFood.ERROR_FATAL.getMessage()).object(null).build();
 		}
 
 		return responseDTO;
 	}
-	
 
 }
