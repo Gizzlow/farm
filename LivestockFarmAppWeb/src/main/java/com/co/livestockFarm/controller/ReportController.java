@@ -1,11 +1,11 @@
 package com.co.livestockFarm.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,26 +20,43 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.co.livestockFarm.dto.ResponseDTO;
+import com.co.livestockFarm.dto.ReportTreatmentDTO;
+import com.co.livestockFarm.service.ReportService;
 
 @Controller
 @RequestMapping(value = "/report")
 public class ReportController {
+	@Autowired
+	ReportService reportService;
 
 	@PostMapping(path = "/treatment")
 	@ResponseBody
-	public void generateTreatmentReport() {
+	public void generateTreatmentReport(@RequestBody ReportTreatmentDTO treatment) {
 		Workbook workbook = new XSSFWorkbook();
 //
 		Sheet sheet = workbook.createSheet("TreatmentReport");
 		defineColumns(sheet);
-
+		
+		Date initialDate = null;
+		Date finalDate = null;
+		
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+		}catch (Exception e) {
+			
+		}
+		List<ReportTreatmentDTO> results = reportService.reportTreatment(initialDate, finalDate);
+		
 		String fileLocation = createTreatmentReport(sheet, workbook);
+		System.out.println(fileLocation);
 		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(fileLocation);

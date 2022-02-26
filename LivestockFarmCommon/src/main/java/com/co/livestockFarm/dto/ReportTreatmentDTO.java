@@ -12,14 +12,14 @@ public class ReportTreatmentDTO {
 	private String expirationDate;
 	private String medicineLot;
 	private String icaCode;
-	private int amount;
+	private Integer amount;
 	private String medicineType;
 	private String retireTime;
 	private String endTreatment;
 	private String personEncharge;
 
 	public ReportTreatmentDTO(String date, String name, String type, String treatment, String medicineName,
-			String expirationDate, String medicineLot, String icaCode, int amount, String medicineType,
+			String expirationDate, String medicineLot, String icaCode, Integer amount, String medicineType,
 			String retireTime, String endTreatment, String personEncharge) {
 		super();
 		this.date = date;
