@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
+import com.co.livestockFarm.dto.TreatmentDTO;
 import com.co.livestockFarm.service.ReportService;
 
 @Controller
@@ -55,7 +56,7 @@ public class ReportController {
 		}
 		List<ReportTreatmentDTO> results = reportService.reportTreatment(initialDate, finalDate);
 		
-		String fileLocation = createTreatmentReport(sheet, workbook);
+		String fileLocation = createTreatmentReport(sheet, workbook, results);
 		System.out.println(fileLocation);
 		FileOutputStream outputStream;
 		try {
@@ -223,7 +224,7 @@ public class ReportController {
 		headerCell.setCellStyle(headerStyle);
 	}
 
-	public String createTreatmentReport(Sheet sheet, Workbook workbook) {
+	public String createTreatmentReport(Sheet sheet, Workbook workbook, List<ReportTreatmentDTO> results) {
 		Row preHeader = sheet.createRow(0);
 		Row header = sheet.createRow(1);
 
@@ -321,8 +322,56 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		Row row = sheet.createRow(2);
-		Cell cell = row.createCell(0);
+		int numberRow = 2;
+		
+		for(int i = 0; i < results.size(); i++) {
+			Row row = sheet.createRow(numberRow);
+			Cell cell = row.createCell(i);
+			ReportTreatmentDTO treatment = results.get(i);
+			
+				
+				
+				String[] date = treatment.getDate().split("/");
+				String anio = date[0];
+				String month = date[1];
+				String year = date[2];
+				
+				String animal = treatment.getName();
+				
+				String type = treatment.getType();
+				
+				String treatmentName = treatment.getTreatment();
+				
+				String medicineName = treatment.getMedicineName();
+				
+				String[] expirationDate = treatment.getExpirationDate().split("/");
+				
+				String expirationYear = expirationDate[2];
+				String expirationMonth = expirationDate[1];
+				String lot = treatment.getMedicineLot();
+				String icaCode = treatment.getIcaCode();
+				String amount = treatment.getAmount().toString();
+				
+				String[]retireTime = treatment.getRetireTime().split("/");
+				String retireMonth = retireTime[1];
+				String retireDay = retireTime[0];
+				
+				String[]endTreatment = treatment.getEndTreatment().split("/");
+				String dayEnd = endTreatment[0];
+				String monthEnd = endTreatment[1];
+				String yearEnd = endTreatment[2];
+				
+				
+				switch(treatment.getMedicineType().toLowerCase()) {
+				case "im":
+					
+				}
+				cell.setCellValue(results.get(i).);
+			
+			numberRow++;
+		}
+		
+		
 		cell.setCellValue("John Smith");
 		cell.setCellStyle(style);
 
