@@ -426,7 +426,7 @@ public class ReportController {
 			cell.setCellStyle(style);
 
 			String[] endTreatment = treatment.getEndTreatment().split("/");
-			String dayEnd = endTreatment[0];
+			String dayEnd = endTreatment[2];
 			cell = row.createCell(20);
 			cell.setCellValue(dayEnd);
 			cell.setCellStyle(style);
@@ -434,7 +434,7 @@ public class ReportController {
 			cell = row.createCell(21);
 			cell.setCellValue(monthEnd);
 			cell.setCellStyle(style);
-			String yearEnd = endTreatment[2];
+			String yearEnd = endTreatment[0];
 			cell = row.createCell(22);
 			cell.setCellValue(yearEnd);
 			cell.setCellStyle(style);
