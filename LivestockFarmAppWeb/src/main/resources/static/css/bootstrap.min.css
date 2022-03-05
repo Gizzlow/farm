@@ -2471,14 +2471,14 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-success {
 	color: #fff;
-	background-color: #28a745;
-	border-color: #28a745
+	background-color: #76230d9e;
+	border-color: #76230d9e
 }
 
 .btn-success:hover {
 	color: #fff;
-	background-color: #218838;
-	border-color: #1e7e34
+	background-color: #76230dde;
+	border-color: #76230dde
 }
 
 .btn-success.focus, .btn-success:focus {

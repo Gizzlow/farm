@@ -162,7 +162,7 @@ section.resume-section .resume-item .resume-date {
 }
 
 .bg-primary {
-	background-color: #00bb2d !important
+	background-color: #76230dde !important
 }
 
 .text-primary {
@@ -202,11 +202,12 @@ a:active, a:focus, a:hover {
 }
 
 .bg1 {
-	background-color: #ccff90;
+	background-color: #76230d9e;
 }
 
 .titulo {
 	margin-left: 70px;
+	color:white;
 }
 
 .primeras {

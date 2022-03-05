@@ -11349,9 +11349,13 @@ p.lead {
     padding: 0.5rem;
   }
   #sideNav .navbar-brand .img-profile {
-    max-width: 10rem;
-    max-height: 10rem;
+    width: 180px;
+    height: 150px;
     border: 0.5rem solid rgba(255, 255, 255, 0.2);
+  }
+   .transparentButton {
+   	background-color: transparent;
+    border: 2px solid transparent;
   }
   #sideNav .navbar-collapse {
     display: flex;
