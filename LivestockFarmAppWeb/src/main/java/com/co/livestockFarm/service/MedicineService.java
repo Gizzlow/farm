@@ -101,6 +101,7 @@ public class MedicineService {
 			aux.setExpiration(df.format(inventoryMedicine.getExpirationDate()));
 			aux.setAmount(inventoryMedicine.getAmount());
 			aux.setMeasurementUnit(medicineDB.getMeasurementUnit());
+			aux.setType(medicineDB.getType());
 			response.add(aux);
 		}
 

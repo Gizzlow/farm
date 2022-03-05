@@ -45,13 +45,13 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad en inventario</label>
-							<input type="text" class="form-control" id="idTreatmentAmountMedicine" name="" required="required"
-								readonly>
+							<input type="text" class="form-control" id="idTreatmentAmountMedicine" name=""
+								required="required" readonly>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha de tratamiento</label>
 							<input type="date" class="form-control" id="idTreatmentDate" name="date" required="required"
-								maxlength="5">
+								onchange="updateTreatmentEnd()" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Tratamiento</label>
@@ -60,17 +60,18 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Dosis</label>
-							<input type="text" class="form-control" id="idTreatmentAmount" name="amount" required="required"
-								maxlength="5">
+							<input type="text" class="form-control" id="idTreatmentAmount" name="amount"
+								required="required" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha fin tratamiento</label>
-							<input type="date" class="form-control" id="idTreatmentDateTreatment" name="endTreatment" required="required"
-								maxlength="5">
+							<input type="text" class="form-control" id="idTreatmentDateTreatment" name="endTreatment"
+								required="required" maxlength="5" readonly>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Persona encargada</label>
-							<input type="text" class="form-control" id="idTreatmentPersonEncharge" name="personEncharge" required="required">
+							<input type="text" class="form-control" id="idTreatmentPersonEncharge" name="personEncharge"
+								required="required">
 						</div>
 						<div class="form-group">
 							<input type="hidden" class="form-control" id="idTreatmentLot" name="medicineLot"
@@ -178,7 +179,7 @@
 		var data;
 		$.ajax({
 			type: 'GET',
-			url: '/medicine/' + 'getAllMedicines',
+			url: '/medicine/' + 'getAllInventoryMedicines',
 			data: data,
 			beforeSend: function () {
 				Swal.fire({
@@ -200,10 +201,12 @@
 				},
 			complete: function (data) {
 				Swal.close();
+				console.log("---------------")
+				console.log(data)
 				var select = document.getElementById("idMedicineTreatmentSelect");
 				for (let i = 0; i < data.responseJSON.object.length; i++) {
 					let opcion = document.createElement('option');
-					opcion.value = data.responseJSON.object[i].medicineId;
+					opcion.value = data.responseJSON.object[i].inventoryMedicineId;
 					opcion.text = data.responseJSON.object[i].name;
 					select.add(opcion);
 				}
@@ -244,6 +247,7 @@
 					$('#idTreatmentAmountMedicine').val(data.responseJSON.object.amount);
 					$('#idTreatmentTreatment').val("");
 					$('#idTreatmentICACode').val(data.responseJSON.object.codeICA);
+					$('#idTreatmentMedicineName').val(data.responseJSON.object.name);
 					$('#idTreatmentType').val(data.responseJSON.object.type);
 					$('#idTreatmentTimeRetirement').val(data.responseJSON.object.timeRetirement);
 				} else {
@@ -264,6 +268,15 @@
 		});
 
 		return false;
+	}
+
+	function updateTreatmentEnd() {
+		let treatmentDate = document.getElementById("idTreatmentDate").value;
+		let treatmentTimeRetirement = document.getElementById("idTreatmentTimeRetirement").value;
+		var TuFecha = new Date(treatmentDate);
+		var dias = parseInt(treatmentTimeRetirement);
+		TuFecha.setDate(TuFecha.getDate() + dias+ 1);
+		$('#idTreatmentDateTreatment').val((TuFecha.getDate()) + "/" + (TuFecha.getMonth() + 1) + "/" + (TuFecha.getFullYear()));
 	}
 
 	function hiddenModalTreatmentLivestock() {
