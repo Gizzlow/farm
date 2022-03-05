@@ -332,7 +332,7 @@ public class ReportController {
 //			Cell cell = row.createCell(i);
 			ReportTreatmentDTO treatment = results.get(i);
 
-			String[] date = treatment.getDate().split("/");
+			String[] date = treatment.getDate().split("-");
 			String day = date[0];
 			String month = date[1];
 			String year = date[2];
@@ -366,9 +366,9 @@ public class ReportController {
 			cell.setCellValue(medicineName);
 			cell.setCellStyle(style);
 
-			String[] expirationDate = treatment.getExpirationDate().split("/");
+			String[] expirationDate = treatment.getExpirationDate().split("-");
 
-			String expirationYear = expirationDate[2];
+			String expirationYear = expirationDate[0];
 			cell = row.createCell(7);
 			cell.setCellValue(expirationYear);
 			cell.setCellStyle(style);
@@ -421,12 +421,12 @@ public class ReportController {
 			cell.setCellValue(medicineType);
 			cell.setCellStyle(style);
 
-			String[] retireTime = treatment.getRetireTime().split("/");
-			String retireMonth = retireTime[1];
+			String[] retireTime = treatment.getRetireTime().split("-");
+			String retireMonth = retireTime[0];
 			cell = row.createCell(18);
 			cell.setCellValue(retireMonth);
 			cell.setCellStyle(style);
-			String retireDay = retireTime[0];
+			String retireDay = retireTime[1];
 			cell = row.createCell(19);
 			cell.setCellValue(retireDay);
 			cell.setCellStyle(style);

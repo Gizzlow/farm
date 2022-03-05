@@ -1,6 +1,7 @@
 package com.co.livestockFarm.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,10 @@ public class TreatmentService {
 			Treatment treatment = new Treatment();
 			Livestock liveStock = liveStockRepository.getLivestockById(treatmentDTO.getLivestockId());
 
-			LocalDate today = LocalDate.parse(treatmentDTO.getDate());
-			today.plusDays(Long.parseLong(treatmentDTO.getTimeRetirement()));
+			
+			int month = Integer.parseInt(treatmentDTO.getTimeRetirement())/30;
+			int days = Integer.parseInt(treatmentDTO.getTimeRetirement())%30;
+
 
 			treatment.setLivestockId(liveStock);
 			treatment.setDate(treatmentDTO.getDate());
@@ -47,7 +50,7 @@ public class TreatmentService {
 			treatment.setMedicineName(treatmentDTO.getMedicineName());
 			treatment.setIcaCode(treatmentDTO.getIcaCode());
 			treatment.setMedicineType(treatmentDTO.getType());
-			treatment.setRetireTime(today.toString());
+			treatment.setRetireTime(month+"-"+days);
 			treatment.setPersonEncharge(treatmentDTO.getPersonEncharge());
 
 			treatmentRepository.save(treatment);
