@@ -391,24 +391,30 @@ public class ReportController {
 			cell.setCellValue(amount);
 			cell.setCellStyle(style);
 
-			String medicineType = treatment.getMedicineType().toUpperCase();
+			String medicineType = treatment.getMedicineType().toLowerCase();
 			switch (medicineType) {
-			case "IM":
+			case "intramuscular":
+				medicineType = "IM";
 				cell = row.createCell(12);
 				break;
-			case "IV":
+			case "intravenosa":
+				medicineType = "IV";
 				cell = row.createCell(13);
 				break;
-			case "SC":
+			case "subcutanea":
+				medicineType = "SC";
 				cell = row.createCell(14);
 				break;
-			case "OR":
+			case "oral":
+				medicineType = "OR";
 				cell = row.createCell(15);
 				break;
-			case "IMA":
+			case "intramamaria":
+				medicineType = "IMA";
 				cell = row.createCell(16);
 				break;
-			case "IU":
+			case "intrauterina":
+				medicineType = "IU";
 				cell = row.createCell(17);
 				break;
 			}
