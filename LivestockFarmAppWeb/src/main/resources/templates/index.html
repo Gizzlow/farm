@@ -35,7 +35,7 @@
 		<a class="navbar-brand js-scroll-trigger" href="#page-top">
 			<span class="d-block d-lg-none">Clarence Taylor</span>
 			<span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2"
-					src="assets/img/profile.jpg" alt="..." /></span>
+					src="assets/img/vaca.jpg" alt="..." /></span>
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
 			aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
@@ -55,14 +55,13 @@
 		<section class="resume-section" id="Ganado">
 			<div class="resume-section-content">
 				<h2 class="mb-5">Ganado</h2>
-				<div class="subheading mb-3">Ganado</div>
-				<button onclick="openRegisterLivestock()">Registrar ganado</button>
-				<button onclick="openEditLivestock()">Tratamiento grupal</button>
+				<button onclick="openRegisterLivestock()" class="btn btn-success">Registrar ganado</button>
+				<button onclick="openEditLivestock()" class="btn btn-success">Tratamiento grupal</button>
 				<div class="float-right">
-					<button onclick="generateHistoryLivestock()">Generar registros de tratamientos</button> </div>
+					<button onclick="generateHistoryLivestock()" class="btn btn-success">Generar historial de tratamientos</button> </div>
 				<p>
-				<div class="table-responsive">
-					<table id="idTableLivestock" class="table-striped" style="width: 180%">
+				<div >
+					<table id="idTableLivestock" class="table-striped" style="width: 200%">
 						<thead>
 							<tr class="color">
 								<th style="width: 9%;" class="color-head">Nombre<br></th>
@@ -81,14 +80,13 @@
 		<section class="resume-section" id="Medicamentos">
 			<div class="resume-section-content">
 				<h2 class="mb-5">Medicamentos</h2>
-				<div class="subheading mb-3">Medicinas</div>
-				<button onclick="openRegisterMedicine()">Registrar medicina</button>
-				<button onclick="openAddMedicine()">Adicionar medicina</button>
+				<button onclick="openRegisterMedicine()" class="btn btn-success">Registrar medicina</button>
+				<button onclick="openAddMedicine()" class="btn btn-success">Adicionar medicina</button>
 				<div class="float-right">
-					<button onclick="generateHistoryMedicine()">Generar historial</button> </div>
+					<button onclick="generateHistoryMedicine()" class="btn btn-success">Generar historial de medicamentos</button> </div>
 				<p>
-				<div class="table-responsive">
-					<table id="idTableMedicine" class="table-striped" style="width: 180%">
+				<div ><!-- class="table-responsive" -->
+					<table id="idTableMedicine" class="table-striped" style="width: 200%">
 						<thead>
 							<tr class="color">
 								<th style="width: 9%;" class="color-head">Nombre<br></th>
@@ -110,13 +108,12 @@
 		<section class="resume-section" id="Materiales">
 			<div class="resume-section-content">
 				<h2 class="mb-5">Materiales</h2>
-				<div class="subheading mb-3">Materiales y Herramientas</div>
-				<button onclick="openRegisterMaterials()">Ingresar materiales</button>
+				<button onclick="openRegisterMaterials()" class="btn btn-success">Ingresar materiales</button>
 				<div class="float-right">
-					<button onclick="generateHistoryMaterials()">Generar historial</button> </div>
+					<button onclick="generateHistoryMaterials()" class="btn btn-success">Generar historial de materiales</button> </div>
 				<p>
-				<div class="table-responsive">
-					<table id="idTableMaterials" class="table-striped" style="width: 180%">
+				<div>
+					<table id="idTableMaterials" class="table-striped" style="width: 200%">
 						<thead>
 							<tr class="color">
 								<th style="width: 9%;" class="color-head">Nombre<br></th>
@@ -135,15 +132,14 @@
 		<section class="resume-section" id="Alimentos">
 			<div class="resume-section-content">
 				<h2 class="mb-5">Alimentos</h2>
-				<div class="subheading mb-3">Alimentos</div>
-				<button onclick="openRegisterFood()">Registrar alimentos</button>
-				<button onclick="openAddFood()">Adicionar alimentos</button>
-				<button onclick="openEditFood()">Editar alimentos</button>
+				<button onclick="openRegisterFood()" class="btn btn-success">Registrar alimentos</button>
+				<button onclick="openAddFood()" class="btn btn-success">Adicionar alimentos</button>
+				<button onclick="openEditFood()" class="btn btn-success">Editar alimentos</button>
 				<div class="float-right">
-					<button onclick="generateHistoryFood()">Generar historial</button> </div>
+					<button onclick="generateHistoryFood()" class="btn btn-success">Generar historial de alimentos</button> </div>
 				<p>
-				<div class="table-responsive">
-					<table id="idTableFood" class="table-striped" style="width: 180%">
+				<div>
+					<table id="idTableFood" class="table-striped" style="width: 200%">
 						<thead>
 							<tr class="color">
 								<th style="width: 9%;" class="color-head">Nombre<br></th>
@@ -152,7 +148,7 @@
 								<th style="width: 9%;" class="color-head">Registro ICA<br></th>
 								<th style="width: 9%;" class="color-head">Fecha vencimiento<br></th>
 								<th style="width: 9%;" class="color-head">Nombre almacen<br></th>
-								<th style="width: 4%;" class="color-head">Acción</th>
+								<th style="width: 8%;" class="color-head text-nowrap">Acción</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -197,11 +193,9 @@
 		construirTablaMedicina();
 		construirTablaMateriales();
 		construirTablaComida();
-
 		$.fn.modal.Constructor.prototype._enforceFocus = function () {};
 		$('.selectRequerido').select2({
 			language: {
-
 				noResults: function () {
 
 					return "No hay resultado";
@@ -255,12 +249,12 @@
 			contenido += '<td>' + data.object[i].type + '</td>';
 			if (data.object[i].active) {
 				contenido += '<td>Activo</td>';
-				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-					+ '<button type="button" id="btnTreatmentLivestock" onclick="openTreatmentLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-trash"></i></button>';
+				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" class="transparentButton" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+					+ '<button type="button" id="btnTreatmentLivestock" class="transparentButton" onclick="openTreatmentLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-trash"></i></button>';
 			} else {
 				contenido += '<td>Inactivo</td>';
-				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-					+ '<button type="button" id="btnTreatmentLivestock" onclick=""><i class="fas fa-trash"></i></button>';
+				contenido += '<td class="text-center"><button type="button" id="btnEditLivestock" class="transparentButton" onclick="openEditLivestock(' + data.object[i].livestockId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+					+ '<button type="button" id="btnTreatmentLivestock" class="transparentButton" onclick=""><i class="fas fa-trash"></i></button>';
 			}
 			contenido += '</tr>';
 		}
@@ -280,6 +274,9 @@
 		var tablaAsig = $('#idTableLivestock').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
+			"columnDefs": [
+                { "orderable": false, "targets":3}
+              ],
 			"processing": true,
 			"ordering": true,
 			"language": {
@@ -289,6 +286,12 @@
 				"zeroRecords": "No se han encontrado coincidencias.",
 				"responsive": true,
 				"lengthMenu": "_MENU_",
+				"paginate": {
+                    "first": '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+                    "last":  '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+                    "next": '<i class="fa fa-arrow-right" aria-hidden="true"></i>',
+                    "previous":'<i class="fa fa-arrow-left" aria-hidden="true"></i>'
+                },
 			},
 			"lengthMenu": [5, 10, 20, 50, 100],
 			"pageLength": 5,
@@ -436,8 +439,8 @@
 			contenido += '<td>' + data.object[i].expiration + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
 			contenido += '<td>' + data.object[i].measurementUnit + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" onclick="openRemoveMedicine(' + data.object[i].inventoryMedicineId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMedicine" onclick="deleteMedicines(' + data.object[i].inventoryMedicineId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnRemoveMedicine" class="transparentButton" onclick="openRemoveMedicine(' + data.object[i].inventoryMedicineId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMedicine" class="transparentButton" onclick="deleteMedicines(' + data.object[i].inventoryMedicineId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 
@@ -456,6 +459,9 @@
 		var tablaAsig = $('#idTableMedicine').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
+			"columnDefs": [
+                { "orderable": false, "targets":5}
+              ],
 			"processing": true,
 			"ordering": true,
 			"language": {
@@ -465,6 +471,12 @@
 				"zeroRecords": "No se han encontrado coincidencias.",
 				"responsive": true,
 				"lengthMenu": "_MENU_",
+				"paginate": {
+                    "first": '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+                    "last":  '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+                    "next": '<i class="fa fa-arrow-right" aria-hidden="true"></i>',
+                    "previous":'<i class="fa fa-arrow-left" aria-hidden="true"></i>'
+                },
 			},
 			"lengthMenu": [5, 10, 20, 50, 100],
 			"pageLength": 5,
@@ -691,9 +703,9 @@
 			contenido += '<tr>';
 			contenido += '<td>' + data.object[i].name + '</td>';
 			contenido += '<td>' + data.object[i].amount + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openAddMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
-				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteMaterials(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" class="transparentButton" onclick="openAddMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" class="transparentButton" onclick="openRemoveMaterials(' + data.object[i].inventoryMaterialsId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" class="transparentButton" onclick="deleteMaterials(' + data.object[i].inventoryMaterialsId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 		$("#idTableMaterials").append(contenido)
@@ -711,6 +723,9 @@
 		var tablaAsig = $('#idTableMaterials').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
+			"columnDefs": [
+                { "orderable": false, "targets":2}
+              ],
 			"processing": true,
 			"ordering": true,
 			"language": {
@@ -720,6 +735,12 @@
 				"zeroRecords": "No se han encontrado coincidencias.",
 				"responsive": true,
 				"lengthMenu": "_MENU_",
+				"paginate": {
+                    "first": '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+                    "last":  '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+                    "next": '<i class="fa fa-arrow-right" aria-hidden="true"></i>',
+                    "previous":'<i class="fa fa-arrow-left" aria-hidden="true"></i>'
+                },
 			},
 			"lengthMenu": [5, 10, 20, 50, 100],
 			"pageLength": 5,
@@ -868,9 +889,9 @@
 			contenido += '<td>' + data.object[i].registroIca + '</td>';
 			contenido += '<td>' + data.object[i].fechaVencimiento + '</td>';
 			contenido += '<td>' + data.object[i].nombreAlmacen + '</td>';
-			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" onclick="openSumarFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\', \'' + data.object[i].foodId + '\')"><i class="fas fa-plus-circle"></i></button>'
-				+ '<button type="button" id="btnRemoveMaterials" onclick="openRemoveFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
-				+ '<button type="button" id="btnDeleteMaterials" onclick="deleteFood(' + data.object[i].inventoryFoodId + ')"><i class="fas fa-trash"></i></button></td>';
+			contenido += '<td class="text-center"><button type="button" id="btnAddMaterials" class="transparentButton" onclick="openSumarFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\', \'' + data.object[i].foodId + '\')"><i class="fas fa-plus-circle"></i></button>'
+				+ '<button type="button" id="btnRemoveMaterials" class="transparentButton" onclick="openRemoveFood(' + data.object[i].inventoryFoodId + ', \'' + data.object[i].name + '\')"><i class="fas fa-minus-circle"></i></button>'
+				+ '<button type="button" id="btnDeleteMaterials" class="transparentButton" onclick="deleteFood(' + data.object[i].inventoryFoodId + ')"><i class="fas fa-trash"></i></button></td>';
 			contenido += '</tr>';
 		}
 		$("#idTableFood").append(contenido)
@@ -888,6 +909,9 @@
 		var tablaAsig = $('#idTableFood').DataTable({
 			"orderCellsTop": true,
 			"order": [0, 'desc'],
+			"columnDefs": [
+                { "orderable": false, "targets":6}
+              ],
 			"processing": true,
 			"ordering": true,
 			"language": {
@@ -897,6 +921,12 @@
 				"zeroRecords": "No se han encontrado coincidencias.",
 				"responsive": true,
 				"lengthMenu": "_MENU_",
+				"paginate": {
+                    "first": '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+                    "last":  '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+                    "next": '<i class="fa fa-arrow-right" aria-hidden="true"></i>',
+                    "previous":'<i class="fa fa-arrow-left" aria-hidden="true"></i>'
+                },
 			},
 			"lengthMenu": [5, 10, 20, 50, 100],
 			"pageLength": 5,
