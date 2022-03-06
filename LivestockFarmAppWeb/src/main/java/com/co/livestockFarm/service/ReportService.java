@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.co.livestockFarm.dto.ReportFoodDTO;
+import com.co.livestockFarm.dto.ReportMaterialsDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
 import com.co.livestockFarm.entity.HistoryMaterials;
@@ -32,9 +33,9 @@ public class ReportService {
 		return response;
 	}
 
-	public List<HistoryMaterials> reportMaterials(Date fechaInicial, Date fechafinal) {
+	public List<ReportMaterialsDTO> reportMaterials(Date fechaInicial, Date fechafinal) {
 
-		List<HistoryMaterials> response = reportRepository.getReportMaterials(fechaInicial, fechafinal);
+		List<ReportMaterialsDTO> response = reportRepository.getReportMaterials(fechaInicial, fechafinal);
 		System.out.println(response.toString());
 		return response;
 	}
