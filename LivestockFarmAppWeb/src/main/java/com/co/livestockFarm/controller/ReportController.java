@@ -78,7 +78,7 @@ public class ReportController {
 //
 		Sheet sheet = workbook.createSheet("MedicineReport");
 		defineMedicinceColumns(sheet);
-		
+
 		Date initialDate = null;
 		Date finalDate = null;
 
@@ -88,7 +88,7 @@ public class ReportController {
 		} catch (Exception e) {
 
 		}
-		
+
 		List<ReportMedicineDTO> results = reportService.reportMedicine(initialDate, finalDate);
 
 		String fileLocation = createMedicinetReport(sheet, workbook, results);
@@ -597,56 +597,60 @@ public class ReportController {
 			cell.setCellStyle(style);
 
 			Date date = treatment.getDate();
-			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");  
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			String strDate = dateFormat.format(date);
 			String fullDate[] = strDate.split("-");
 			String day = fullDate[0];
 			String month = fullDate[1];
 			String year = fullDate[2];
-			
-			
+
 			cell = row.createCell(4);
 			cell.setCellValue(year);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(5);
 			cell.setCellValue(month);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(6);
 			cell.setCellValue(day);
 			cell.setCellStyle(style);
 
+			String input = "0";
+			if (treatment.getInput() != null)
+				input = treatment.getInput().toString();
 
-			String input = treatment.getInput().toString();
 			cell = row.createCell(7);
 			cell.setCellValue(input);
 			cell.setCellStyle(style);
 
-			String output = treatment.getOutput().toString();
+			String output = "0";
+			if (treatment.getOutput() != null)
+				output = treatment.getOutput().toString();
+
 			cell = row.createCell(8);
 			cell.setCellValue(output);
 			cell.setCellStyle(style);
-			
+
 			date = treatment.getExpirationDate();
 			strDate = dateFormat.format(date);
 			fullDate = strDate.split("-");
 			day = fullDate[0];
 			month = fullDate[1];
 			year = fullDate[2];
-			
+
 			cell = row.createCell(9);
 			cell.setCellValue(year);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(10);
 			cell.setCellValue(month);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(11);
 			cell.setCellValue(day);
 			cell.setCellStyle(style);
-			
+
 			String lot = treatment.getLot();
 			cell = row.createCell(12);
 			cell.setCellValue(lot);
@@ -655,7 +659,7 @@ public class ReportController {
 			String residue = treatment.getResidue().toString();
 			cell = row.createCell(13);
 			cell.setCellValue(residue);
-			cell.setCellStyle(style);			
+			cell.setCellStyle(style);
 
 			numberRow++;
 		}
