@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.co.livestockFarm.dto.ReportFoodDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
 import com.co.livestockFarm.service.ReportService;
@@ -106,13 +107,57 @@ public class ReportController {
 
 	@PostMapping(path = "/food")
 	@ResponseBody
-	public void generateFoodReport() {
+	public void generateFoodReport(@RequestBody ReportTreatmentDTO food) {
 		Workbook workbook = new XSSFWorkbook();
 //
 		Sheet sheet = workbook.createSheet("FodReport");
 		defineFoodColumns(sheet);
 
-		String fileLocation = createFoodReport(sheet, workbook);
+		Date initialDate = null;
+		Date finalDate = null;
+
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getName());
+		} catch (Exception e) {
+
+		}
+
+		List<ReportFoodDTO> results = reportService.reportFood(initialDate, finalDate);
+		
+		String fileLocation = createFoodReport(sheet, workbook, results);
+		FileOutputStream outputStream;
+		try {
+			outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	@PostMapping(path = "/materials")
+	@ResponseBody
+	public void generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("MaterialsReport");
+		defineMaterialsColumns(sheet);
+
+		Date initialDate = null;
+		Date finalDate = null;
+
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+		} catch (Exception e) {
+
+		}
+
+//		List<ReportMaterialsDTO> results = reportService.reportMaterials(initialDate, finalDate);
+
+		String fileLocation = createMaterialsReport(sheet, workbook);
 		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(fileLocation);
@@ -182,6 +227,16 @@ public class ReportController {
 		sheet.setColumnWidth(9, 10000); // ICA
 		sheet.setColumnWidth(10, 7000); // Lote
 		sheet.setColumnWidth(11, 10000); // Dia
+	}
+	public void defineMaterialsColumns(Sheet sheet) {
+		sheet.setColumnWidth(0, 10000); // Name
+		sheet.setColumnWidth(1, 2000); // Anio
+		sheet.setColumnWidth(2, 2000); // Mes
+		sheet.setColumnWidth(3, 2000); // Dia
+		sheet.setColumnWidth(4, 7000); // Entra
+		sheet.setColumnWidth(5, 7000); // Sali
+		sheet.setColumnWidth(6, 7000); // Saldo
+		sheet.setColumnWidth(7, 10000); // Onserva
 	}
 
 	public void defineHeaders(Cell headerCell, Row header, CellStyle headerStyle) {
@@ -464,20 +519,8 @@ public class ReportController {
 			cell.setCellValue(personInCharge);
 			cell.setCellStyle(style);
 
-//				cell.setCellValue(results.get(i).);
-
 			numberRow++;
 		}
-
-//		cell.setCellValue("John Smith");
-//		cell.setCellStyle(style);
-//
-//		cell = row.createCell(1);
-//		cell.setCellValue(20);
-//		cell.setCellStyle(style);
-
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -678,7 +721,7 @@ public class ReportController {
 		return fileLocation;
 	}
 
-	public String createFoodReport(Sheet sheet, Workbook workbook) {
+	public String createFoodReport(Sheet sheet, Workbook workbook, List<ReportFoodDTO> results) {
 		Row preHeader = sheet.createRow(0);
 
 		CellStyle headerStyle = workbook.createCellStyle();
@@ -743,17 +786,87 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		Row row = sheet.createRow(2);
-		Cell cell = row.createCell(0);
-		cell.setCellValue("John Smith");
-		cell.setCellStyle(style);
+		int numberRow = 1;
 
-		cell = row.createCell(1);
-		cell.setCellValue(20);
-		cell.setCellStyle(style);
+		for (int i = 0; i < results.size(); i++) {
+			Row row = sheet.createRow(numberRow);
+			ReportFoodDTO treatment = results.get(i);
 
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
+			String name = treatment.getName();
+			Cell cell = row.createCell(0);
+			cell.setCellValue(name);
+			cell.setCellStyle(style);
+
+			String date[] = treatment.getDate().split("-");
+			String day = date[2];
+			String month = date[1];
+			String year = date[0];
+			
+			cell = row.createCell(1);
+			cell.setCellValue(year);
+			cell.setCellStyle(style);
+			
+			cell = row.createCell(2);
+			cell.setCellValue(month);
+			cell.setCellStyle(style);
+			
+			cell = row.createCell(3);
+			cell.setCellValue(day);
+			cell.setCellStyle(style);
+
+			String input = "0";
+			if (treatment.getInput() != null)
+				input = treatment.getInput().toString();
+
+			cell = row.createCell(4);
+			cell.setCellValue(input);
+			cell.setCellStyle(style);
+
+			String output = "0";
+			if (treatment.getOutput() != null)
+				output = treatment.getOutput().toString();
+
+			cell = row.createCell(5);
+			cell.setCellValue(output);
+			cell.setCellStyle(style);
+			
+			String balance = "0";
+			if (treatment.getBalance() != null)
+				balance = treatment.getBalance().toString();
+
+			cell = row.createCell(6);
+			cell.setCellValue(balance);
+			cell.setCellStyle(style);
+			
+			Date expDate = treatment.getExpirationDate();
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String strDate = dateFormat.format(expDate);			
+			cell = row.createCell(7);
+			cell.setCellValue(strDate);
+			cell.setCellStyle(style);
+			
+			String storeName = treatment.getNombreAlmacen();
+			cell = row.createCell(8);
+			cell.setCellValue(storeName);
+			cell.setCellStyle(style);
+			
+			String icaCode = treatment.getIcaRegistration();
+			cell = row.createCell(9);
+			cell.setCellValue(icaCode);
+			cell.setCellStyle(style);
+			
+			String lot = treatment.getLote();
+			cell = row.createCell(10);
+			cell.setCellValue(lot);
+			cell.setCellStyle(style);
+			
+			String observartions = treatment.getObservation();
+			cell = row.createCell(11);
+			cell.setCellValue(observartions);
+			cell.setCellStyle(style);
+
+			numberRow++;
+		}
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -763,6 +876,162 @@ public class ReportController {
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
 		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Alimento_" + dateReport + ".xlsx";
+		return fileLocation;
+	}
+	
+	public String createMaterialsReport(Sheet sheet, Workbook workbook) {
+		Row preHeader = sheet.createRow(0);
+
+		CellStyle headerStyle = workbook.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		headerStyle.setBorderBottom(BorderStyle.THIN);
+		headerStyle.setBorderRight(BorderStyle.THIN);
+		headerStyle.setBorderTop(BorderStyle.THIN);
+		headerStyle.setBorderLeft(BorderStyle.THIN);
+
+		XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+		font.setFontName("Arial");
+		font.setFontHeightInPoints((short) 16);
+		headerStyle.setFont(font);
+
+		Cell preHeaderCell = preHeader.createCell(0);
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell.setCellValue("Nombre");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(1);
+		preHeaderCell.setCellValue("Año");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(2);
+		preHeaderCell.setCellValue("Mes");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(3);
+		preHeaderCell.setCellValue("Día");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(4);
+		preHeaderCell.setCellValue("Entrada");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(5);
+		preHeaderCell.setCellValue("Salida");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(6);
+		preHeaderCell.setCellValue("Saldo");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(7);
+		preHeaderCell.setCellValue("Observaciones");
+		preHeaderCell.setCellStyle(headerStyle);
+		
+		CellStyle style = workbook.createCellStyle();
+		style.setWrapText(true);
+
+		int numberRow = 1;
+
+//		for (int i = 0; i < results.size(); i++) {
+//			Row row = sheet.createRow(numberRow);
+//			ReportMedicineDTO treatment = results.get(i);
+//
+//			String name = treatment.getName();
+//			Cell cell = row.createCell(0);
+//			cell.setCellValue(name);
+//			cell.setCellStyle(style);
+//
+//			String activeIngredient = treatment.getActiveIngredient();
+//			cell = row.createCell(1);
+//			cell.setCellValue(activeIngredient);
+//			cell.setCellStyle(style);
+//
+//			String icaCode = treatment.getCodeICA();
+//			cell = row.createCell(3);
+//			cell.setCellValue(icaCode);
+//			cell.setCellStyle(style);
+//
+//			Date date = treatment.getDate();
+//			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//			String strDate = dateFormat.format(date);
+//			String fullDate[] = strDate.split("-");
+//			String day = fullDate[0];
+//			String month = fullDate[1];
+//			String year = fullDate[2];
+//
+//			cell = row.createCell(4);
+//			cell.setCellValue(year);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(5);
+//			cell.setCellValue(month);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(6);
+//			cell.setCellValue(day);
+//			cell.setCellStyle(style);
+//
+//			String input = "0";
+//			if (treatment.getInput() != null)
+//				input = treatment.getInput().toString();
+//
+//			cell = row.createCell(7);
+//			cell.setCellValue(input);
+//			cell.setCellStyle(style);
+//
+//			String output = "0";
+//			if (treatment.getOutput() != null)
+//				output = treatment.getOutput().toString();
+//
+//			cell = row.createCell(8);
+//			cell.setCellValue(output);
+//			cell.setCellStyle(style);
+//
+//			date = treatment.getExpirationDate();
+//			strDate = dateFormat.format(date);
+//			fullDate = strDate.split("-");
+//			day = fullDate[0];
+//			month = fullDate[1];
+//			year = fullDate[2];
+//
+//			cell = row.createCell(9);
+//			cell.setCellValue(year);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(10);
+//			cell.setCellValue(month);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(11);
+//			cell.setCellValue(day);
+//			cell.setCellStyle(style);
+//
+//			String lot = treatment.getLot();
+//			cell = row.createCell(12);
+//			cell.setCellValue(lot);
+//			cell.setCellStyle(style);
+//
+//			String residue = treatment.getResidue().toString();
+//			cell = row.createCell(13);
+//			cell.setCellValue(residue);
+//			cell.setCellStyle(style);
+//
+//			numberRow++;
+//		}
+
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		String dateReport = formatter.format(date);
+		System.out.println(dateReport);
+
+		File currDir = new File(".");
+		String path = currDir.getAbsolutePath();
+		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Materiales_" + dateReport + ".xlsx";
 		return fileLocation;
 	}
 

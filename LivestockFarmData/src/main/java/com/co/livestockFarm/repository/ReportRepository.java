@@ -11,7 +11,6 @@ import com.co.livestockFarm.dto.ReportFoodDTO;
 import com.co.livestockFarm.dto.ReportMaterialsDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
-import com.co.livestockFarm.entity.HistoryFood;
 import com.co.livestockFarm.entity.HistoryMaterials;
 
 public interface ReportRepository extends CrudRepository<HistoryMaterials, Long> {
