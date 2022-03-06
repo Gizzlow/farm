@@ -118,9 +118,11 @@ public class MedicineService {
 			inventoryMedicine.setMedicineId(medicineAux);
 			inventoryMedicine
 					.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(inventoryMedicineDTO.getExpiration()));
+			inventoryMedicineDTO.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(inventoryMedicineDTO.getExpiration()));
 			inventoryMedicine.setAmount(inventoryMedicineDTO.getAmount());
 			inventoryMedicine.setLot(inventoryMedicineDTO.getLot());
 			inventoryMedicineRepository.save(inventoryMedicine);
+			registerHistorial(inventoryMedicineDTO, inventoryMedicineDTO.getAmount(), null, inventoryMedicineDTO.getAmount());
 
 			return ResponseDTO.builder().statusCode(ConstantMedicine.MEDICINE_ADD.getStatusCode())
 					.message(ConstantMedicine.MEDICINE_ADD.getMessage()).build();
@@ -176,6 +178,8 @@ public class MedicineService {
 			if (inventoryMedicine.getAmount() >= 0) {
 				inventoryMedicineRepository.save(inventoryMedicine);
 				inventoryMedicineDTO.setMedicineId(inventoryMedicine.getMedicineId().getMedicineId());
+				inventoryMedicineDTO.setLot(inventoryMedicine.getLot());
+				inventoryMedicineDTO.setExpirationDate(inventoryMedicine.getExpirationDate());
 				registerHistorial(inventoryMedicineDTO, null, inventoryMedicineDTO.getAmount(), residue);
 
 				return ResponseDTO.builder().statusCode(ConstantMedicine.REMOVE_MEDICINE_SUCESSFUL.getStatusCode())
@@ -209,6 +213,8 @@ public class MedicineService {
 		medicine.setMedicineId(inventoryMedicineDTO.getMedicineId());
 		historyMedicine.setMedicineId(medicine);
 		historyMedicine.setDate(new Date());
+		historyMedicine.setExpirationDate(inventoryMedicineDTO.getExpirationDate());
+		historyMedicine.setLot(inventoryMedicineDTO.getLot());
 		historyMedicine.setObservation(inventoryMedicineDTO.getObservation());
 		historyMedicine.setInput(input);
 		historyMedicine.setOutput(output);
