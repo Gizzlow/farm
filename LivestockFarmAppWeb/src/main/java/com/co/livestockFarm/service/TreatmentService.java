@@ -1,4 +1,6 @@
 package com.co.livestockFarm.service;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class TreatmentService {
 	@Autowired
 	HistoryMedicineRepository historyMedicineRepository;
 
-	public ResponseDTO<Object> addTreatment(TreatmentDTO treatmentDTO) {
+	public ResponseDTO<Object> addTreatment(TreatmentDTO treatmentDTO) throws ParseException {
 		InventoryMedicine medicineEntity = inventoryMedicineRepository
 				.getInventoryMedicineById(treatmentDTO.getInventoryId());
 		ResponseDTO<Object> responseDTO;
@@ -62,6 +64,14 @@ public class TreatmentService {
 
 			medicineEntity.setAmount(medicineEntity.getAmount() - treatmentDTO.getAmount());
 			inventoryMedicineRepository.save(medicineEntity);
+
+			InventoryMedicineDTO inventoryMedicineDTO = new InventoryMedicineDTO();
+			inventoryMedicineDTO.setMedicineId(medicineEntity.getMedicineId().getMedicineId());
+			inventoryMedicineDTO.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(treatmentDTO.getExpirationDate()));
+			inventoryMedicineDTO.setLot(treatmentDTO.getMedicineLot());
+
+			registerHistorial(inventoryMedicineDTO, null, Long.valueOf(treatmentDTO.getAmount()),
+					medicineEntity.getAmount());
 
 			responseDTO = ResponseDTO.builder()
 					.statusCode(ConstantTreatment.REMOVE_INVENTORY_MEDICINE_AMOUNT_SUCCESS.getStatusCode())
