@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
 import com.co.livestockFarm.entity.HistoryFood;
 import com.co.livestockFarm.entity.HistoryMaterials;
@@ -18,8 +19,8 @@ public interface ReportRepository extends CrudRepository<HistoryMaterials, Long>
 	List<ReportTreatmentDTO> getReportTreatment(@Param("fechaInicial") Date fechaInicial,
 			@Param("fechaFinal") Date fechaFinal);
 
-	@Query(value = "SELECT H FROM HistoryMedicine H WHERE CAST(H.date as date) BETWEEN :fechaInicial AND :fechaFinal ORDER BY H.date DESC")
-	List<HistoryMedicine> getReportMedicine(@Param("fechaInicial") Date fechaInicial,
+	@Query(value = "SELECT new com.co.livestockFarm.dto.ReportMedicineDTO(M.name,M.activeIngredient,M.codeICA,H.date,H.input,H.output,H.residue,H.expirationDate,H.lot) FROM HistoryMedicine H JOIN Medicine M ON H.medicineId = M.medicineId WHERE H.date BETWEEN :fechaInicial AND :fechaFinal ORDER BY H.date DESC")
+	List<ReportMedicineDTO> getReportMedicine(@Param("fechaInicial") Date fechaInicial,
 			@Param("fechaFinal") Date fechaFinal);
 
 	@Query(value = "SELECT H FROM HistoryMaterials H WHERE CAST(H.date as date) BETWEEN :fechaInicial AND :fechaFinal ORDER BY H.date DESC")
