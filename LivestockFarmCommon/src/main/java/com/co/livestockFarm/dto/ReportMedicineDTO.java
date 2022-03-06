@@ -2,6 +2,8 @@ package com.co.livestockFarm.dto;
 
 import java.util.Date;
 
+import lombok.Data;
+@Data
 public class ReportMedicineDTO {
 
 	private String name;
