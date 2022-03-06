@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
+import com.co.livestockFarm.entity.HistoryMedicine;
 import com.co.livestockFarm.service.ReportService;
 
 @Controller
@@ -71,13 +72,25 @@ public class ReportController {
 
 	@PostMapping(path = "/medicine")
 	@ResponseBody
-	public void generateMedicineReport() {
+	public void generateMedicineReport(@RequestBody ReportTreatmentDTO treatment) {
 		Workbook workbook = new XSSFWorkbook();
 //
 		Sheet sheet = workbook.createSheet("MedicineReport");
 		defineMedicinceColumns(sheet);
+		
+		Date initialDate = null;
+		Date finalDate = null;
 
-		String fileLocation = createMedicinetReport(sheet, workbook);
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+		} catch (Exception e) {
+
+		}
+		
+		List<HistoryMedicine> results = reportService.reportMedicine(initialDate, finalDate);
+
+		String fileLocation = createMedicinetReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(fileLocation);
@@ -142,7 +155,7 @@ public class ReportController {
 		sheet.setColumnWidth(0, 10000); // Pro
 		sheet.setColumnWidth(1, 10000); // Prin
 		sheet.setColumnWidth(2, 5000); // Pres
-		sheet.setColumnWidth(3, 000); // Regi
+		sheet.setColumnWidth(3, 5000); // Regi
 		sheet.setColumnWidth(4, 2000); // Anio
 		sheet.setColumnWidth(5, 2000); // Mes
 		sheet.setColumnWidth(6, 2000); // Dia
@@ -476,7 +489,7 @@ public class ReportController {
 		return fileLocation;
 	}
 
-	public String createMedicinetReport(Sheet sheet, Workbook workbook) {
+	public String createMedicinetReport(Sheet sheet, Workbook workbook, List<HistoryMedicine> results) {
 		Row preHeader = sheet.createRow(0);
 
 		CellStyle headerStyle = workbook.createCellStyle();
@@ -556,14 +569,142 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		Row row = sheet.createRow(2);
-		Cell cell = row.createCell(0);
-		cell.setCellValue("John Smith");
-		cell.setCellStyle(style);
+		int numberRow = 2;
 
-		cell = row.createCell(1);
-		cell.setCellValue(20);
-		cell.setCellStyle(style);
+//		for (int i = 0; i < results.size(); i++) {
+//			Row row = sheet.createRow(numberRow);
+//			HistoryMedicine treatment = results.get(i);
+//
+//			String[] date = treatment.getDate().split("-");
+//			String day = date[0];
+//			String month = date[1];
+//			String year = date[2];
+//			Cell cell = row.createCell(0);
+//			cell.setCellValue(day);
+//			cell.setCellStyle(style);
+//			cell = row.createCell(1);
+//			cell.setCellValue(month);
+//			cell.setCellStyle(style);
+//			cell = row.createCell(2);
+//			cell.setCellValue(year);
+//			cell.setCellStyle(style);
+//
+//			String animal = treatment.getName();
+//			cell = row.createCell(3);
+//			cell.setCellValue(animal);
+//			cell.setCellStyle(style);
+//
+//			String type = treatment.getType();
+//			cell = row.createCell(4);
+//			cell.setCellValue(type);
+//			cell.setCellStyle(style);
+//
+//			String treatmentName = treatment.getTreatment();
+//			cell = row.createCell(5);
+//			cell.setCellValue(treatmentName);
+//			cell.setCellStyle(style);
+//
+//			String medicineName = treatment.getMedicineName();
+//			cell = row.createCell(6);
+//			cell.setCellValue(medicineName);
+//			cell.setCellStyle(style);
+//
+//			String[] expirationDate = treatment.getExpirationDate().split("-");
+//
+//			String expirationYear = expirationDate[0];
+//			cell = row.createCell(7);
+//			cell.setCellValue(expirationYear);
+//			cell.setCellStyle(style);
+//			String expirationMonth = expirationDate[1];
+//			cell = row.createCell(8);
+//			cell.setCellValue(expirationMonth);
+//			cell.setCellStyle(style);
+//
+//			String lot = treatment.getMedicineLot();
+//			cell = row.createCell(9);
+//			cell.setCellValue(lot);
+//			cell.setCellStyle(style);
+//			String icaCode = treatment.getIcaCode();
+//			cell = row.createCell(10);
+//			cell.setCellValue(icaCode);
+//			cell.setCellStyle(style);
+//
+//			String amount = treatment.getAmount().toString();
+//			cell = row.createCell(11);
+//			cell.setCellValue(amount);
+//			cell.setCellStyle(style);
+//
+//			String medicineType = treatment.getMedicineType().toLowerCase();
+//			switch (medicineType) {
+//			case "intramuscular":
+//				medicineType = "IM";
+//				cell = row.createCell(12);
+//				break;
+//			case "intravenosa":
+//				medicineType = "IV";
+//				cell = row.createCell(13);
+//				break;
+//			case "subcutanea":
+//				medicineType = "SC";
+//				cell = row.createCell(14);
+//				break;
+//			case "oral":
+//				medicineType = "OR";
+//				cell = row.createCell(15);
+//				break;
+//			case "intramamaria":
+//				medicineType = "IMA";
+//				cell = row.createCell(16);
+//				break;
+//			case "intrauterina":
+//				medicineType = "IU";
+//				cell = row.createCell(17);
+//				break;
+//			}
+//			cell.setCellValue(medicineType);
+//			cell.setCellStyle(style);
+//
+//			String[] retireTime = treatment.getRetireTime().split("-");
+//			String retireMonth = retireTime[0];
+//			cell = row.createCell(18);
+//			cell.setCellValue(retireMonth);
+//			cell.setCellStyle(style);
+//			String retireDay = retireTime[1];
+//			cell = row.createCell(19);
+//			cell.setCellValue(retireDay);
+//			cell.setCellStyle(style);
+//
+//			String[] endTreatment = treatment.getEndTreatment().split("/");
+//			String dayEnd = endTreatment[2];
+//			cell = row.createCell(20);
+//			cell.setCellValue(dayEnd);
+//			cell.setCellStyle(style);
+//			String monthEnd = endTreatment[1];
+//			cell = row.createCell(21);
+//			cell.setCellValue(monthEnd);
+//			cell.setCellStyle(style);
+//			String yearEnd = endTreatment[0];
+//			cell = row.createCell(22);
+//			cell.setCellValue(yearEnd);
+//			cell.setCellStyle(style);
+//
+//			String personInCharge = treatment.getPersonEncharge();
+//			cell = row.createCell(23);
+//			cell.setCellValue(personInCharge);
+//			cell.setCellStyle(style);
+//
+////				cell.setCellValue(results.get(i).);
+//
+//			numberRow++;
+//		}
+//		Row row = sheet.createRow(2);
+//		Cell cell = row.createCell(0);
+//		cell.setCellValue("John Smith");
+//		cell.setCellStyle(style);
+//
+//		cell = row.createCell(1);
+//		cell.setCellValue(20);
+//		cell.setCellStyle(style);
 
 		// Finally, let's write the content to a “temp.xlsx” file in the current
 		// directory and close the workbook:
