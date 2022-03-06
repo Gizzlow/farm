@@ -597,7 +597,7 @@ public class ReportController {
 			cell.setCellStyle(style);
 
 			Date date = treatment.getDate();
-			DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");  
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");  
 			String strDate = dateFormat.format(date);
 			String fullDate[] = strDate.split("-");
 			String day = fullDate[0];
