@@ -24,4 +24,6 @@ public class HistoryFoodDTO {
 	private String icaRegistration;
 	private String lote;
 	private String observation;
+	private String fechaVencimiento;
+	private String nombreAlmacen;
 }

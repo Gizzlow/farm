@@ -1,5 +1,6 @@
 package com.co.livestockFarm.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,12 +81,19 @@ public class FoodService {
 			inventoryFoodRepository.save(inventoryFood);
 			inventoryFoodDTO.inventoryFoodId = inventoryFood.getInventoryFoodId();
 			inventoryFoodDTO.setName(foodFromDB.getName());
+			inventoryFoodDTO.setFechaVencimiento(inventoryFood.getFechaVencimiento());
+			inventoryFoodDTO.setNombreAlmacen(inventoryFood.getNombreAlmacen());
 
 			FoodDTO food = objectMapper.convertValue(foodFromDB, FoodDTO.class);
 			String dateNow = LocalDateTime.now().toLocalDate().toString();
 
 			HistoryFoodDTO traceAdd = new HistoryFoodDTO(food.getFoodId(), dateNow, inventoryFoodDTO.getRegistroIca(),
 					inventoryFoodDTO.getLote(), inventoryFood.getObservation());
+			traceAdd.setFechaVencimiento(inventoryFood.getFechaVencimiento());
+			traceAdd.setNombreAlmacen(inventoryFood.getNombreAlmacen());
+			traceAdd.setObservation(inventoryFoodDTO.getObservation());
+			traceAdd.setLote(inventoryFood.getLote());
+			traceAdd.setIcaRegistration(inventoryFood.getRegistroIca());
 			registerTrace(traceAdd, inventoryFoodDTO.getCantidad(), operation, initialAmount);
 
 			return ResponseDTO.builder().statusCode(ConstantFood.FOOD_SUCESSFUL.getStatusCode())
@@ -120,6 +128,10 @@ public class FoodService {
 				HistoryFoodDTO traceAdd = new HistoryFoodDTO(foodDTO.getFoodId(), dateNow,
 						inventoryFoodFromDB.getRegistroIca(), inventoryFoodFromDB.getLote(),
 						inventoryFoodFromDB.getObservation());
+				traceAdd.setFechaVencimiento(inventoryFoodFromDB.getFechaVencimiento());
+				traceAdd.setObservation(inventoryFoodFromDB.getObservation());
+				traceAdd.setFechaVencimiento(inventoryFoodFromDB.getFechaVencimiento());
+				traceAdd.setNombreAlmacen(inventoryFoodFromDB.getNombreAlmacen());
 
 				registerTrace(traceAdd, amount, ConstantFood.OUTPUT_OPERATION_TYPE.getMessage(), initialAmount);
 
@@ -164,6 +176,9 @@ public class FoodService {
 				historyFood.setFoodId(foodFromDB);
 				historyFood.setObservation(historyFoodDTO.getObservation());
 				historyFood.setLote(historyFoodDTO.getLote());
+				historyFood.setObservation(historyFoodDTO.getObservation());
+				historyFood.setExpirationDate(new SimpleDateFormat("yyyy-MM-dd").parse(historyFoodDTO.getFechaVencimiento()));
+				historyFood.setNombreAlmacen(historyFoodDTO.getNombreAlmacen());
 				historyFoodRepository.save(historyFood);
 			}
 		} catch (Exception e) {
