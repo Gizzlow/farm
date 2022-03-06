@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.co.livestockFarm.dto.ReportFoodDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
-import com.co.livestockFarm.entity.HistoryFood;
 import com.co.livestockFarm.entity.HistoryMaterials;
 import com.co.livestockFarm.repository.ReportRepository;
 

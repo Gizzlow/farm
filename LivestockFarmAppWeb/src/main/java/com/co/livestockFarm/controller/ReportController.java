@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.co.livestockFarm.dto.ReportFoodDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
 import com.co.livestockFarm.service.ReportService;
@@ -106,13 +107,25 @@ public class ReportController {
 
 	@PostMapping(path = "/food")
 	@ResponseBody
-	public void generateFoodReport() {
+	public void generateFoodReport(@RequestBody ReportTreatmentDTO food) {
 		Workbook workbook = new XSSFWorkbook();
 //
 		Sheet sheet = workbook.createSheet("FodReport");
 		defineFoodColumns(sheet);
 
-		String fileLocation = createFoodReport(sheet, workbook);
+		Date initialDate = null;
+		Date finalDate = null;
+
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getName());
+		} catch (Exception e) {
+
+		}
+
+		List<ReportFoodDTO> results = reportService.reportFood(initialDate, finalDate);
+		
+		String fileLocation = createFoodReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(fileLocation);
@@ -506,20 +519,8 @@ public class ReportController {
 			cell.setCellValue(personInCharge);
 			cell.setCellStyle(style);
 
-//				cell.setCellValue(results.get(i).);
-
 			numberRow++;
 		}
-
-//		cell.setCellValue("John Smith");
-//		cell.setCellStyle(style);
-//
-//		cell = row.createCell(1);
-//		cell.setCellValue(20);
-//		cell.setCellStyle(style);
-
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -720,7 +721,7 @@ public class ReportController {
 		return fileLocation;
 	}
 
-	public String createFoodReport(Sheet sheet, Workbook workbook) {
+	public String createFoodReport(Sheet sheet, Workbook workbook, List<ReportFoodDTO> results) {
 		Row preHeader = sheet.createRow(0);
 
 		CellStyle headerStyle = workbook.createCellStyle();
@@ -785,17 +786,87 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		Row row = sheet.createRow(2);
-		Cell cell = row.createCell(0);
-		cell.setCellValue("John Smith");
-		cell.setCellStyle(style);
+		int numberRow = 1;
 
-		cell = row.createCell(1);
-		cell.setCellValue(20);
-		cell.setCellStyle(style);
+		for (int i = 0; i < results.size(); i++) {
+			Row row = sheet.createRow(numberRow);
+			ReportFoodDTO treatment = results.get(i);
 
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
+			String name = treatment.getName();
+			Cell cell = row.createCell(0);
+			cell.setCellValue(name);
+			cell.setCellStyle(style);
+
+			String date[] = treatment.getDate().split("-");
+			String day = date[2];
+			String month = date[1];
+			String year = date[0];
+			
+			cell = row.createCell(1);
+			cell.setCellValue(year);
+			cell.setCellStyle(style);
+			
+			cell = row.createCell(2);
+			cell.setCellValue(month);
+			cell.setCellStyle(style);
+			
+			cell = row.createCell(3);
+			cell.setCellValue(day);
+			cell.setCellStyle(style);
+
+			String input = "0";
+			if (treatment.getInput() != null)
+				input = treatment.getInput().toString();
+
+			cell = row.createCell(4);
+			cell.setCellValue(input);
+			cell.setCellStyle(style);
+
+			String output = "0";
+			if (treatment.getOutput() != null)
+				output = treatment.getOutput().toString();
+
+			cell = row.createCell(5);
+			cell.setCellValue(output);
+			cell.setCellStyle(style);
+			
+			String balance = "0";
+			if (treatment.getBalance() != null)
+				balance = treatment.getBalance().toString();
+
+			cell = row.createCell(6);
+			cell.setCellValue(balance);
+			cell.setCellStyle(style);
+			
+			Date expDate = treatment.getExpirationDate();
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String strDate = dateFormat.format(expDate);			
+			cell = row.createCell(7);
+			cell.setCellValue(strDate);
+			cell.setCellStyle(style);
+			
+			String storeName = treatment.getNombreAlmacen();
+			cell = row.createCell(8);
+			cell.setCellValue(storeName);
+			cell.setCellStyle(style);
+			
+			String icaCode = treatment.getIcaRegistration();
+			cell = row.createCell(9);
+			cell.setCellValue(icaCode);
+			cell.setCellStyle(style);
+			
+			String lot = treatment.getLote();
+			cell = row.createCell(10);
+			cell.setCellValue(lot);
+			cell.setCellStyle(style);
+			
+			String observartions = treatment.getObservation();
+			cell = row.createCell(11);
+			cell.setCellValue(observartions);
+			cell.setCellStyle(style);
+
+			numberRow++;
+		}
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
