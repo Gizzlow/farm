@@ -526,11 +526,8 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		System.out.println(dateReport);
-
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_" + dateReport + ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/"+"Reporte_Tratamiento" + dateReport + ".xlsx";		
+		
 		return fileLocation;
 	}
 
@@ -714,11 +711,8 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		System.out.println(dateReport);
-
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Medicina_" + dateReport + ".xlsx";
+		
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Medicina_" + dateReport + ".xlsx";
 		return fileLocation;
 	}
 
@@ -872,11 +866,8 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		System.out.println(dateReport);
-
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Alimento_" + dateReport + ".xlsx";
+		
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Alimento_" + dateReport + ".xlsx";
 		return fileLocation;
 	}
 	
@@ -1000,11 +991,8 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		System.out.println(dateReport);
 
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Materiales_" + dateReport + ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/"+"Reporte_Materiales_" + dateReport + ".xlsx";
 		return fileLocation;
 	}
 
