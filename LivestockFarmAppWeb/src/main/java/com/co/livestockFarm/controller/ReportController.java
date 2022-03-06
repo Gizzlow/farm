@@ -124,6 +124,38 @@ public class ReportController {
 		}
 
 	}
+	
+	@PostMapping(path = "/materials")
+	@ResponseBody
+	public void generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("MaterialsReport");
+		defineMaterialsColumns(sheet);
+
+		Date initialDate = null;
+		Date finalDate = null;
+
+		try {
+			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+		} catch (Exception e) {
+
+		}
+
+//		List<ReportMaterialsDTO> results = reportService.reportMaterials(initialDate, finalDate);
+
+		String fileLocation = createMaterialsReport(sheet, workbook);
+		FileOutputStream outputStream;
+		try {
+			outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	public void defineColumns(Sheet sheet) {
 		sheet.setColumnWidth(0, 2000);
@@ -182,6 +214,16 @@ public class ReportController {
 		sheet.setColumnWidth(9, 10000); // ICA
 		sheet.setColumnWidth(10, 7000); // Lote
 		sheet.setColumnWidth(11, 10000); // Dia
+	}
+	public void defineMaterialsColumns(Sheet sheet) {
+		sheet.setColumnWidth(0, 10000); // Name
+		sheet.setColumnWidth(1, 2000); // Anio
+		sheet.setColumnWidth(2, 2000); // Mes
+		sheet.setColumnWidth(3, 2000); // Dia
+		sheet.setColumnWidth(4, 7000); // Entra
+		sheet.setColumnWidth(5, 7000); // Sali
+		sheet.setColumnWidth(6, 7000); // Saldo
+		sheet.setColumnWidth(7, 10000); // Onserva
 	}
 
 	public void defineHeaders(Cell headerCell, Row header, CellStyle headerStyle) {
@@ -570,7 +612,7 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		int numberRow = 2;
+		int numberRow = 1;
 
 		for (int i = 0; i < results.size(); i++) {
 			Row row = sheet.createRow(numberRow);
@@ -763,6 +805,162 @@ public class ReportController {
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
 		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Alimento_" + dateReport + ".xlsx";
+		return fileLocation;
+	}
+	
+	public String createMaterialsReport(Sheet sheet, Workbook workbook) {
+		Row preHeader = sheet.createRow(0);
+
+		CellStyle headerStyle = workbook.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		headerStyle.setBorderBottom(BorderStyle.THIN);
+		headerStyle.setBorderRight(BorderStyle.THIN);
+		headerStyle.setBorderTop(BorderStyle.THIN);
+		headerStyle.setBorderLeft(BorderStyle.THIN);
+
+		XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+		font.setFontName("Arial");
+		font.setFontHeightInPoints((short) 16);
+		headerStyle.setFont(font);
+
+		Cell preHeaderCell = preHeader.createCell(0);
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell.setCellValue("Nombre");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(1);
+		preHeaderCell.setCellValue("Año");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(2);
+		preHeaderCell.setCellValue("Mes");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(3);
+		preHeaderCell.setCellValue("Día");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(4);
+		preHeaderCell.setCellValue("Entrada");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(5);
+		preHeaderCell.setCellValue("Salida");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(6);
+		preHeaderCell.setCellValue("Saldo");
+		preHeaderCell.setCellStyle(headerStyle);
+
+		preHeaderCell = preHeader.createCell(7);
+		preHeaderCell.setCellValue("Observaciones");
+		preHeaderCell.setCellStyle(headerStyle);
+		
+		CellStyle style = workbook.createCellStyle();
+		style.setWrapText(true);
+
+		int numberRow = 1;
+
+//		for (int i = 0; i < results.size(); i++) {
+//			Row row = sheet.createRow(numberRow);
+//			ReportMedicineDTO treatment = results.get(i);
+//
+//			String name = treatment.getName();
+//			Cell cell = row.createCell(0);
+//			cell.setCellValue(name);
+//			cell.setCellStyle(style);
+//
+//			String activeIngredient = treatment.getActiveIngredient();
+//			cell = row.createCell(1);
+//			cell.setCellValue(activeIngredient);
+//			cell.setCellStyle(style);
+//
+//			String icaCode = treatment.getCodeICA();
+//			cell = row.createCell(3);
+//			cell.setCellValue(icaCode);
+//			cell.setCellStyle(style);
+//
+//			Date date = treatment.getDate();
+//			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//			String strDate = dateFormat.format(date);
+//			String fullDate[] = strDate.split("-");
+//			String day = fullDate[0];
+//			String month = fullDate[1];
+//			String year = fullDate[2];
+//
+//			cell = row.createCell(4);
+//			cell.setCellValue(year);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(5);
+//			cell.setCellValue(month);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(6);
+//			cell.setCellValue(day);
+//			cell.setCellStyle(style);
+//
+//			String input = "0";
+//			if (treatment.getInput() != null)
+//				input = treatment.getInput().toString();
+//
+//			cell = row.createCell(7);
+//			cell.setCellValue(input);
+//			cell.setCellStyle(style);
+//
+//			String output = "0";
+//			if (treatment.getOutput() != null)
+//				output = treatment.getOutput().toString();
+//
+//			cell = row.createCell(8);
+//			cell.setCellValue(output);
+//			cell.setCellStyle(style);
+//
+//			date = treatment.getExpirationDate();
+//			strDate = dateFormat.format(date);
+//			fullDate = strDate.split("-");
+//			day = fullDate[0];
+//			month = fullDate[1];
+//			year = fullDate[2];
+//
+//			cell = row.createCell(9);
+//			cell.setCellValue(year);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(10);
+//			cell.setCellValue(month);
+//			cell.setCellStyle(style);
+//
+//			cell = row.createCell(11);
+//			cell.setCellValue(day);
+//			cell.setCellStyle(style);
+//
+//			String lot = treatment.getLot();
+//			cell = row.createCell(12);
+//			cell.setCellValue(lot);
+//			cell.setCellStyle(style);
+//
+//			String residue = treatment.getResidue().toString();
+//			cell = row.createCell(13);
+//			cell.setCellValue(residue);
+//			cell.setCellStyle(style);
+//
+//			numberRow++;
+//		}
+
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		String dateReport = formatter.format(date);
+		System.out.println(dateReport);
+
+		File currDir = new File(".");
+		String path = currDir.getAbsolutePath();
+		String fileLocation = path.substring(0, path.length() - 1) + "Reporte_Materiales_" + dateReport + ".xlsx";
 		return fileLocation;
 	}
 
