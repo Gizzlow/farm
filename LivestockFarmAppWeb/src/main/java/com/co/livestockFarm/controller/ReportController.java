@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.co.livestockFarm.dto.ReportFoodDTO;
+import com.co.livestockFarm.dto.ReportMaterialsDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
 import com.co.livestockFarm.service.ReportService;
@@ -155,9 +156,9 @@ public class ReportController {
 
 		}
 
-//		List<ReportMaterialsDTO> results = reportService.reportMaterials(initialDate, finalDate);
+		List<ReportMaterialsDTO> results = reportService.reportMaterials(initialDate, finalDate);
 
-		String fileLocation = createMaterialsReport(sheet, workbook);
+		String fileLocation = createMaterialsReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(fileLocation);
@@ -879,7 +880,7 @@ public class ReportController {
 		return fileLocation;
 	}
 	
-	public String createMaterialsReport(Sheet sheet, Workbook workbook) {
+	public String createMaterialsReport(Sheet sheet, Workbook workbook, List<ReportMaterialsDTO> results) {
 		Row preHeader = sheet.createRow(0);
 
 		CellStyle headerStyle = workbook.createCellStyle();
@@ -937,92 +938,64 @@ public class ReportController {
 
 		int numberRow = 1;
 
-//		for (int i = 0; i < results.size(); i++) {
-//			Row row = sheet.createRow(numberRow);
-//			ReportMedicineDTO treatment = results.get(i);
-//
-//			String name = treatment.getName();
-//			Cell cell = row.createCell(0);
-//			cell.setCellValue(name);
-//			cell.setCellStyle(style);
-//
-//			String activeIngredient = treatment.getActiveIngredient();
-//			cell = row.createCell(1);
-//			cell.setCellValue(activeIngredient);
-//			cell.setCellStyle(style);
-//
-//			String icaCode = treatment.getCodeICA();
-//			cell = row.createCell(3);
-//			cell.setCellValue(icaCode);
-//			cell.setCellStyle(style);
-//
-//			Date date = treatment.getDate();
-//			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//			String strDate = dateFormat.format(date);
-//			String fullDate[] = strDate.split("-");
-//			String day = fullDate[0];
-//			String month = fullDate[1];
-//			String year = fullDate[2];
-//
-//			cell = row.createCell(4);
-//			cell.setCellValue(year);
-//			cell.setCellStyle(style);
-//
-//			cell = row.createCell(5);
-//			cell.setCellValue(month);
-//			cell.setCellStyle(style);
-//
-//			cell = row.createCell(6);
-//			cell.setCellValue(day);
-//			cell.setCellStyle(style);
-//
-//			String input = "0";
-//			if (treatment.getInput() != null)
-//				input = treatment.getInput().toString();
-//
-//			cell = row.createCell(7);
-//			cell.setCellValue(input);
-//			cell.setCellStyle(style);
-//
-//			String output = "0";
-//			if (treatment.getOutput() != null)
-//				output = treatment.getOutput().toString();
-//
-//			cell = row.createCell(8);
-//			cell.setCellValue(output);
-//			cell.setCellStyle(style);
-//
-//			date = treatment.getExpirationDate();
-//			strDate = dateFormat.format(date);
-//			fullDate = strDate.split("-");
-//			day = fullDate[0];
-//			month = fullDate[1];
-//			year = fullDate[2];
-//
-//			cell = row.createCell(9);
-//			cell.setCellValue(year);
-//			cell.setCellStyle(style);
-//
-//			cell = row.createCell(10);
-//			cell.setCellValue(month);
-//			cell.setCellStyle(style);
-//
-//			cell = row.createCell(11);
-//			cell.setCellValue(day);
-//			cell.setCellStyle(style);
-//
-//			String lot = treatment.getLot();
-//			cell = row.createCell(12);
-//			cell.setCellValue(lot);
-//			cell.setCellStyle(style);
-//
-//			String residue = treatment.getResidue().toString();
-//			cell = row.createCell(13);
-//			cell.setCellValue(residue);
-//			cell.setCellStyle(style);
-//
-//			numberRow++;
-//		}
+		for (int i = 0; i < results.size(); i++) {
+			Row row = sheet.createRow(numberRow);
+			ReportMaterialsDTO treatment = results.get(i);
+
+			String name = treatment.getName();
+			Cell cell = row.createCell(0);
+			cell.setCellValue(name);
+			cell.setCellStyle(style);
+			
+			
+			Date date = treatment.getDate();
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String strDate = dateFormat.format(date);
+			String fullDate[] = strDate.split("-");
+			String day = fullDate[0];
+			String month = fullDate[1];
+			String year = fullDate[2];
+
+			cell = row.createCell(1);
+			cell.setCellValue(year);
+			cell.setCellStyle(style);
+
+			cell = row.createCell(2);
+			cell.setCellValue(month);
+			cell.setCellStyle(style);
+
+			cell = row.createCell(3);
+			cell.setCellValue(day);
+			cell.setCellStyle(style);
+
+			String input = "0";
+			if (treatment.getInput() != null)
+				input = treatment.getInput().toString();
+
+			cell = row.createCell(4);
+			cell.setCellValue(input);
+			cell.setCellStyle(style);
+
+			String output = "0";
+			if (treatment.getOutput() != null)
+				output = treatment.getOutput().toString();
+
+			cell = row.createCell(5);
+			cell.setCellValue(output);
+			cell.setCellStyle(style);
+
+			String balance = treatment.getResidue().toString();
+			cell = row.createCell(6);
+			cell.setCellValue(balance);
+			cell.setCellStyle(style);
+
+			String observation = treatment.getObservation();
+			cell = row.createCell(7);
+			cell.setCellValue(observation);
+			cell.setCellStyle(style);
+
+			numberRow++;
+		}
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
