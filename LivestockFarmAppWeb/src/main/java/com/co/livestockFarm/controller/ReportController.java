@@ -570,7 +570,7 @@ public class ReportController {
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
-		int numberRow = 2;
+		int numberRow = 1;
 
 		for (int i = 0; i < results.size(); i++) {
 			Row row = sheet.createRow(numberRow);

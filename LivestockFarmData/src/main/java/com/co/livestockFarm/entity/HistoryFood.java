@@ -1,5 +1,7 @@
 package com.co.livestockFarm.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,10 +29,12 @@ public class HistoryFood {
 	@JoinColumn(name = "foodId")
 	private Food foodId;
 	private String date;
+	private Date expirationDate;
 	private int input;
 	private int output;
 	@Value("${some.key:0}")
 	private int balance;
+	private String nombreAlmacen;
 	private String icaRegistration;
 	private String lote;
 	private String observation;
