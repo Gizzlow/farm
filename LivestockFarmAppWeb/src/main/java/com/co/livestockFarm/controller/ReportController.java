@@ -3,6 +3,8 @@ package com.co.livestockFarm.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -125,7 +127,7 @@ public class ReportController {
 		}
 
 		List<ReportFoodDTO> results = reportService.reportFood(initialDate, finalDate);
-		
+
 		String fileLocation = createFoodReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
@@ -138,7 +140,7 @@ public class ReportController {
 		}
 
 	}
-	
+
 	@PostMapping(path = "/materials")
 	@ResponseBody
 	public void generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
@@ -229,6 +231,7 @@ public class ReportController {
 		sheet.setColumnWidth(10, 7000); // Lote
 		sheet.setColumnWidth(11, 10000); // Dia
 	}
+
 	public void defineMaterialsColumns(Sheet sheet) {
 		sheet.setColumnWidth(0, 10000); // Name
 		sheet.setColumnWidth(1, 2000); // Anio
@@ -526,8 +529,16 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/"+"Reporte_Tratamiento" + dateReport + ".xlsx";		
-		
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Tratamiento_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return fileLocation;
 	}
 
@@ -705,14 +716,19 @@ public class ReportController {
 			numberRow++;
 		}
 
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
-
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Medicina_" + dateReport + ".xlsx";
+
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Medicina_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fileLocation;
 	}
 
@@ -796,15 +812,15 @@ public class ReportController {
 			String day = date[2];
 			String month = date[1];
 			String year = date[0];
-			
+
 			cell = row.createCell(1);
 			cell.setCellValue(year);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(2);
 			cell.setCellValue(month);
 			cell.setCellStyle(style);
-			
+
 			cell = row.createCell(3);
 			cell.setCellValue(day);
 			cell.setCellStyle(style);
@@ -824,7 +840,7 @@ public class ReportController {
 			cell = row.createCell(5);
 			cell.setCellValue(output);
 			cell.setCellStyle(style);
-			
+
 			String balance = "0";
 			if (treatment.getBalance() != null)
 				balance = treatment.getBalance().toString();
@@ -832,29 +848,29 @@ public class ReportController {
 			cell = row.createCell(6);
 			cell.setCellValue(balance);
 			cell.setCellStyle(style);
-			
+
 			Date expDate = treatment.getExpirationDate();
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-			String strDate = dateFormat.format(expDate);			
+			String strDate = dateFormat.format(expDate);
 			cell = row.createCell(7);
 			cell.setCellValue(strDate);
 			cell.setCellStyle(style);
-			
+
 			String storeName = treatment.getNombreAlmacen();
 			cell = row.createCell(8);
 			cell.setCellValue(storeName);
 			cell.setCellStyle(style);
-			
+
 			String icaCode = treatment.getIcaRegistration();
 			cell = row.createCell(9);
 			cell.setCellValue(icaCode);
 			cell.setCellStyle(style);
-			
+
 			String lot = treatment.getLote();
 			cell = row.createCell(10);
 			cell.setCellValue(lot);
 			cell.setCellStyle(style);
-			
+
 			String observartions = treatment.getObservation();
 			cell = row.createCell(11);
 			cell.setCellValue(observartions);
@@ -866,11 +882,18 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Alimento_" + dateReport + ".xlsx";
+
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Alimento_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
 		return fileLocation;
 	}
-	
+
 	public String createMaterialsReport(Sheet sheet, Workbook workbook, List<ReportMaterialsDTO> results) {
 		Row preHeader = sheet.createRow(0);
 
@@ -923,7 +946,7 @@ public class ReportController {
 		preHeaderCell = preHeader.createCell(7);
 		preHeaderCell.setCellValue("Observaciones");
 		preHeaderCell.setCellStyle(headerStyle);
-		
+
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 
@@ -937,8 +960,7 @@ public class ReportController {
 			Cell cell = row.createCell(0);
 			cell.setCellValue(name);
 			cell.setCellStyle(style);
-			
-			
+
 			Date date = treatment.getDate();
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			String strDate = dateFormat.format(date);
@@ -992,7 +1014,14 @@ public class ReportController {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
 
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/"+"Reporte_Materiales_" + dateReport + ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+		} catch (IOException e) {
+			fileLocation += "Reporte_Materiales_" + dateReport + ".xlsx";
+			e.printStackTrace();
+		}
 		return fileLocation;
 	}
 
