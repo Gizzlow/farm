@@ -24,15 +24,15 @@
 					<form id="addFood" method="post" object="inventoryFoodDTO">
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre</label>
-							<select class="form-control selectRequerido" id="idAddFoodSelect" name="foodId" required="required"
-								style="width: 100%;">
+							<select class="form-control selectRequerido" id="idAddFoodSelect" name="foodId"
+								required="required" style="width: 100%;">
 								<option value="">Selecciona una opción</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Cantidad</label>
-							<input type="text" class="form-control" id="idAddFoodAmount" name="cantidad" required="required"
-								maxlength="5">
+							<input type="number" class="form-control" id="idAddFoodAmount" name="cantidad"
+								required="required" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Lote</label>
@@ -41,21 +41,23 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Registro ICA</label>
-							<input type="text" class="form-control" id="idAddFoodCodeICA" name="registroIca" required="required"
-								maxlength="5">
+							<input type="text" class="form-control" id="idAddFoodCodeICA" name="registroIca"
+								required="required" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha vencimiento</label>
-							<input type="date" class="form-control" id="idAddFoodExpiredDate" name="fechaVencimiento" required="required"
-								maxlength="5">
+							<input type="date" class="form-control" id="idAddFoodExpiredDate" name="fechaVencimiento"
+								required="required" maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Nombre almacen</label>
-							<input type="text" class="form-control" id="idAddFoodNameWarehouse" name="nombreAlmacen" maxlength="90">
+							<input type="text" class="form-control" id="idAddFoodNameWarehouse" name="nombreAlmacen"
+								maxlength="90">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Observación</label>
-							<input type="text" class="form-control" id="idAddFoodObservation" name="observation" maxlength="90">
+							<input type="text" class="form-control" id="idAddFoodObservation" name="observation"
+								maxlength="90">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -70,6 +72,22 @@
 <script th:inline="javascript">
 
 	$(document).on('submit', '#addFood', function (e) {
+		var entidad = document.getElementById("idAddFoodSelect").value;
+		if (entidad == -1) {
+			Swal.fire({
+				title: "¡Información!",
+				text: "Debe seleccionar un alimento",
+				icon: "warning",
+				confirmButtonText: 'Aceptar',
+				allowOutsideClick: () => false
+			}).then((result) => {
+				if (result.value) {
+				}
+			}
+			);
+			return false;
+		}
+
 		e.preventDefault();
 		var data = $(this).serialize();
 		var mensajeRespuesta = "";
