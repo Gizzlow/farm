@@ -56,7 +56,7 @@
 			<div class="resume-section-content">
 				<h2 class="mb-5">Ganado</h2>
 				<button onclick="openRegisterLivestock()" class="btn btn-success">Registrar ganado</button>
-				<button onclick="openEditLivestock()" class="btn btn-success">Tratamiento grupal</button>
+				<!--<button onclick="openEditLivestock()" class="btn btn-success">Tratamiento grupal</button>-->
 				<div class="float-right">
 					<button onclick="generateHistoryLivestock()" class="btn btn-success">Generar historial de tratamientos</button> </div>
 				<p>
@@ -399,8 +399,8 @@
 	}
 
 	function generateHistoryLivestock() {
-		//$('#idRegisterMaterialsName').val("");
-		//$('#idRegisterMaterialsAmount').val("");
+		$('#idHistoryLivestockDateInitial').val("");
+		$('#idHistoryLivestockDateLast').val("");
 		$("#modalReportLivestock").modal("show");
 	}
 
@@ -659,8 +659,8 @@
 	}
 	
 	function generateHistoryMedicine() {
-		//$('#idRegisterMaterialsName').val("");
-		//$('#idRegisterMaterialsAmount').val("");
+		$('#idHistoryMedicineDateInitial').val("");
+		$('#idHistoryMedicineDateLast').val("");
 		$("#modalReportMedicine").modal("show");
 	}
 
@@ -1079,8 +1079,8 @@
 	}
 	
 	function generateHistoryFood() {
-		//$('#idRegisterMaterialsName').val("");
-		//$('#idRegisterMaterialsAmount').val("");
+		$('#idHistoryFoodDateInitial').val("");
+		$('#idHistoryFoodDatelast').val("");
 		$("#modalReportFood").modal("show");
 	}
 
