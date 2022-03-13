@@ -45,14 +45,14 @@ public class ReportController {
 
 	@PostMapping(path = "/treatment")
 	@ResponseBody
-	public ResponseDTO<Object> generateTreatmentReport(@RequestBody ReportTreatmentDTO treatment) {
+	public ResponseDTO<Object> generateTreatmentReport(ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
 
 		try {
-			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
-			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+			initialDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getName());
 		} catch (Exception e) {
 			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
 					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
@@ -81,14 +81,14 @@ public class ReportController {
 
 	@PostMapping(path = "/medicine")
 	@ResponseBody
-	public ResponseDTO<Object> generateMedicineReport(@RequestBody ReportTreatmentDTO treatment) {
+	public ResponseDTO<Object> generateMedicineReport(ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
 
 		try {
-			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
-			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+			initialDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getName());
 		} catch (Exception e) {
 			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
 					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
@@ -116,14 +116,14 @@ public class ReportController {
 
 	@PostMapping(path = "/food")
 	@ResponseBody
-	public ResponseDTO<Object> generateFoodReport(@RequestBody ReportTreatmentDTO food) {
+	public ResponseDTO<Object> generateFoodReport(ReportTreatmentDTO food) {
 
 		Date initialDate = null;
 		Date finalDate = null;
 
 		try {
-			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getDate());
-			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getName());
+			initialDate = new SimpleDateFormat("yyyy-MM-dd").parse(food.getDate());
+			finalDate = new SimpleDateFormat("yyyy-MM-dd").parse(food.getName());
 		} catch (Exception e) {
 			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
 					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
@@ -153,14 +153,14 @@ public class ReportController {
 
 	@PostMapping(path = "/materials")
 	@ResponseBody
-	public ResponseDTO<Object> generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
+	public ResponseDTO<Object> generateMaterialsReport(ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
 
 		try {
-			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
-			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
+			initialDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getDate());
+			finalDate = new SimpleDateFormat("yyyy-MM-dd").parse(treatment.getName());
 		} catch (Exception e) {
 			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
 					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
