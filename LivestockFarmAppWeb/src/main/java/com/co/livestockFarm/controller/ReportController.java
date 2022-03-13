@@ -2,6 +2,8 @@ package com.co.livestockFarm.controller;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +33,9 @@ import com.co.livestockFarm.dto.ReportFoodDTO;
 import com.co.livestockFarm.dto.ReportMaterialsDTO;
 import com.co.livestockFarm.dto.ReportMedicineDTO;
 import com.co.livestockFarm.dto.ReportTreatmentDTO;
+import com.co.livestockFarm.dto.ResponseDTO;
 import com.co.livestockFarm.service.ReportService;
+import com.co.livestockFarm.util.ConstantReport;
 
 @Controller
 @RequestMapping(value = "/report")
@@ -41,11 +45,7 @@ public class ReportController {
 
 	@PostMapping(path = "/treatment")
 	@ResponseBody
-	public void generateTreatmentReport(@RequestBody ReportTreatmentDTO treatment) {
-		Workbook workbook = new XSSFWorkbook();
-//
-		Sheet sheet = workbook.createSheet("TreatmentReport");
-		defineColumns(sheet);
+	public ResponseDTO<Object> generateTreatmentReport(@RequestBody ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
@@ -54,10 +54,15 @@ public class ReportController {
 			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
 			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
 		} catch (Exception e) {
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
 
 		}
 		List<ReportTreatmentDTO> results = reportService.reportTreatment(initialDate, finalDate);
-
+		Workbook workbook = new XSSFWorkbook();
+		//
+		Sheet sheet = workbook.createSheet("TreatmentReport");
+		defineColumns(sheet);
 		String fileLocation = createTreatmentReport(sheet, workbook, results);
 		System.out.println(fileLocation);
 		FileOutputStream outputStream;
@@ -66,19 +71,17 @@ public class ReportController {
 			workbook.write(outputStream);
 			workbook.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_BUILDING_REPORT.getMessage()).object(null).build();
 		}
+		return ResponseDTO.builder().statusCode(ConstantReport.SUCCESS_REPORT.getStatusCode())
+				.message(ConstantReport.SUCCESS_REPORT.getMessage()).object(null).build();
 
 	}
 
 	@PostMapping(path = "/medicine")
 	@ResponseBody
-	public void generateMedicineReport(@RequestBody ReportTreatmentDTO treatment) {
-		Workbook workbook = new XSSFWorkbook();
-//
-		Sheet sheet = workbook.createSheet("MedicineReport");
-		defineMedicinceColumns(sheet);
+	public ResponseDTO<Object> generateMedicineReport(@RequestBody ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
@@ -87,11 +90,15 @@ public class ReportController {
 			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
 			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
 		} catch (Exception e) {
-
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
 		}
 
 		List<ReportMedicineDTO> results = reportService.reportMedicine(initialDate, finalDate);
+		Workbook workbook = new XSSFWorkbook();
 
+		Sheet sheet = workbook.createSheet("MedicineReport");
+		defineMedicinceColumns(sheet);
 		String fileLocation = createMedicinetReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
@@ -99,19 +106,17 @@ public class ReportController {
 			workbook.write(outputStream);
 			workbook.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_BUILDING_REPORT.getMessage()).object(null).build();
 		}
+		return ResponseDTO.builder().statusCode(ConstantReport.SUCCESS_REPORT.getStatusCode())
+				.message(ConstantReport.SUCCESS_REPORT.getMessage()).object(null).build();
 
 	}
 
 	@PostMapping(path = "/food")
 	@ResponseBody
-	public void generateFoodReport(@RequestBody ReportTreatmentDTO food) {
-		Workbook workbook = new XSSFWorkbook();
-//
-		Sheet sheet = workbook.createSheet("FodReport");
-		defineFoodColumns(sheet);
+	public ResponseDTO<Object> generateFoodReport(@RequestBody ReportTreatmentDTO food) {
 
 		Date initialDate = null;
 		Date finalDate = null;
@@ -120,10 +125,16 @@ public class ReportController {
 			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getDate());
 			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(food.getName());
 		} catch (Exception e) {
-
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
 		}
 
 		List<ReportFoodDTO> results = reportService.reportFood(initialDate, finalDate);
+
+		Workbook workbook = new XSSFWorkbook();
+		//
+		Sheet sheet = workbook.createSheet("FodReport");
+		defineFoodColumns(sheet);
 
 		String fileLocation = createFoodReport(sheet, workbook, results);
 		FileOutputStream outputStream;
@@ -132,18 +143,17 @@ public class ReportController {
 			workbook.write(outputStream);
 			workbook.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_BUILDING_REPORT.getMessage()).object(null).build();
 		}
+		return ResponseDTO.builder().statusCode(ConstantReport.SUCCESS_REPORT.getStatusCode())
+				.message(ConstantReport.SUCCESS_REPORT.getMessage()).object(null).build();
 
 	}
 
 	@PostMapping(path = "/materials")
 	@ResponseBody
-	public void generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
-		Workbook workbook = new XSSFWorkbook();
-		Sheet sheet = workbook.createSheet("MaterialsReport");
-		defineMaterialsColumns(sheet);
+	public ResponseDTO<Object> generateMaterialsReport(@RequestBody ReportTreatmentDTO treatment) {
 
 		Date initialDate = null;
 		Date finalDate = null;
@@ -152,11 +162,14 @@ public class ReportController {
 			initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getDate());
 			finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(treatment.getName());
 		} catch (Exception e) {
-
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_FATAL.getMessage()).object(null).build();
 		}
 
 		List<ReportMaterialsDTO> results = reportService.reportMaterials(initialDate, finalDate);
-
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("MaterialsReport");
+		defineMaterialsColumns(sheet);
 		String fileLocation = createMaterialsReport(sheet, workbook, results);
 		FileOutputStream outputStream;
 		try {
@@ -164,9 +177,11 @@ public class ReportController {
 			workbook.write(outputStream);
 			workbook.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseDTO.builder().statusCode(ConstantReport.ERROR_FATAL.getStatusCode())
+					.message(ConstantReport.ERROR_BUILDING_REPORT.getMessage()).object(null).build();
 		}
+		return ResponseDTO.builder().statusCode(ConstantReport.SUCCESS_REPORT.getStatusCode())
+				.message(ConstantReport.SUCCESS_REPORT.getMessage()).object(null).build();
 
 	}
 
@@ -526,8 +541,16 @@ public class ReportController {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/" + "Reporte_Tratamiento"
-				+ dateReport + ".xlsx";
+
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Tratamiento_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return fileLocation;
 	}
@@ -706,15 +729,20 @@ public class ReportController {
 			numberRow++;
 		}
 
-		// Finally, let's write the content to a “temp.xlsx” file in the current
-		// directory and close the workbook:
-
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
 
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Medicina_" + dateReport
-				+ ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Medicina_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return fileLocation;
 	}
 
@@ -869,8 +897,15 @@ public class ReportController {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
 
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/Reporte_Alimento_" + dateReport
-				+ ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Alimento_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
 		return fileLocation;
 	}
 
@@ -994,8 +1029,16 @@ public class ReportController {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateReport = formatter.format(date);
 
-		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/" + "Reporte_Materiales_"
-				+ dateReport + ".xlsx";
+		String fileLocation = System.getProperty("user.home") + "/Documents/Reportes/";
+
+		try {
+			Files.createDirectories(Paths.get(fileLocation));
+			fileLocation += "Reporte_Materiales_" + dateReport + ".xlsx";
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+
 		return fileLocation;
 	}
 
