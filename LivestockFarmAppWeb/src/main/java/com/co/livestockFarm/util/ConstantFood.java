@@ -24,7 +24,6 @@ public enum ConstantFood {
 	}
 
 	public int getStatusCode() {
-
 		return statusCode;
 	}
 
