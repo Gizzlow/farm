@@ -19,31 +19,26 @@ public class ReportService {
 	private ReportRepository reportRepository;
 
 	public List<ReportTreatmentDTO> reportTreatment(Date fechaInicial, Date fechafinal) {
-
 		List<ReportTreatmentDTO> response = reportRepository.getReportTreatment(fechaInicial, fechafinal);
-		System.out.println(response.toString());
+
 		return response;
 	}
 
 	public List<ReportMedicineDTO> reportMedicine(Date fechaInicial, Date fechafinal) {
-
 		List<ReportMedicineDTO> response = reportRepository.getReportMedicine(fechaInicial, fechafinal);
-		System.out.println(response.toString());
+
 		return response;
 	}
 
 	public List<ReportMaterialsDTO> reportMaterials(Date fechaInicial, Date fechafinal) {
-
 		List<ReportMaterialsDTO> response = reportRepository.getReportMaterials(fechaInicial, fechafinal);
-		System.out.println(response.toString());
+
 		return response;
 	}
 
 	public List<ReportFoodDTO> reportFood(Date fechaInicial, Date fechafinal) {
-
 		List<ReportFoodDTO> response = reportRepository.getReportFood(fechaInicial, fechafinal);
-		System.out.println(response.toString());
+
 		return response;
 	}
-
 }
