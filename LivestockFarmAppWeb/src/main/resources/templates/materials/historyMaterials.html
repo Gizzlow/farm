@@ -26,12 +26,12 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha inicial</label>
-							<input type="date" class="form-control" id="idAddMaterialsAmount" name="amount" required="required"
+							<input type="date" class="form-control" id="idHistoryMaterialsDateInitial" name="date" required="required"
 								maxlength="5">
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Fecha final</label>
-							<input type="date" class="form-control" id="idAddMaterialsObservation" name="observation" maxlength="90">
+							<input type="date" class="form-control" id="idHistoryMaterialsDatelast" name="name" maxlength="90">
 						</div>
 						<button type="submit" class="btn btn-success">Guardar</button>
 					</form>
@@ -42,3 +42,57 @@
 </body>
 
 </html>
+<script th:inline="javascript">
+
+	$(document).on('submit', '#historyMaterials', function (e) {
+		e.preventDefault();
+		var data = $(this).serialize();
+		var mensajeRespuesta = "";
+		$.ajax({
+			type: 'POST',
+			url: '/report/' + 'materials ',
+			data: data,
+			beforeSend: function () {
+				Swal.fire({
+					title: 'Cargando...',
+					position: 'top',
+					allowOutsideClick: () => !Swal.isLoading(),
+					onBeforeOpen: () => {
+						Swal.showLoading();
+					}
+				});
+			},
+			success: function (data) {
+				Swal.close();
+				mensajeRespuesta = data.message;
+			},
+			error:
+				function () {
+					Swal.close();
+				},
+			complete: function (data) {
+				Swal.close();
+				Swal.fire({
+					title: "¡Información!",
+					text: mensajeRespuesta,
+					icon: "warning",
+					confirmButtonText: 'Aceptar',
+					allowOutsideClick: () => false
+				}).then((result) => {
+					if (result.value) {
+						$("#modalHistoryMaterials").modal('hide');
+					}
+				}
+				);
+			}
+		});
+
+		return false;
+	});
+
+
+	function hiddenHistoryMaterials() {
+		$("#modalHistoryMaterials").modal("hide");
+	}
+
+</script>
